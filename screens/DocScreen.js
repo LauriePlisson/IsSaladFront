@@ -6,18 +6,18 @@ import {
   TextInput,
 } from "react-native";
 
-export default function HomeScreen({ navigation }) {
+export default function DocScreen({}) {
   return (
     <View style={styles.container}>
-      <Text /*style={styles.title}*/>Home Screen</Text>
+      <Text /*style={styles.title}*/>Doc Screen</Text>
     </View>
   );
 }
 
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
+    backgroundColor: "grey",
     alignItems: "center",
     justifyContent: "center",
   },

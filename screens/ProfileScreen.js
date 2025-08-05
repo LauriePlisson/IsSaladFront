@@ -6,10 +6,10 @@ import {
   TextInput,
 } from "react-native";
 
-export default function HomeScreen({ navigation }) {
+export default function ProfileScreen({}) {
   return (
     <View style={styles.container}>
-      <Text /*style={styles.title}*/>Home Screen</Text>
+      <Text /*style={styles.title}*/>Profile Screen</Text>
     </View>
   );
 }
@@ -17,7 +17,7 @@ export default function HomeScreen({ navigation }) {
 styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
+    backgroundColor: "red",
     alignItems: "center",
     justifyContent: "center",
   },
