@@ -21,7 +21,7 @@
       "jsx"
     ]
   },
-  "dependencies" : {
+  "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/bottom-tabs": "6",
     "@react-navigation/native": "6",
@@ -57,4 +57,3 @@
   },
   "private": true
 }
-
