@@ -21,40 +21,40 @@ export default function SignUpScreen({ navigation }) {
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleSignUp = () => {
-    // if (
-    //   username.length < 3 ||
-    //   !regexPassword.test(password) ||
-    //   !regexEmail.test(email)
-    // ) {
-    //   setError(true);
-    //   console.log("Invalid input");
-    //   return;
-    // } else {
-    //   fetch(`${lienExpo}users/signup`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       username: username,
-    //       mail: email,
-    //       password: password,
-    //     }),
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       if (data.result === true) {
-    //         setUsername("");
-    //         setEmail("");
-    //         setPassword("");
-    //         console.log("Sign up successful:", data.message);
-    navigation.navigate("SignIn");
-    //       } else {
-    //         console.log("Sign up failed:", data.error);
-    //         setError(true);
-    //       }
-    //     });
-    // }
+    if (
+      username.length < 3 ||
+      !regexPassword.test(password) ||
+      !regexEmail.test(email)
+    ) {
+      setError(true);
+      console.log("Invalid input");
+      return;
+    } else {
+      fetch(`${lienExpo}users/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          mail: email,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result === true) {
+            setUsername("");
+            setEmail("");
+            setPassword("");
+            console.log("Sign up successful:", data.message);
+            navigation.navigate("SignIn");
+          } else {
+            console.log("Sign up failed:", data.error);
+            setError(true);
+          }
+        });
+    }
   };
   return (
     <View style={styles.container}>
