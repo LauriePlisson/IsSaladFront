@@ -4,6 +4,8 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { CameraView, Camera, CameraType } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
+import { UserState } from "../reducers/user";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -11,6 +13,8 @@ const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 
 export default function CameraScreen({ navigation }) {
   const cameraRef = useRef<CameraView | null>(null);
+
+  const user = useSelector((state: { user: UserState }) => state.user.value);
 
   const [hasPermission, setHasPermission] = useState<boolean>(false);
   const [facing, setFacing] = useState<CameraType>("back");
@@ -46,7 +50,7 @@ export default function CameraScreen({ navigation }) {
       type: "image/jpeg",
     });
 
-    formData.append("token", "your_token_here");
+    formData.append("token", user.token);
 
     fetch(`${BACKEND_ADDRESS}/posts/createPost`, {
       method: "POST",
