@@ -10,7 +10,7 @@ interface LogButtonProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export default function ButtonLogin({ children, onPress, style, color = 'primary' }: LogButtonProps) {
+export default function ButtonLog({ children, onPress, style, color = 'primary' }: LogButtonProps) {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
       <Text style={[styles.buttonText, color === 'primary' ? styles.primaryText : styles.secondaryText]}>{children}</Text>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 // });
 
 // in file:
-// import LoginButton from './components/logButton';
+// import LogButton from './components/logButton';
 
 // export default function App() {
 //   let pressed = false;
