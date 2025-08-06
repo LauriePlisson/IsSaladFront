@@ -12,6 +12,8 @@ import SearchScreen from "./screens/SearchScreen";
 import CameraScreen from "./screens/CameraScreen";
 import DocScreen from "./screens/DocScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import ResultScreen from "./screens/ResultScreen";
+import HomeCameraScreen from "./screens/HomeCameraScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -21,7 +23,7 @@ const TabNavigator = () => {
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Camera" component={CameraScreen} />
+      <Tab.Screen name="TabCamera" component={HomeCameraScreen} />
       <Tab.Screen name="Doc" component={DocScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
       {/* Add other tabs here if needed */}
@@ -37,6 +39,8 @@ export default function App() {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="Result" component={ResultScreen} />
+        <Stack.Screen name="Camera" component={CameraScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
