@@ -16,6 +16,7 @@ import SearchScreen from "./screens/SearchScreen";
 import CameraScreen from "./screens/CameraScreen";
 import DocScreen from "./screens/DocScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,12 +41,14 @@ const TabNavigator = () => {
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer style={styles.container}>
+      <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

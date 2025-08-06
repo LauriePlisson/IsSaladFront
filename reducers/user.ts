@@ -29,8 +29,33 @@ export const userSlice = createSlice({
     addUser: (state: UserState, action: PayloadAction<UserState["value"]>) => {
       state.value = action.payload;
     },
+    editUsername: (state, action: PayloadAction<string>) => {
+      state.value.username = action.payload;
+    },
+    editAvatar: (state, action: PayloadAction<string>) => {
+      state.value.avatar = action.payload;
+    },
+    editDescription: (state, action: PayloadAction<string>) => {
+      state.value.description = action.payload;
+    },
+    logOutUser: (state) => {
+      state.value = {
+        username: "",
+        token: "",
+        friendList: [],
+        avatar: "",
+        description: "",
+        team: "",
+      };
+    },
   },
 });
 
-export const { addUser } = userSlice.actions;
+export const {
+  addUser,
+  editAvatar,
+  editDescription,
+  editUsername,
+  logOutUser,
+} = userSlice.actions;
 export default userSlice.reducer;
