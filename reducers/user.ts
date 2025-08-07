@@ -48,6 +48,15 @@ export const userSlice = createSlice({
         team: "",
       };
     },
+    addFriendtoFriendList: (state, action: PayloadAction<string>) => {
+      if (!state.value.friendList.includes(action.payload)) {
+        state.value.friendList.push(action.payload);
+      } else {
+        state.value.friendList = state.value.friendList.filter(
+          (elem) => elem !== action.payload
+        );
+      }
+    },
   },
 });
 
@@ -57,5 +66,6 @@ export const {
   editDescription,
   editUsername,
   logOutUser,
+  addFriendtoFriendList,
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -61,42 +61,10 @@ export default function SignUpScreen({ navigation }) {
         });
     }
     console.log("Sign Up button pressed");
-    // if (
-    //   username.length < 3 ||
-    //   // !regexPassword.test(password) ||
-    //   !regexEmail.test(email)
-    // ) {
-    //   setError(true);
-    //   console.log("Invalid input");
-    //   return;
-    // } else {
-    fetch(`${lienExpo}users/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        mail: email,
-        password: password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Response data:", data);
-        if (data.result === true) {
-          setUsername("");
-          setEmail("");
-          setPassword("");
-          console.log("Sign up successful:", data.message);
-          navigation.navigate("SignIn");
-        } else {
-          console.log("Sign up failed:", data.error);
-          setError(true);
-        }
-      });
+
     //}
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
