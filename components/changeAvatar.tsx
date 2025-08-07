@@ -1,23 +1,23 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 // Type declaration for the props of the ChangeAvatar component
 interface ChangeAvatarProps {
 	name?: string;
-	children: React.ReactNode;
+	photoPath: string;
 	onPress?: () => void;
 	style?: StyleProp<ViewStyle>;
 }
 
 // ChangeAvatar component
-export default function ChangeAvatar({ name, onPress, children, style }: ChangeAvatarProps) {
+export default function ChangeAvatar({ name, onPress, style, photoPath }: ChangeAvatarProps) {
 	return (
 			<TouchableOpacity style={[styles.button, styles[name === 'modify' ? 'modify' : 'display'], style]} onPress={onPress}>
 				{name && <FontAwesome name='pencil' size={20} style={styles.icon} />}
-				{children}
+				<Image source={{ uri: photoPath }} style={styles.avatar} />
 			</TouchableOpacity>
 		);
 	};
@@ -46,12 +46,10 @@ const styles = StyleSheet.create({
 		height: 40,
 		borderWidth: 2,
 	},
+	avatar: {
+		flex: 1,
+		borderRadius: 100,
+		resizeMode: 'cover',
+		aspectRatio: 1,
+	},
 });
-
-// In file: style for image avatar
-// avatar: {
-  //   flex: 1,
-	// 	borderRadius: 100,
-  //   resizeMode: 'cover',
-  //   aspectRatio: 1,
-	// },

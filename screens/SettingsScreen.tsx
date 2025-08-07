@@ -176,9 +176,8 @@ export default function SettingsScreen({ navigation }) {
         onPress={() => {
           handleChangeAvatar();
         }}
-      >
-        <Image source={{ uri: avatar || avatarUrl }} style={styles.avatar} />
-      </ChangeAvatar>
+        photoPath={avatar || avatarUrl}
+      />
 
       <Text style={styles.errorText}>
         {errorAvatar ? "Error changing avatar" : ""}

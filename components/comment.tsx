@@ -1,6 +1,6 @@
-import React, { Children } from 'react';
-import { StyleProp, TextInput, View, ViewStyle, Image, ImageSourcePropType } from 'react-native';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
+import { StyleSheet, Text, Image, View } from 'react-native';
 
 // Type declaration for the props of the Comment component
 interface CommentProps {
