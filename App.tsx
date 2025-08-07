@@ -23,6 +23,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 import tabBar from "./components/tabBar";
 import headerLeftBtn from "./components/headerLeftBtn";
 import PhotoButton from "./components/photoBtn";
+import TestScreen from "./screens/TestScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -54,7 +55,10 @@ const TabNavigator = () => {
           case "Profile":
             iconName = "user";
             break;
-          case "Camera":
+          case "Test":
+            iconName = "cog";
+            break;
+          case "TabCamera":
             return null; // Camera button will be handled separately
         }
         return <FontAwesome name={iconName} size={24} color={color} />;
@@ -71,7 +75,8 @@ const TabNavigator = () => {
         color: "transparent",
       },
     })}>
-      <Tab.Screen name="Home" component={HomeScreen} options={{ headerLeft: false }} />
+      <Tab.Screen name="Test" component={TestScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} options={{ headerLeft: false }} />
       <Tab.Screen name="TabCamera" component={HomeCameraScreen} options={{ tabBarButton: (props) => (<PhotoButton {...props} />) }} />
       <Tab.Screen name="Doc" component={DocScreen} options={{ headerLeft: false }} />

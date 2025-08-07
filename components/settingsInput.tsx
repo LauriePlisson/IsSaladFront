@@ -5,7 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // Type declaration for the props of the SettingsInput component
 interface SettingsInputProps {
-	children: React.ReactNode;
+	confirm?: boolean;
 	onChangeText?: (text: string) => void;
 	onPress?: () => void;
 	placeholder?: string;
@@ -15,7 +15,7 @@ interface SettingsInputProps {
 }
 
 // SettingsInput component
-export default function SettingsInput({ children, secureTextEntry,onChangeText, placeholder, value, onPress, style}: SettingsInputProps) {
+export default function SettingsInput({ confirm, secureTextEntry,onChangeText, placeholder, value, onPress, style}: SettingsInputProps) {
 	return (
 			<View style={[styles.formContainer, style]}>
 				<TextInput
@@ -25,13 +25,13 @@ export default function SettingsInput({ children, secureTextEntry,onChangeText, 
 							placeholderTextColor="#381d2a5a"
 							secureTextEntry={secureTextEntry}
 				/>
-				{(onChangeText && !value) && <FontAwesome
+				{(onChangeText && !value && !confirm) && <FontAwesome
 					name="pencil"
 					size={20}
 					color="#f39b6d"
 					style={styles.icon}
 				/>}
-				{value && <FontAwesome
+				{value && !confirm && <FontAwesome
 					name="check"
 					size={20}
 					color="#f39b6d"

@@ -13,11 +13,12 @@ interface FormContainerProps {
 	hover?: boolean;
 	secureTextEntry?: boolean;
 	style?: StyleProp<ViewStyle>;
+	focused?: boolean;
 }
 // FormContainer component
-export default function FormContainer({ children, secureTextEntry,onChangeText, placeholder, hover, text, style}: FormContainerProps) {
+export default function FormContainer({ children, secureTextEntry,onChangeText, placeholder, focused, text, style}: FormContainerProps) {
 	return (
-			<View style={[styles[hover ? 'hover' : 'formContainer'], style]}>
+			<View style={[styles[focused ? 'hover' : 'formContainer'], style]}>
 			{text && <Text style={styles.containerName}>{text}</Text>}
 				<TextInput
 							style={[styles.input, style]}
