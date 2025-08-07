@@ -5,7 +5,12 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+import FormContainer from "../components/formContainer";
+import ButtonLog from "../components/logButton";
 import { useState } from "react";
 
 export default function SignUpScreen({ navigation }) {
@@ -93,44 +98,76 @@ export default function SignUpScreen({ navigation }) {
     //}
   };
   return (
-    <View style={styles.container}>
-      <Text /*style={styles.title}*/>Sign Up</Text>
-      <TextInput
-        /*style={styles.input}*/ placeholder="username"
-        onChangeText={(value) => setUsername(value)}
-        value={username}
-      />
-      <TextInput
-        /*style={styles.input}*/ placeholder="Email"
-        onChangeText={(value) => setEmail(value)}
-        value={email}
-      />
-      <TextInput
-        /*style={styles.input}*/ placeholder="Password"
-        secureTextEntry={true}
-        onChangeText={(value) => setPassword(value)}
-        value={password}
-      />
-      <Text /*style={styles.errorText}*/>
-        {error ? "Invalid username or mail or password" : ""}
-      </Text>
-      <TouchableOpacity
-        /*style={styles.button}*/
-        onPress={() => {
-          handleSignUp();
-        }}
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.SignUpContainer}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <Text /*style={styles.buttonText}*/>Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+        <FormContainer
+          text="Email"
+          placeholder="Email"
+          secureTextEntry={false}
+          onChangeText={(value) => setEmail(value)}
+          value={email}
+        />
+        <FormContainer
+          text="Username"
+          placeholder="Username"
+          secureTextEntry={false}
+          onChangeText={(value) => setUsername(value)}
+          value={username}
+        />
+        <FormContainer
+          text="Password"
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={(value) => setPassword(value)}
+          value={password}
+        />
+
+        <Text style={styles.errorText}>
+          {error ? "Invalid username or mail or password" : ""}
+        </Text>
+        <ButtonLog
+          children="Singn Up"
+          onPress={() => {
+            handleSignUp();
+          }}
+        />
+      </KeyboardAvoidingView>
+      <ButtonLog
+        children="Log In"
+        onPress={() => {
+          navigation.navigate("SignIn");
+        }}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "blue",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  errorText: {
+    color: "#f39b6d",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 16,
+    color: "#381D2A",
+  },
+  SignUpContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomWidth: 2,
+    borderColor: "#f39b6d",
+    width: "80%",
   },
 });

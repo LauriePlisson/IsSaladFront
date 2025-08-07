@@ -5,7 +5,11 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Image,
 } from "react-native";
+import LogOut from "../components/logOut";
+import SettingsInput from "../components/settingsInput";
+import ChangeAvatar from "../components/changeAvatar";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editAvatar, editUsername, logOutUser } from "../reducers/user";
@@ -28,7 +32,8 @@ export default function SettingsScreen({ navigation }) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
   const regexPassword: RegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-  const avatarUrl = avatar || user.avatar;
+  const avatarUrl = user.avatar;
+  console.log(avatarUrl);
 
   const handleChangeAvatar = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -45,7 +50,7 @@ export default function SettingsScreen({ navigation }) {
       name: "avatar.jpg",
     });
     formData.append("token", user.token);
-
+    setAvatar(result.assets[0].uri);
     fetch(`${lienExpo}users/changeAvatar`, {
       method: "PUT",
       body: formData,
@@ -116,7 +121,7 @@ export default function SettingsScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result === true) {
-          //   console.log("Password changed successfully", data);
+          console.log("Password changed successfully", data);
           setPassword("");
           setNewPassword("");
           setErrorPassword(false);
@@ -124,7 +129,7 @@ export default function SettingsScreen({ navigation }) {
           setPassword("");
           setNewPassword("");
           setErrorPassword(true);
-          //   console.log("Failed to change password:", data.error);
+          console.log("Failed to change password:", data.error);
         }
       });
   };
@@ -164,87 +169,74 @@ export default function SettingsScreen({ navigation }) {
         onPress={() => navigation.navigate("TabNavigator", "Profile")}
       >
         <Text>Go to Profil</Text>
-        <Text /*style={styles.title}*/>
-          {errorAvatar ? "Error changing avatar" : ""}
-        </Text>
       </TouchableOpacity>
-      <Text /*style={styles.title}*/>Settings Screen</Text>
 
-      <TouchableOpacity
-        /*style={styles.button}*/
+      <ChangeAvatar
+        name="modify"
         onPress={() => {
           handleChangeAvatar();
         }}
       >
-        <Text /*style={styles.buttonText}*/>Change Avatar</Text>
-      </TouchableOpacity>
-      <TextInput
-        /*style={styles.input}*/
-        placeholder="Change username"
+        <Image source={{ uri: avatar || avatarUrl }} style={styles.avatar} />
+      </ChangeAvatar>
+
+      <Text style={styles.errorText}>
+        {errorAvatar ? "Error changing avatar" : ""}
+      </Text>
+
+      <SettingsInput
+        placeholder="Username"
+        secureTextEntry={false}
         onChangeText={(value) => {
           setUsername(value), setErrorUsername(false);
         }}
         value={username}
+        onPress={() => handleChangeUsername()}
       />
-      <Text /*style={styles.errorText}*/>
+      <Text style={styles.errorText}>
         {errorUsername ? "Invalid Username or Empty Field" : ""}
       </Text>
-      <TouchableOpacity
-        /*style={styles.button}*/
-        onPress={() => {
-          handleChangeUsername();
-        }}
-      >
-        <Text /*style={styles.buttonText}*/>Save Username</Text>
-      </TouchableOpacity>
-
-      <TextInput
-        /*style={styles.input}*/
-        placeholder="enter password"
+      <SettingsInput
+        placeholder="Password"
         secureTextEntry={true}
         onChangeText={(value) => {
-          setPassword(value), setErrorPassword(false);
+          setErrorPassword(false), setPassword(value);
         }}
         value={password}
+        confirm={true}
       />
-      <TextInput
-        /*style={styles.input}*/
-        placeholder="enter new password"
+
+      <SettingsInput
+        placeholder="New Password"
         secureTextEntry={true}
         onChangeText={(value) => setNewPassword(value)}
         value={newpassword}
+        onPress={() => {
+          handleChangePassword();
+        }}
       />
-      <Text /*style={styles.errorText}*/>
+
+      <Text style={styles.errorText}>
         {errorPassword
           ? "Wrong Password, Invalid Newpassword or Empty Field"
           : ""}{" "}
       </Text>
-      <TouchableOpacity
-        /*style={styles.button}*/
-        onPress={() => {
-          handleChangePassword();
-        }}
-      >
-        <Text /*style={styles.buttonText}*/>Save Password</Text>
-      </TouchableOpacity>
 
-      <TouchableOpacity
+      <LogOut
+        children="Log Out"
         onPress={() => {
           handleLogout();
         }}
-      >
-        <Text /*style={styles.buttonText}*/>Log Out</Text>
-      </TouchableOpacity>
-      <Text /*style={styles.errorText}*/>
-        {errorDelete ? "Error deleting account" : ""}
-      </Text>
-      <TouchableOpacity
+      />
+      <LogOut
         onPress={() => {
           handleDeleteAccount();
         }}
-      >
-        <Text /*style={styles.buttonText}*/>Delete Account</Text>
-      </TouchableOpacity>
+        children="Delete Account"
+      />
+      <Text style={styles.errorText}>
+        {errorDelete ? "Error deleting account" : ""}
+      </Text>
     </View>
   );
 }
@@ -252,8 +244,16 @@ export default function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "violet",
     alignItems: "center",
     justifyContent: "center",
+  },
+  errorText: {
+    color: "#f39b6d",
+  },
+  avatar: {
+    flex: 1,
+    borderRadius: 100,
+    resizeMode: "cover",
+    aspectRatio: 1,
   },
 });

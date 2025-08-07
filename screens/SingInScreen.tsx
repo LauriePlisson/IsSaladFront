@@ -5,7 +5,12 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+import FormContainer from "../components/formContainer";
+import ButtonLog from "../components/logButton";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../reducers/user";
@@ -61,47 +66,73 @@ export default function SignInScreen({ navigation }) {
   // console.log(error);
 
   return (
-    <View style={styles.container}>
-      <Text /*style={styles.title}*/>Sign In</Text>
-      <TextInput
-        /*style={styles.input}*/ placeholder="username"
-        onChangeText={(value) => setUsername(value)}
-        value={username}
-      />
-      <TextInput
-        /*style={styles.input}*/ placeholder="Password"
-        secureTextEntry={true}
-        onChangeText={(value) => setPassword(value)}
-        value={password}
-      />
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.signInContainer}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <FormContainer
+          text="Username"
+          placeholder="Username"
+          secureTextEntry={false}
+          onChangeText={(value) => {
+            setError(false), setUsername(value);
+          }}
+          value={username}
+        />
+        <FormContainer
+          text="Password"
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={(value) => {
+            setError(false), setPassword(value);
+          }}
+          value={password}
+        />
+        <Text style={styles.errorText}>
+          {error ? "Invalid username or password" : ""}
+        </Text>
+        <ButtonLog
+          children="Log In"
+          onPress={() => {
+            onPressSignIn();
+          }}
+        />
+      </KeyboardAvoidingView>
 
-      <Text /*style={styles.errorText}*/>
-        {error ? "Invalid username or password" : ""}
-      </Text>
-
-      <TouchableOpacity
-        /*style={styles.button}*/
+      <ButtonLog
+        children="Sign Up"
         onPress={() => {
-          onPressSignIn();
+          setError(false), navigation.navigate("SignUp");
         }}
-      >
-        <Text /*style={styles.buttonText}*/>Sign In</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        /*style={styles.button}*/
-        onPress={() => navigation.navigate("SignUp")}
-      >
-        <Text /*style={styles.buttonText}*/>Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "yellow",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  signInContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomWidth: 2,
+    borderColor: "#f39b6d",
+    width: "80%",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 16,
+    color: "#381D2A",
+  },
+  errorText: {
+    color: "#f39b6d",
   },
 });
