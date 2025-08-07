@@ -121,19 +121,7 @@ export default function CameraScreen({ navigation }) {
           <FontAwesome name="times" size={25} color="black" />
         </TouchableOpacity>
         <Text style={styles.text}>Nouvelle Publication</Text>
-        <TouchableOpacity
-          style={styles.headerButton}
-          // onPress={() => {
-          //   if (photoUrl && Result) {
-          //     navigation.navigate("Result" as any, {
-          //       photoUrl: photoUrl,
-          //       result: Result,
-          //     });
-          //   } else {
-          //     alert("Aucune image ou résultat disponible.");
-          //   }
-          // }}
-        >
+        <TouchableOpacity style={styles.headerButton}>
           {/*@ts-ignore*/}
 
           <FontAwesome name="arrow-right" size={25} color="black" />
