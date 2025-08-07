@@ -1,44 +1,57 @@
-import React from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React from "react";
+import { StyleProp, ViewStyle } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 // Type declaration for the props of the LogButton component
 interface LogButtonProps {
   children: React.ReactNode;
   onPress?: () => void;
-  color?: 'primary' | 'secondary';
+  color?: "primary" | "secondary";
   style?: StyleProp<ViewStyle>;
 }
 
-export default function ButtonLog({ children, onPress, style, color = 'primary' }: LogButtonProps) {
+export default function ButtonLog({
+  children,
+  onPress,
+  style,
+  color = "primary",
+}: LogButtonProps) {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-      <Text style={[styles.buttonText, color === 'primary' ? styles.primaryText : styles.secondaryText]}>{children}</Text>
+      <Text
+        style={[
+          styles.buttonText,
+          color === "primary" ? styles.primaryText : styles.secondaryText,
+        ]}
+      >
+        {children}
+      </Text>
     </TouchableOpacity>
   );
-};
+}
 
 // Login button styles
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#aabd8c',
+    backgroundColor: "#aabd8c",
     borderRadius: 8,
     padding: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 20,
   },
   buttonText: {
-    textAlign: 'center',
-    fontFamily: 'Josefin Sans',
-    textTransform: 'uppercase',
+    textAlign: "center",
+    fontFamily: "Josefin Sans",
+    textTransform: "uppercase",
     fontSize: 14,
-    fontWeight: 'medium',
+    fontWeight: "medium",
   },
   primaryText: {
-    color: '#381D2A',
+    color: "#381D2A",
   },
   secondaryText: {
-    color: '#57683C',
+    color: "#57683C",
   },
 });
 
