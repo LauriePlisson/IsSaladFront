@@ -7,13 +7,13 @@ import {
 import Comment from "../components/comment";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import UserBlock from "../components/userBlock";
 
 export default function SignInScreen({ navigation }) {
-  const user = { username: "test", avatar: "https://res.cloudinary.com/dtaynthro/image/upload/v1754572742/IsSalad/avatars/ovs9tsmnbbrskt2rhi5l.jpg", date: Date.now(), team: 'https://res.cloudinary.com/dtaynthro/image/upload/v1754485826/IsSalad/posts/avugq79eqew6fkmgokca.png' };
+  const user = { username: "Test", avatar: "https://res.cloudinary.com/dtaynthro/image/upload/v1754572742/IsSalad/avatars/ovs9tsmnbbrskt2rhi5l.jpg", team: 'Salad' , isFriend: false };
   return (
     <SafeAreaView style={styles.container}>
-      <Comment text="This is a comment" position="first">{user}</Comment>
-      <Comment text="This is another comment" position="last">{user}</Comment>
+      <UserBlock onPress={() => {console.log('Click !')}} children={user}></UserBlock>
     </SafeAreaView>
   );
 }
