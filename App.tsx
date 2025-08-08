@@ -126,7 +126,18 @@ export default function App() {
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              headerShown: true,
+              headerBackVisible: true,
+              headerStyle: { backgroundColor: "#aabd8c" },
+              headerTitleStyle: { color: "transparent" },
+              headerTintColor: "#381d2aff",
+              headerBackTitleVisible: false,
+            }}
+          />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Result" component={ResultScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
