@@ -4,7 +4,10 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
+import SearchContainer from "../components/searchContainer";
+import UserBlock from "../components/userBlock";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { addFriendtoFriendList } from "../reducers/user";
@@ -18,7 +21,8 @@ export default function SearchScreen() {
 
   const user = useSelector((state: any) => state.user.value);
   console.log("User from Redux:", user);
-  console.log(myfriends);
+  console.log("my friends:", myfriends);
+  let isFriend = false;
 
   useEffect(() => {
     fetch(`${lienExpo}users/`)
@@ -53,8 +57,9 @@ export default function SearchScreen() {
       });
   };
 
-  const handleAdd = (name) => {
+  const handleAdd = (name: string) => {
     console.log("Adding user:", name);
+
     fetch(`${lienExpo}users/addFriend`, {
       method: "PUT",
       headers: {
@@ -69,68 +74,92 @@ export default function SearchScreen() {
       .then((data) => {
         console.log("Add friend response:", data);
         addFriendtoFriendList(name);
+        setMyFriends(data.friendList);
+        setSearchUsername("");
+        setSearchResults([]);
       });
+
     // Logic to add a user to the friend list
   };
-  const displayAllUsers = allUsers.map((user, i) => {
+  const displayAllUsers = allUsers.map((alluser, i) => {
     return (
-      <View key={i}>
-        <Text style={styles.username}>{user.username}</Text>
-        <TouchableOpacity onPress={() => handleAdd(user.username)}>
-          <Text>+</Text>
-        </TouchableOpacity>
-      </View>
+      <UserBlock
+        key={i}
+        children={alluser}
+        onPress={() => {
+          handleAdd(alluser.username);
+        }}
+        isFriend={myfriends.some((e) => e.username === alluser.username)}
+      />
     );
   });
 
   const displayMyFriends = myfriends.map((friend, i) => {
     return (
-      <View key={i}>
-        <Text style={styles.username}>{friend.username}</Text>
-        <TouchableOpacity onPress={() => handleAdd(friend.username)}>
-          <Text>X</Text>
-        </TouchableOpacity>
-      </View>
+      <UserBlock
+        key={i}
+        children={friend}
+        onPress={() => {
+          handleAdd(friend.username);
+        }}
+        isFriend={true}
+      />
     );
   });
 
   const displaySearchResults = searchResults.map((result, i) => {
     return (
-      <View key={i}>
-        <Text style={styles.username}>{result.username}</Text>
-        <TouchableOpacity>
-          <Text onPress={() => handleAdd(result.username)}>+</Text>
-        </TouchableOpacity>
-      </View>
+      <UserBlock
+        key={i}
+        children={result}
+        onPress={() => {
+          handleAdd(result.username);
+        }}
+        isFriend={myfriends.some((e) => e.username === result.username)}
+      />
     );
   });
 
   return (
     <View style={styles.container}>
-      <Text>Search Screen</Text>
-      <TextInput
-        placeholder="Search..."
+      <SearchContainer
+        children={"search..."}
         onChangeText={(value) => setSearchUsername(value)}
         value={searchUsername}
-      />
-      <TouchableOpacity
         onPress={() => {
           handleSearch();
         }}
+      />
+
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        style={styles.usersDisplay}
       >
-        <Text>Search</Text>
-      </TouchableOpacity>
-      {displayMyFriends}
-      {/* {displaySearchResults} */}
-      {/* {displayAllUsers} */}
+        {myfriends.length === 0 &&
+          !searchUsername &&
+          searchResults.length === 0 && (
+            <>
+              <Text>All users:</Text>
+              {displayAllUsers}
+            </>
+          )}
+        {searchResults.length > 0 && <>{displaySearchResults}</>}
+        {!searchUsername && myfriends.length > 0 && (
+          <>
+            <Text>Your friends:</Text>
+            {displayMyFriends}
+          </>
+        )}
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "purple",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -139,5 +168,8 @@ const styles = StyleSheet.create({
     color: "white",
     marginVertical: 10,
     backgroundColor: "black",
+  },
+  usersDisplay: {
+    width: "100%",
   },
 });
