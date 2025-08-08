@@ -1,26 +1,34 @@
-import React from 'react';
-import { StyleProp, TextInput, View, ViewStyle } from 'react-native';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React from "react";
+import { StyleProp, TextInput, View, ViewStyle } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 // Type declaration for the props of the InputElem component
 interface InputProps {
-	children: React.ReactNode;
-	onChangeText?: (text: string) => void;
-	style?: StyleProp<ViewStyle>;
-	secureTextEntry?: boolean;
+  children: React.ReactNode;
+  onChangeText?: (text: string) => void;
+  style?: StyleProp<ViewStyle>;
+  secureTextEntry?: boolean;
+  value?: string;
 }
 
-export default function InputElem({ children, onChangeText, style, secureTextEntry }: InputProps) {
-	return (
-		<TextInput
-			style={[styles.input, style]}
-			placeholder={children as string}
-			onChangeText={onChangeText}
-			placeholderTextColor="#381D2A"
-			secureTextEntry={secureTextEntry}
-		/>
-	);
-};
+export default function InputElem({
+  children,
+  onChangeText,
+  style,
+  secureTextEntry,
+  value,
+}: InputProps) {
+  return (
+    <TextInput
+      style={[styles.input, style]}
+      placeholder={children as string}
+      onChangeText={onChangeText}
+      value={value}
+      placeholderTextColor="#381D2A55"
+      secureTextEntry={secureTextEntry}
+    />
+  );
+}
 
 const styles = StyleSheet.create({
   input: {
