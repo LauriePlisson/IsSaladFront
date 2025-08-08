@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
-  ScrollView,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { UserState } from "../reducers/user";

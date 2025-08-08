@@ -16,9 +16,9 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 
-export default function ResultScreen(props, navigation) {
-  const photoUrl = props.route.params.photoUrl;
-  const result = props.route.params.result;
+export default function ResultScreen({ route, navigation }) {
+  const photoUrl = route.params.photoUrl;
+  const result = route.params.result;
   const user = useSelector((state: { user: UserState }) => state.user.value);
 
   const [description, setDescription] = useState("");
@@ -47,6 +47,7 @@ export default function ResultScreen(props, navigation) {
 
       if (data.result) {
         alert("Description ajoutée avec succès !");
+        navigation.navigate("TabNavigator");
       } else {
         alert("Erreur : " + data.error);
       }
@@ -65,7 +66,7 @@ export default function ResultScreen(props, navigation) {
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.headerButton}
-            onPress={() => props.navigation.navigate("TabNavigator")}
+            onPress={() => navigation.navigate("TabNavigator")}
           >
             {/*@ts-ignore*/}
             <FontAwesome name="times" size={25} color="black" />
