@@ -32,7 +32,7 @@ const store = configureStore({
   reducer: { user },
 });
 
-const TabNavigator = () => {
+const TabNavigator = ({ navigation }) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -57,9 +57,9 @@ const TabNavigator = () => {
               iconName = "user";
               break;
             case "Test":
-            iconName = "cog";
-            break;
-          case "TabCamera":
+              iconName = "cog";
+              break;
+            case "TabCamera":
               return null; // Camera button will be handled separately
           }
           //@ts-ignore
@@ -79,11 +79,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Test" component={TestScreen} />
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-       
-      />
+      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
         name="Search"
         component={SearchScreen}
@@ -102,7 +98,19 @@ const TabNavigator = () => {
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ headerLeft: false }}
+        options={{
+          headerRight: () => {
+            return (
+              <FontAwesome
+                name="cog"
+                size={24}
+                color="#381d2a"
+                style={{ marginRight: 20, marginBottom: 5 }}
+                onPress={() => navigation.navigate("Settings")}
+              />
+            );
+          },
+        }}
       />
       {/* Add other tabs here if needed */}
     </Tab.Navigator>

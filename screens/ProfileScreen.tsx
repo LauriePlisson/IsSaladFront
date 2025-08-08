@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { UserState } from "../reducers/user";
@@ -16,7 +18,6 @@ export default function ProfileScreen({ navigation }) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
   const user = useSelector((state: any) => state.user.value);
   const dispatch = useDispatch();
-  // console.log(username);
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<any[]>([]);
 
@@ -24,7 +25,7 @@ export default function ProfileScreen({ navigation }) {
     fetch(`${lienExpo}users/${user.username}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setPosts(data.postsList);
       });
   }, []);
@@ -33,10 +34,10 @@ export default function ProfileScreen({ navigation }) {
 
   const postDisplay = posts.map((post, i) => {
     return (
-      <View key={i} style={styles.postContainer}>
+      <View key={i}>
         <Image
           source={{ uri: post.photoUrl }}
-          style={{ width: 100, height: 100 }}
+          style={{ width: 150, aspectRatio: 1 }}
         />
       </View>
     );
@@ -65,13 +66,20 @@ export default function ProfileScreen({ navigation }) {
         }
       });
   };
+  console.log("userfriendlist reducer:", user.friendList);
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
-        <Text /*style={styles.title}*/>Go to Settings</Text>
-      </TouchableOpacity>
-      <Text /*style={styles.title}*/>Profile Screen</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.infoUser}>
+        <Image
+          source={{ uri: user.avatar }}
+          style={{ width: 100, aspectRatio: 1, borderRadius: 100 }}
+        />
+        <Text>{user.username}</Text>
+        <Text>{user.description}</Text>
+        <Text>Nombre de poste: {posts.length}</Text>
+        <Text>Nombre d'ami: {user.friendList.length}</Text>
+      </View>
       <TextInput
         /*style={styles.input}*/
         placeholder="Change description"
@@ -86,19 +94,29 @@ export default function ProfileScreen({ navigation }) {
       >
         <Text /*style={styles.buttonText}*/>Save Description</Text>
       </TouchableOpacity>
-      {postDisplay}
-    </View>
+      <ScrollView
+        contentContainerStyle={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          gap: 10,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        style={styles.display}
+      >
+        {postDisplay}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
-  postContainer: {
-    backgroundColor: "white",
+  display: {
+    margin: 10,
   },
 });

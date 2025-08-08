@@ -9,7 +9,7 @@ import {
 import SearchContainer from "../components/searchContainer";
 import UserBlock from "../components/userBlock";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { addFriendtoFriendList } from "../reducers/user";
 
 export default function SearchScreen() {
@@ -20,8 +20,9 @@ export default function SearchScreen() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
 
   const user = useSelector((state: any) => state.user.value);
-  console.log("User from Redux:", user);
-  console.log("my friends:", myfriends);
+  const dispatch = useDispatch();
+  // console.log("User from Redux:", user);
+  // console.log("my friends:", myfriends);
   let isFriend = false;
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function SearchScreen() {
         // console.log("Fetched users:", data);
         setAllUsers(data.users);
       });
-    setMyFriends(user.friendList);
+    // setMyFriends(user.friendList);
   }, []);
 
   const handleSearch = () => {
@@ -45,11 +46,10 @@ export default function SearchScreen() {
       .then((data) => {
         if (data.result) {
           setSearchResults([data]);
-          // setAllUsers(data.users);
-          console.log("Search results:", data);
+
+          // console.log("Search results:", data);
         } else {
-          console.log("No users found");
-          // setAllUsers([]);
+          // console.log("No users found");
         }
       })
       .catch((error) => {
@@ -57,8 +57,8 @@ export default function SearchScreen() {
       });
   };
 
-  const handleAdd = (name: string) => {
-    console.log("Adding user:", name);
+  const handleAdd = (frienddata: string) => {
+    // console.log("Adding user:", frienddata);
 
     fetch(`${lienExpo}users/addFriend`, {
       method: "PUT",
@@ -67,55 +67,62 @@ export default function SearchScreen() {
       },
       body: JSON.stringify({
         token: user.token,
-        friendUsername: name,
+        friendUsername: frienddata.username,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Add friend response:", data);
-        addFriendtoFriendList(name);
-        setMyFriends(data.friendList);
+        // console.log("Add friend response:", friendname);
+        const newFriend = {
+          username: frienddata.username,
+          avatar: frienddata.avatar,
+          team: frienddata.team,
+          description: frienddata.description,
+        };
+        dispatch(addFriendtoFriendList(newFriend));
+        // setMyFriends(data.friendList);
         setSearchUsername("");
         setSearchResults([]);
+        // console.log("reducer", user.friendList);
       });
 
     // Logic to add a user to the friend list
   };
-  const displayAllUsers = allUsers.map((alluser, i) => {
+  const displayAllUsers = allUsers?.map((alluser, i) => {
     return (
       <UserBlock
         key={i}
         children={alluser}
         onPress={() => {
-          handleAdd(alluser.username);
+          handleAdd(alluser);
         }}
-        isFriend={myfriends.some((e) => e.username === alluser.username)}
+        isFriend={user.friendList.some((e) => e.username === alluser.username)}
       />
     );
   });
 
-  const displayMyFriends = myfriends.map((friend, i) => {
+  const displayMyFriends = user.friendList?.map((friend, i) => {
     return (
       <UserBlock
         key={i}
         children={friend}
         onPress={() => {
-          handleAdd(friend.username);
+          handleAdd(friend);
         }}
         isFriend={true}
       />
     );
   });
 
-  const displaySearchResults = searchResults.map((result, i) => {
+  const displaySearchResults = searchResults?.map((result, i) => {
     return (
       <UserBlock
         key={i}
         children={result}
         onPress={() => {
-          handleAdd(result.username);
+          handleAdd(result);
         }}
-        isFriend={myfriends.some((e) => e.username === result.username)}
+        isFriend={user.friendList.some((e) => e.username === result.username)}
       />
     );
   });
@@ -138,7 +145,7 @@ export default function SearchScreen() {
         }}
         style={styles.usersDisplay}
       >
-        {myfriends.length === 0 &&
+        {user.friendList.length === 0 &&
           !searchUsername &&
           searchResults.length === 0 && (
             <>
@@ -147,7 +154,7 @@ export default function SearchScreen() {
             </>
           )}
         {searchResults.length > 0 && <>{displaySearchResults}</>}
-        {!searchUsername && myfriends.length > 0 && (
+        {!searchUsername && user.friendList.length > 0 && (
           <>
             <Text>Your friends:</Text>
             {displayMyFriends}

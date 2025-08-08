@@ -21,8 +21,6 @@ export default function UserBlock({
   onPress,
   isFriend = false,
 }: UserBlockProps) {
-  console.log("UserBlock rendered with:", children, isFriend);
-
   return (
     <View style={[styles.container, style]}>
       <Image source={{ uri: children.avatar }} style={styles.avatar} />
