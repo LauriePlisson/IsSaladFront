@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -32,7 +32,7 @@ const store = configureStore({
   reducer: { user },
 });
 
-const TabNavigator = () => {
+const TabNavigator = ({ navigation, user}) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -41,6 +41,7 @@ const TabNavigator = () => {
           borderTopLeftRadius: 8,
           borderTopRightRadius: 8,
         },
+        headerBackImageSource: headerLeftBtn,
         tabBarIcon: ({ color }) => {
           let iconName;
           switch (route.name) {
@@ -57,8 +58,8 @@ const TabNavigator = () => {
               iconName = "user";
               break;
             case "Test":
-            iconName = "cog";
-            break;
+              iconName = "meh-o";
+              break;
           case "TabCamera":
               return null; // Camera button will be handled separately
           }
@@ -78,38 +79,71 @@ const TabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="Test" component={TestScreen} />
+      <Tab.Screen
+        name="Test"
+        component={TestScreen}
+        options={{ 
+          // headerShown: false, tabBarButton: () => null, // Hide this tab in the tab bar
+          headerRight: () => {
+            return (
+              <FontAwesome name="cog" size={24} color="#381D2A" onPress={() => navigation.navigate('Settings')} />
+            );
+          }
+        }}
+      />
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-       
       />
       <Tab.Screen
         name="Search"
         component={SearchScreen}
-        options={{ headerLeft: false }}
+        // options={{ headerLeft: false }}
       />
       <Tab.Screen
         name="TabCamera"
         component={HomeCameraScreen}
-        options={{ tabBarButton: (props) => <PhotoButton {...props} /> }}
+        options={{ 
+          tabBarButton: () => { 
+            return (
+              <TouchableOpacity
+                style={{
+                  bottom: 20,
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#f39b6d",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 8,
+                }}
+                onPress={() => navigation.navigate('Camera')}
+              >
+                <FontAwesome name="camera" size={24} color="#381D2A" />
+              </TouchableOpacity>
+            );
+          }
+        }}
       />
       <Tab.Screen
         name="Doc"
         component={DocScreen}
-        options={{ headerLeft: false }}
+        // options={{ headerLeft: false }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ headerLeft: false }}
+        options={{ headerRight: () => {
+            return (
+              <FontAwesome name="cog" style={{ marginRight: 20, marginBottom: 5, color: "#381D2A" }} size={24} onPress={() => navigation.navigate('Settings')} />
+            );
+          } }}
       />
       {/* Add other tabs here if needed */}
     </Tab.Navigator>
   );
 };
 
-export default function App() {
+export default function App({ navigation }) {
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -118,7 +152,18 @@ export default function App() {
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} options={{ 
+            headerShown: true,
+            headerBackTitleVisible: false,
+            headerBackVisible: true,
+            headerStyle: {
+              backgroundColor: "#aabd8c",
+            },
+            headerTitleStyle: {
+              color: "transparent",
+            },
+            headerTintColor: "#381d2aff",
+          }}/>
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Result" component={ResultScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />

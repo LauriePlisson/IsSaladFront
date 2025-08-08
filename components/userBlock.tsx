@@ -5,17 +5,17 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // Type declaration for the props of the UserBlock component
 interface UserBlockProps {
-	children: {
+	children?: {
 		username: string;
 		avatar: string;
-		isFriend: boolean;
 		team: string;
 	};
 	onPress: () => void;
+	isFriend?: boolean;
 	style?: StyleProp<ViewStyle>;
 }
 // UserBlock component
-export default function UserBlock({children, style, onPress}: UserBlockProps) {
+export default function UserBlock({children, style, onPress, isFriend = false}: UserBlockProps) {
 	return (
 		<View style={[styles.container, style]}>
 			<Image source={{ uri: children.avatar }} style={styles.avatar} />
@@ -23,7 +23,7 @@ export default function UserBlock({children, style, onPress}: UserBlockProps) {
 				<Text style={styles.username}>{children.username}</Text>
 				<Text style={styles.team}>{children.team}</Text>
 			</View>
-			{!children.isFriend ? (
+			{!isFriend ? (
 				//@ts-ignore
 				<FontAwesome name='plus' size={24} color="#381d2a" style={styles.icon} onPress={onPress} />
 			) : (
@@ -37,7 +37,7 @@ export default function UserBlock({children, style, onPress}: UserBlockProps) {
 const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: 15,
-		paddingVertical: 20,
+		paddingVertical: 10,
 		width: '80%',
 		backgroundColor: '#e9e3b4',
 		marginVertical: 20,

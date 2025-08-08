@@ -10,13 +10,13 @@ interface InputProps {
 	secureTextEntry?: boolean;
 }
 
-export default function InputElem({ children, onChangeText, style, secureTextEntry }: InputProps) {
+export default function InputElem({ children, onChangeText, style, secureTextEntry = false }: InputProps) {
 	return (
 		<TextInput
 			style={[styles.input, style]}
 			placeholder={children as string}
 			onChangeText={onChangeText}
-			placeholderTextColor="#381D2A"
+			placeholderTextColor="#381D2A55"
 			secureTextEntry={secureTextEntry}
 		/>
 	);
