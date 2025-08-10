@@ -14,8 +14,8 @@ import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-const BACKEND_ADDRESS = "http://192.168.100.158:3000";
-
+// const BACKEND_ADDRESS = "http://192.168.100.158:3000";
+const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function ResultScreen({ route, navigation }) {
   const photoUrl = route.params.photoUrl;
   const result = route.params.result;
@@ -30,18 +30,15 @@ export default function ResultScreen({ route, navigation }) {
     }
 
     try {
-      const response = await fetch(
-        `${BACKEND_ADDRESS}/posts/updateDescription`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token: user.token,
-            photoUrl,
-            description,
-          }),
-        }
-      );
+      const response = await fetch(`${lienExpo}/posts/updateDescription`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          photoUrl,
+          description,
+        }),
+      });
 
       const data = await response.json();
 

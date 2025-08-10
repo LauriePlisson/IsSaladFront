@@ -39,9 +39,7 @@ export default function SignInScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Response data:", data);
         if (data.result === true && data.token) {
-          console.log("Sign in successful", data);
           dispatch(
             addUser({
               username: data.username,
@@ -52,18 +50,15 @@ export default function SignInScreen({ navigation }) {
               team: data.team,
             })
           );
-          console.log("User added to Redux store:", data.username);
+
           navigation.navigate("TabNavigator", "Home");
           setUsername("");
           setPassword("");
         } else {
           setError(true);
-          // console.log("Sign in failed");
         }
       });
   };
-
-  // console.log(error);
 
   return (
     <SafeAreaView style={styles.container}>

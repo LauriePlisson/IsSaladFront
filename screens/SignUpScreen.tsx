@@ -32,7 +32,7 @@ export default function SignUpScreen({ navigation }) {
       !regexEmail.test(email)
     ) {
       setError(true);
-      console.log("Invalid input");
+
       return;
     } else {
       fetch(`${lienExpo}users/signup`, {
@@ -52,17 +52,13 @@ export default function SignUpScreen({ navigation }) {
             setUsername("");
             setEmail("");
             setPassword("");
-            console.log("Sign up successful:", data.message);
+
             navigation.navigate("SignIn");
           } else {
-            console.log("Sign up failed:", data.error);
             setError(true);
           }
         });
     }
-    console.log("Sign Up button pressed");
-
-    //}
   };
 
   return (

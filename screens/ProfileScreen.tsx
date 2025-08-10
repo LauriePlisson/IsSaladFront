@@ -18,8 +18,11 @@ export default function ProfileScreen({ navigation }) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
   const user = useSelector((state: any) => state.user.value);
   const dispatch = useDispatch();
+
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<any[]>([]);
+  const [edit, setEdit] = useState<boolean>(false);
+  const [errorDesc, setErrorDesc] = useState(false);
 
   useEffect(() => {
     fetch(`${lienExpo}users/${user.username}`)
@@ -34,7 +37,10 @@ export default function ProfileScreen({ navigation }) {
 
   const postDisplay = posts.map((post, i) => {
     return (
-      <View key={i}>
+      <View key={i} style={styles.postContainer}>
+        <TouchableOpacity>
+          <Text>X</Text>
+        </TouchableOpacity>
         <Image
           source={{ uri: post.photoUrl }}
           style={{ width: 150, aspectRatio: 1 }}
@@ -58,42 +64,60 @@ export default function ProfileScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result === true) {
-          console.log("Description changed successfully", data);
+          // console.log("Description changed successfully", data);
           dispatch(editDescription(description));
           setDescription("");
+          setEdit(false);
         } else {
-          console.log("Failed to change description:", data.error);
+          setErrorDesc(true);
+          // console.log("Failed to change description:", data.error);
         }
       });
   };
-  console.log("userfriendlist reducer:", user.friendList);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.infoUser}>
+      <View style={styles.User}>
         <Image
           source={{ uri: user.avatar }}
           style={{ width: 100, aspectRatio: 1, borderRadius: 100 }}
         />
-        <Text>{user.username}</Text>
-        <Text>{user.description}</Text>
-        <Text>Nombre de poste: {posts.length}</Text>
-        <Text>Nombre d'ami: {user.friendList.length}</Text>
+        <View style={styles.userInfo}>
+          <View style={styles.username}>
+            <Text>{user.username}</Text>
+            <Text>{user.description}</Text>
+            <TouchableOpacity onPress={() => setEdit(!edit)}>
+              <Text>edit description</Text>
+            </TouchableOpacity>
+            {edit && (
+              <>
+                <TextInput
+                  placeholder="Change description"
+                  onChangeText={(value) => setDescription(value)}
+                  value={description}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    handleChangeDescription();
+                  }}
+                >
+                  <Text /*style={styles.buttonText}*/>Save Description</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+          <View style={styles.userNumber}>
+            <View style={styles.stats}>
+              <Text>Posts: </Text>
+              <Text>{posts.length}</Text>
+            </View>
+            <View style={styles.stats}>
+              <Text>Friends: </Text>
+              <Text>{user.friendList.length}</Text>
+            </View>
+          </View>
+        </View>
       </View>
-      <TextInput
-        /*style={styles.input}*/
-        placeholder="Change description"
-        onChangeText={(value) => setDescription(value)}
-        value={description}
-      />
-      <TouchableOpacity
-        /*style={styles.button}*/
-        onPress={() => {
-          handleChangeDescription();
-        }}
-      >
-        <Text /*style={styles.buttonText}*/>Save Description</Text>
-      </TouchableOpacity>
       <ScrollView
         contentContainerStyle={{
           flexDirection: "row",
@@ -118,5 +142,26 @@ const styles = StyleSheet.create({
   },
   display: {
     margin: 10,
+  },
+  User: {
+    flexDirection: "row",
+    marginTop: 25,
+    width: "90%",
+  },
+  userInfo: {
+    flexDirection: "row",
+    marginLeft: 15,
+  },
+  userNumber: {
+    // borderWidth: 2,
+    flexDirection: "row",
+    marginLeft: 15,
+    gap: 15,
+  },
+  stats: {
+    alignItems: "center",
+  },
+  postContainer: {
+    alignItems: "flex-end",
   },
 });

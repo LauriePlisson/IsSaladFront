@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import LogOut from "../components/logOut";
 import SettingsInput from "../components/settingsInput";
@@ -165,61 +167,65 @@ export default function SettingsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("TabNavigator", "Profile")}
-      >
-        <Text>Go to Profil</Text>
-      </TouchableOpacity>
-
       <ChangeAvatar
         name="modify"
         onPress={() => {
           handleChangeAvatar();
         }}
         photoPath={avatar || avatarUrl}
+        style={{ marginBottom: 15 }}
       />
 
       <Text style={styles.errorText}>
         {errorAvatar ? "Error changing avatar" : ""}
       </Text>
+      <KeyboardAvoidingView
+        style={styles.infoContainer}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <SettingsInput
+          placeholder="Username"
+          secureTextEntry={false}
+          onChangeText={(value) => {
+            setUsername(value), setErrorUsername(false);
+          }}
+          value={username}
+          onPress={() => handleChangeUsername()}
+        />
+        <Text style={styles.errorText}>
+          {errorUsername ? "Invalid Username or Empty Field" : ""}
+        </Text>
+        <SettingsInput
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={(value) => {
+            setErrorPassword(false), setPassword(value);
+          }}
+          value={password}
+          confirm={true}
+          style={{
+            width: "89%",
+            alignItems: "center",
+            justifyContent: "flex-start",
+          }}
+        />
 
-      <SettingsInput
-        placeholder="Username"
-        secureTextEntry={false}
-        onChangeText={(value) => {
-          setUsername(value), setErrorUsername(false);
-        }}
-        value={username}
-        onPress={() => handleChangeUsername()}
-      />
-      <Text style={styles.errorText}>
-        {errorUsername ? "Invalid Username or Empty Field" : ""}
-      </Text>
-      <SettingsInput
-        placeholder="Password"
-        secureTextEntry={true}
-        onChangeText={(value) => {
-          setErrorPassword(false), setPassword(value);
-        }}
-        value={password}
-        confirm={true}
-      />
+        <SettingsInput
+          placeholder="New Password"
+          secureTextEntry={true}
+          onChangeText={(value) => setNewPassword(value)}
+          value={newpassword}
+          onPress={() => {
+            handleChangePassword();
+          }}
+        />
 
-      <SettingsInput
-        placeholder="New Password"
-        secureTextEntry={true}
-        onChangeText={(value) => setNewPassword(value)}
-        value={newpassword}
-        onPress={() => {
-          handleChangePassword();
-        }}
-      />
-
-      <Text style={styles.errorText}>
-        {errorPassword
-          ? "Wrong Password, Invalid Newpassword or Empty Field"
-          : ""}{" "}
-      </Text>
+        <Text style={styles.errorText}>
+          {errorPassword
+            ? "Wrong Password, Invalid Newpassword or Empty Field"
+            : ""}{" "}
+        </Text>
+      </KeyboardAvoidingView>
 
       <LogOut
         children="Log Out"
@@ -244,13 +250,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    marginTop: 30,
   },
+  infoContainer: {
+    alignItems: "center",
+    marginBottom: 15,
+  },
+
   errorText: {
     color: "#f39b6d",
   },
   avatar: {
-    flex: 1,
+    // flex: 1,
     borderRadius: 100,
     resizeMode: "cover",
     aspectRatio: 1,

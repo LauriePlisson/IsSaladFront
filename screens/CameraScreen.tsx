@@ -17,8 +17,8 @@ import { UserState } from "../reducers/user";
 
 import * as ImagePicker from "expo-image-picker";
 
-const BACKEND_ADDRESS = "http://192.168.100.158:3000";
-
+// const BACKEND_ADDRESS = "http://192.168.100.158:3000";
+const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function CameraScreen({ navigation }) {
   const cameraRef = useRef<CameraView | null>(null);
 
@@ -83,7 +83,7 @@ export default function CameraScreen({ navigation }) {
     formData.append("date", new Date().toISOString());
 
     try {
-      const response = await fetch(`${BACKEND_ADDRESS}/posts/createPost`, {
+      const response = await fetch(`${lienExpo}posts/createPost`, {
         method: "POST",
         body: formData,
         headers: {

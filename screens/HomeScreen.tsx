@@ -11,15 +11,15 @@ import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-const BACKEND_ADDRESS = "http://192.168.100.158:3000";
-
+// const BACKEND_ADDRESS = "http://192.168.100.158:3000";
+const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function HomeScreen() {
   const user = useSelector((state: { user: UserState }) => state.user.value);
   const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch(`${BACKEND_ADDRESS}/posts/getPosts`);
+      const response = await fetch(`${lienExpo}posts/getPosts`);
       const data = await response.json();
       if (data.result) {
         setPosts(data.posts.slice(0, 5));
@@ -37,7 +37,7 @@ export default function HomeScreen() {
 
   const handleLike = async (post) => {
     try {
-      const response = await fetch(`${BACKEND_ADDRESS}/posts/likePost`, {
+      const response = await fetch(`${lienExpo}posts/likePost`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -56,7 +56,7 @@ export default function HomeScreen() {
 
   const handleDislike = async (post) => {
     try {
-      const response = await fetch(`${BACKEND_ADDRESS}/posts/dislikePost`, {
+      const response = await fetch(`${lienExpo}posts/dislikePost`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

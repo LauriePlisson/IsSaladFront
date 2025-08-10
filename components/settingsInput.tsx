@@ -58,7 +58,7 @@ export default function SettingsInput({
 const styles = StyleSheet.create({
   formContainer: {
     width: "80%",
-    height: 56,
+    height: "auto",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   input: {
-    height: 44,
+    height: "auto",
     width: "90%",
     fontSize: 20,
     color: "#381d2a",

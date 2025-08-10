@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import SearchContainer from "../components/searchContainer";
 import UserBlock from "../components/userBlock";
@@ -16,8 +17,9 @@ export default function SearchScreen() {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
   const [searchUsername, setSearchUsername] = useState<string>("");
   const [allUsers, setAllUsers] = useState<any[]>([]);
-  const [myfriends, setMyFriends] = useState<any[]>([]);
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [viewAll, setViewAll] = useState<boolean>(true);
+  const [viewFriend, setViewFriend] = useState<boolean>(false);
 
   const user = useSelector((state: any) => state.user.value);
   const dispatch = useDispatch();
@@ -126,9 +128,16 @@ export default function SearchScreen() {
       />
     );
   });
+  const handlePressOngletAll = () => {
+    setViewAll(true);
+    setViewFriend(false);
+  };
 
+  const handlePressOngletFriend = () => {
+    setViewFriend(true), setViewAll(false);
+  };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SearchContainer
         children={"search..."}
         onChangeText={(value) => setSearchUsername(value)}
@@ -137,6 +146,20 @@ export default function SearchScreen() {
           handleSearch();
         }}
       />
+      <View style={styles.onglets}>
+        <TouchableOpacity
+          style={styles.onglet}
+          onPress={() => handlePressOngletAll()}
+        >
+          <Text style={styles.textonglet}>All Users</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.onglet}
+          onPress={() => handlePressOngletFriend()}
+        >
+          <Text style={styles.textonglet}>Your Friends</Text>
+        </TouchableOpacity>
+      </View>
 
       <ScrollView
         contentContainerStyle={{
@@ -145,23 +168,21 @@ export default function SearchScreen() {
         }}
         style={styles.usersDisplay}
       >
-        {user.friendList.length === 0 &&
-          !searchUsername &&
-          searchResults.length === 0 && (
-            <>
-              <Text>All users:</Text>
-              {displayAllUsers}
-            </>
-          )}
+        {viewAll && !viewFriend && (
+          <>
+            <Text>All users:</Text>
+            {displayAllUsers}
+          </>
+        )}
         {searchResults.length > 0 && <>{displaySearchResults}</>}
-        {!searchUsername && user.friendList.length > 0 && (
+        {!viewAll && viewFriend && (
           <>
             <Text>Your friends:</Text>
             {displayMyFriends}
           </>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -178,5 +199,29 @@ const styles = StyleSheet.create({
   },
   usersDisplay: {
     width: "100%",
+  },
+  onglets: {
+    flexDirection: "row",
+    // borderWidth: 2,
+
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "space-around",
+    height: 50,
+    gap: 7,
+    marginBottom: 15,
+    marginTop: 5,
+  },
+  onglet: {
+    // borderWidth: 2,
+    height: "100%",
+    width: "45%",
+    backgroundColor: "#aabd8c",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+  },
+  textonglet: {
+    color: "#381D2A",
   },
 });
