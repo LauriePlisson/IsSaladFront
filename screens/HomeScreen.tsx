@@ -14,6 +14,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
+import Comment from "../components/comment";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -114,7 +115,7 @@ export default function HomeScreen() {
         // mettre à jour le post localement
         setSelectedPost(data.post);
         setPosts((prev) =>
-          prev.map((p) => (p._id === data.post._id ? data.post : p))
+          prev.map((elem) => (elem._id === data.post._id ? data.post : elem))
         );
       } else {
         alert(data.error || "Erreur envoi commentaire");
@@ -150,6 +151,8 @@ export default function HomeScreen() {
         visible={commentsVisible}
         animationType="slide"
         onRequestClose={() => setCommentsVisible(false)}
+        style={styles.globalModalStyle}
+        postComment={comment}
       >
         <View style={styles.modal}>
           <Text style={styles.modalTitle}>Commentaires</Text>
@@ -206,8 +209,19 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     textAlign: "center",
   },
+  globalModalStyle: {
+    flex: 0.5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   modal: { flex: 1, backgroundColor: "#fff", padding: 16, paddingTop: 24 },
-  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 50,
+    textAlign: "center",
+  },
   commentRow: {
     paddingVertical: 10,
     borderBottomWidth: 1,
