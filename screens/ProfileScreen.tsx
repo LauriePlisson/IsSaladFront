@@ -12,6 +12,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import { editDescription, UserState } from "../reducers/user";
+import MiniPost from "../components/miniPost";
 
 export type PostState = {
   _id: string;
@@ -22,7 +23,11 @@ export type PostState = {
   description: string;
   like: string[];
   dislike: string[];
-  comment: any[];
+  userHasLiked: boolean;
+  userHasDisliked: boolean;
+  likeCount: number;
+  dislikeCount: number;
+  comments: any[];
 };
 
 type toDeleteState = {
@@ -77,19 +82,7 @@ export default function ProfileScreen({ navigation }) {
 
   const postDisplay = posts.map((post, i) => {
     return (
-      <View key={i} style={styles.postContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            handleX(post.photoUrl);
-          }}
-        >
-          <Text>X</Text>
-        </TouchableOpacity>
-        <Image
-          source={{ uri: post.photoUrl }}
-          style={{ width: 120, aspectRatio: 1, borderRadius: 8 }}
-        />
-      </View>
+      <MiniPost postBlock={post} key={i} onPress={() => {}} toDelete={() => handleX(post.photoUrl)} isMine={true} />
     );
   });
 
@@ -116,6 +109,8 @@ export default function ProfileScreen({ navigation }) {
         } else {
           setErrorDesc(true);
           // console.log("Failed to change description:", data.error);
+          setDescription("");
+          setEdit(false);
         }
       });
   };
@@ -129,29 +124,44 @@ export default function ProfileScreen({ navigation }) {
         />
         <View style={styles.userInfo}>
           <View>
-            <Text>{user.username}</Text>
-            <Text>{user.description}</Text>
-            <TouchableOpacity onPress={() => setEdit(!edit)}>
-              <Text>edit description</Text>
-            </TouchableOpacity>
+            <Text style={styles.username}>{user.username}</Text>
+            <Text style={styles.description}>{user.description}</Text>
+            {!edit && <TouchableOpacity onPress={() => setEdit(!edit)}>
+              <Text style={styles.editButton}>edit description</Text>
+            </TouchableOpacity>}
             {edit && (
               <>
                 <TextInput
                   placeholder="Change description"
                   onChangeText={(value) => setDescription(value)}
                   value={description}
+                  style={{
+                    width: "100%",
+                    height: 40,
+                    borderColor: "#e9e3b4",
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    paddingHorizontal: 10,
+                    marginVertical: 10,
+                  }}
                 />
                 <TouchableOpacity
                   onPress={() => {
                     handleChangeDescription();
                   }}
                 >
-                  <Text /*style={styles.buttonText}*/>Save Description</Text>
+                  <Text style={styles.editButton}>Save Description</Text>
                 </TouchableOpacity>
               </>
             )}
           </View>
-          <View style={styles.userNumber}>
+          <View style={styles.userTeam}>
+            {user.team && <Image
+              source={{ uri: user.team }}
+              style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
+            />}
+          </View>
+          {/* <View style={styles.userNumber}>
             <View style={styles.stats}>
               <Text>Posts: </Text>
               <Text>{posts.length}</Text>
@@ -160,7 +170,7 @@ export default function ProfileScreen({ navigation }) {
               <Text>Friends: </Text>
               <Text>{user.friendList.length}</Text>
             </View>
-          </View>
+          </View> */}
         </View>
       </View>
       <ScrollView
@@ -190,18 +200,42 @@ const styles = StyleSheet.create({
   },
   User: {
     flexDirection: "row",
-    marginTop: 25,
-    width: "90%",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    marginTop: 15,
+    width: "95%",
+    // backgroundColor: "#e9e3b4",
   },
   userInfo: {
     flexDirection: "row",
-    marginLeft: 15,
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: '70%',
+    marginLeft: 10,
+    // backgroundColor: "#948b49ff",
   },
-  userNumber: {
-    // borderWidth: 2,
-    flexDirection: "row",
-    marginLeft: 15,
-    gap: 15,
+  username: {
+    fontFamily: "Josefin Sans",
+    fontSize: 22,
+    fontWeight: 900,
+    color: "#381d2a",
+  },
+  description: {
+    fontFamily: "Josefin Sans",
+    fontSize: 16,
+    color: "#381d2a9d",
+  },
+  editButton: {
+    fontFamily: "Josefin Sans",
+    fontSize: 12,
+    color: "#d67b1aff",
+    textDecorationLine: "underline",
+  },
+  userTeam: {
+    width: 60,
+    aspectRatio: 1,
+    borderRadius: 100,
+    backgroundColor: "#1f6225ff",
   },
   stats: {
     alignItems: "center",

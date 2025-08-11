@@ -14,6 +14,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
+import Comment from "../components/comment";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -158,12 +159,14 @@ export default function HomeScreen() {
             data={selectedPost?.comments ?? []}
             keyExtractor={(_, i) => i.toString()}
             renderItem={({ item }) => (
-              <View style={styles.commentRow}>
-                <Text style={styles.commentAuthor}>
-                  {item?.ownerComment?.username ?? "Utilisateur"}
-                </Text>
-                <Text>{item.text}</Text>
-              </View>
+              console.log(item),
+              <Comment ownerComment={item.ownerComment} text={item.text} position = {'first'}/>
+              // <View style={styles.commentRow}>
+              //   <Text style={styles.commentAuthor}>
+              //     {item?.ownerComment?.username ?? "Utilisateur"}
+              //   </Text>
+              //   <Text>{item.text}</Text>
+              // </View>
             )}
           />
 

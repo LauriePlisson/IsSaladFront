@@ -4,27 +4,27 @@ import { StyleSheet, Text, Image, View } from 'react-native';
 
 // Type declaration for the props of the Comment component
 interface CommentProps {
-	children: {
+	ownerComment: {
 		username: string;
-		avatar: string;
-		date: number;
-		team: string;
+		avatar?: string;
+		team?: string;
 	};
+	date?: number;
 	text: string;
 	position?: string;
 	style?: StyleProp<ViewStyle>;
 }
 // Comment component
-export default function Comment({children, text, style, position = 'first'}: CommentProps) {
+export default function Comment({ownerComment, text, style, position = 'first', date}: CommentProps) {
 	return (
 			<View style={[styles.mid, styles[position === 'last' ? 'last' : 'first'], style]}>
 				<View style={[styles.user, style]}>
-					<Image source={{ uri: children.avatar }} style={styles.avatar} />
+					{ownerComment.avatar && <Image source={{ uri: ownerComment.avatar }} style={styles.avatar} />}
 					<View style={styles.userInfo}>
-						<Text style={styles.username}>{children.username}</Text>
-						<Text style={styles.date}>{children.date}</Text>
+						<Text style={styles.username}>{ownerComment.username}</Text>
+						{date && <Text style={styles.date}>{date}</Text>}
 					</View>
-					<Image source={{ uri: children.team }} style={styles.team} />
+					{ownerComment.team && <Image source={{ uri: ownerComment.team }} style={styles.team} />}
 				</View>
 				{text && <Text style={styles.comment}>{text}</Text>}
 			</View>
