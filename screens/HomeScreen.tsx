@@ -157,17 +157,10 @@ export default function HomeScreen() {
 
           <FlatList
             data={selectedPost?.comments ?? []}
-            keyExtractor={(_, i) => i.toString()}
-            renderItem={({ item }) => (
-              console.log(item),
-              <Comment ownerComment={item.ownerComment} text={item.text} position = {'first'}/>
-              // <View style={styles.commentRow}>
-              //   <Text style={styles.commentAuthor}>
-              //     {item?.ownerComment?.username ?? "Utilisateur"}
-              //   </Text>
-              //   <Text>{item.text}</Text>
-              // </View>
+            renderItem={({ item, index }) => (
+              <Comment ownerComment={item.ownerComment} text={item.text} position={index === 0 ? 'first' : (index === selectedPost?.comments.length - 1 ? 'last' : 'middle')} date={item.date} />
             )}
+            keyExtractor={(item) => item._id}
           />
 
           <View style={styles.commentInputRow}>
