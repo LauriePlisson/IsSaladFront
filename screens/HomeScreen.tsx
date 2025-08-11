@@ -21,10 +21,15 @@ export default function HomeScreen() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch(`${lienExpo}posts/getPosts`);
+      const response = await fetch(`${lienExpo}posts/getPosts`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${user.token}`,
+        },
+      });
       const data = await response.json();
       if (data.result) {
-        setPosts(data.posts.slice(0, 5));
+        setPosts(data.posts.slice(0, 1));
       } else {
         alert("Erreur lors de la récupération des posts");
       }
@@ -51,8 +56,8 @@ export default function HomeScreen() {
       });
       const data = await response.json();
       if (data.result) {
-        console.log(data);
         fetchPosts(); // Recharge la liste
+        console.log(posts);
       }
     } catch (error) {
       console.error("Erreur lors du like :", error);
@@ -71,7 +76,6 @@ export default function HomeScreen() {
       });
       const data = await response.json();
       if (data.result) {
-        console.log(data);
         fetchPosts(); // Recharge la liste
       }
     } catch (error) {
@@ -84,8 +88,6 @@ export default function HomeScreen() {
       <Text style={styles.title}>Fil d'actualité</Text>
       <View style={styles.postsContainer}>
         {posts.map((post, index) => {
-          const userHasLiked = post.like.includes(user.token);
-          const userHasDisliked = post.dislike.includes(user.token);
           return (
             <Post
               key={index}
@@ -96,8 +98,6 @@ export default function HomeScreen() {
               handleLike={() => {
                 handleLike(post);
               }}
-              hasLike={userHasLiked}
-              hasDislike={userHasDisliked}
               onPress={() => {}}
             />
           );

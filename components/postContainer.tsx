@@ -12,7 +12,6 @@ interface PostProps {
 			username: string;
 			avatar?: string;
 		};
-		username: string;
 		description: string;
 		date: string;
 		photoUrl?: string;
@@ -24,42 +23,34 @@ interface PostProps {
 			team?: string;
 			date: string;
 		}[] | undefined;
-		likes?: { _id }[] | undefined;
-		dislikes?: { _id }[] | undefined;
+		likeCount?: number;
+		dislikeCount?: number;
+		userHasLiked?: boolean;
+		userHasDisliked?: boolean;
 		result?: string;
 	};
 	handleLike: () => void;
 	handleDislike: () => void;
 	onPress: () => void;
-	hasLike?: boolean;
-	hasDislike?: boolean;
 	style?: StyleProp<ViewStyle>;
 }
 
 
 
 // Post component
-export default function Post({postBlock, style, onPress, handleLike, handleDislike, hasLike, hasDislike}: PostProps) {
+export default function Post({postBlock, style, onPress, handleLike, handleDislike}: PostProps) {
 	const time: any = moment(postBlock.date);
 	const formattedDate: string = moment(time).fromNow();
 	let defaultPercentage: number = 100;
-	let total: number = 0;
-	if (postBlock.likes && postBlock.dislikes) {
-		total = postBlock.likes.length + postBlock.dislikes.length;
-	} else if (!postBlock.likes && !postBlock.dislikes) {
-		total = defaultPercentage
-	} else if (!postBlock.likes || !postBlock.dislikes) {
-		defaultPercentage = 50;
-	};
-	console.log('Likes:', postBlock.likes, 'Dislikes:', postBlock.dislikes, 'Total:', total, 'Default Percentage:', defaultPercentage);
+	let total: number = postBlock.likeCount + postBlock.dislikeCount;
 	const likePercentage = (total: number) => {
-		return Math.round((postBlock.likes.length / total) * 100);
+		return Math.round((postBlock.likeCount / total) * 100);
 	};
 	const dislikePercentage = (total: number) => {
-		return Math.round((postBlock.dislikes.length / total) * 100);
+		return Math.round((postBlock.dislikeCount / total) * 100);
 	};
-	const likeWidth: number = postBlock.likes ? likePercentage(postBlock.likes.length + postBlock.dislikes.length) : (postBlock.dislikes ? 0 : defaultPercentage);
-	const dislikeWidth: number = postBlock.dislikes ? dislikePercentage(postBlock.likes.length + postBlock.dislikes.length) : 0;
+	const likeWidth: number = postBlock.likeCount ? likePercentage(total) : (postBlock.dislikeCount ? 0 : defaultPercentage);
+	const dislikeWidth: number = postBlock.dislikeCount ? dislikePercentage(total) : 0;
 	return (
 		<View style={[styles.container, style]}>
 			<Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
@@ -79,8 +70,8 @@ export default function Post({postBlock, style, onPress, handleLike, handleDisli
 			<View style={styles.separator} />
 			<View style={styles.interactContainer}>
 				<>
-					{hasLike ? <FontAwesome name="heart" size={24} color="#f39b6d" style={styles.icon} onPress={handleLike} /> : <FontAwesome name="heart-o" size={24} color="#f39b6d" style={styles.icon} onPress={handleLike} />}
-					{hasDislike ? <FontAwesome name="thumbs-down" size={24} color="#f39b6d" style={styles.icon} onPress={handleDislike} /> : <FontAwesome name="thumbs-down" size={24} color="#5a2b11ff" style={styles.icon} onPress={handleDislike} />}
+					{postBlock.userHasLiked ? <FontAwesome name="heart" size={24} color={"#f39b6d"} style={styles.icon} onPress={handleLike} /> : <FontAwesome name="heart-o" size={24} color={"#f39b6d"} style={styles.icon} onPress={handleLike} />}
+					{postBlock.userHasDisliked ? <FontAwesome name="thumbs-down" size={24} color={"#f39b6d"} style={styles.icon} onPress={handleDislike} /> : <FontAwesome name="thumbs-down" size={24} color={"#5a2b11ff"} style={styles.icon} onPress={handleDislike} />}
 					{/* {postBlock.comments && postBlock.comments.map((comment) => (
 						<View key={comment._id} style={styles.userContainer}>
 							<Image source={{ uri: comment.avatar }} style={styles.avatar} />
