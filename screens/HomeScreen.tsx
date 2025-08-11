@@ -29,7 +29,7 @@ export default function HomeScreen() {
       });
       const data = await response.json();
       if (data.result) {
-        setPosts(data.posts.slice(0, 1));
+        setPosts(data.posts.slice(0, 5)); // Limite à 5 posts
       } else {
         alert("Erreur lors de la récupération des posts");
       }
@@ -57,7 +57,6 @@ export default function HomeScreen() {
       const data = await response.json();
       if (data.result) {
         fetchPosts(); // Recharge la liste
-        console.log(posts);
       }
     } catch (error) {
       console.error("Erreur lors du like :", error);
