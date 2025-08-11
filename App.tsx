@@ -24,6 +24,7 @@ import tabBar from "./components/tabBar";
 import headerLeftBtn from "./components/headerLeftBtn";
 import PhotoButton from "./components/photoBtn";
 import TestScreen from "./screens/TestScreen";
+import { ScreenStackHeaderLeftView } from "react-native-screens";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,7 +61,7 @@ const TabNavigator = ({ navigation }) => {
             case "Test":
               iconName = "meh-o";
               break;
-          case "TabCamera":
+            case "TabCamera":
               return null; // Camera button will be handled separately
           }
           //@ts-ignore
@@ -75,11 +76,15 @@ const TabNavigator = ({ navigation }) => {
           height: 90,
         },
         headerTitleStyle: {
-          color: "transparent",
+          color: "#ac6139ff",
+          fontWeight: "15",
+          fontSize: 25,
+          // fontFamily: "josephin sans",
         },
+        headerTitle: "IsSalad?",
       })}
     >
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Test"
         component={TestScreen}
         options={{ 
@@ -90,11 +95,8 @@ const TabNavigator = ({ navigation }) => {
             );
           }
         }}
-      />
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-      />
+      /> */}
+      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
         name="Search"
         component={SearchScreen}
@@ -103,8 +105,8 @@ const TabNavigator = ({ navigation }) => {
       <Tab.Screen
         name="TabCamera"
         component={HomeCameraScreen}
-        options={{ 
-          tabBarButton: () => { 
+        options={{
+          tabBarButton: () => {
             return (
               <TouchableOpacity
                 style={{
@@ -116,12 +118,12 @@ const TabNavigator = ({ navigation }) => {
                   justifyContent: "center",
                   borderRadius: 8,
                 }}
-                onPress={() => navigation.navigate('Camera')}
+                onPress={() => navigation.navigate("Camera")}
               >
                 <FontAwesome name="camera" size={24} color="#381D2A" />
               </TouchableOpacity>
             );
-          }
+          },
         }}
       />
       <Tab.Screen

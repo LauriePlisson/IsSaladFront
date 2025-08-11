@@ -9,7 +9,7 @@ import {
 export default function DocScreen({}) {
   return (
     <View style={styles.container}>
-      <Text /*style={styles.title}*/>Doc Screen</Text>
+      <Text /*style={styles.title}*/>Bienvenue dans IsSalad? !</Text>
     </View>
   );
 }
@@ -17,7 +17,6 @@ export default function DocScreen({}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "grey",
     alignItems: "center",
     justifyContent: "center",
   },

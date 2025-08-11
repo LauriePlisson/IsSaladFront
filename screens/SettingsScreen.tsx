@@ -35,7 +35,6 @@ export default function SettingsScreen({ navigation }) {
   const regexPassword: RegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
   const avatarUrl = user.avatar;
-  console.log(avatarUrl);
 
   const handleChangeAvatar = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

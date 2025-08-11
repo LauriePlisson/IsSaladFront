@@ -1,4 +1,3 @@
-import React from "react";
 import {
   StyleSheet,
   Text,
@@ -9,11 +8,10 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { useState, useEffect, useCallback } from "react";
-import { UserState } from "../reducers/user";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
-import { editDescription } from "../reducers/user";
+import { editDescription, UserState } from "../reducers/user";
 
 export type PostState = {
   _id: string;
@@ -27,16 +25,27 @@ export type PostState = {
   comment: any[];
 };
 
+type toDeleteState = {
+  token: string;
+  photoUrl: string;
+};
+
+type changeDescr = {
+  username: string;
+  description: string;
+  token: string;
+};
+
 export default function ProfileScreen({ navigation }) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
-  const user = useSelector((state: UserState) => state.user.value);
+  const user = useSelector((state: { user: UserState }) => state.user.value);
   const dispatch = useDispatch();
 
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<PostState[]>([]);
   const [edit, setEdit] = useState<boolean>(false);
   const [delet, setDelet] = useState<boolean>(false);
-  const [errorDesc, setErrorDesc] = useState(false);
+  const [errorDesc, setErrorDesc] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -50,7 +59,7 @@ export default function ProfileScreen({ navigation }) {
   );
 
   const handleX = (url: string) => {
-    const toDelete = {
+    const toDelete: toDeleteState = {
       token: user.token,
       photoUrl: url,
     };
@@ -78,23 +87,24 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
         <Image
           source={{ uri: post.photoUrl }}
-          style={{ width: 120, aspectRatio: 1 }}
+          style={{ width: 120, aspectRatio: 1, borderRadius: 8 }}
         />
       </View>
     );
   });
 
   const handleChangeDescription = () => {
+    const changeDescription: changeDescr = {
+      username: user.username,
+      description: description,
+      token: user.token,
+    };
     fetch(`${lienExpo}users/changeDescription`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username: user.username,
-        description: description,
-        token: user.token,
-      }),
+      body: JSON.stringify(changeDescription),
     })
       .then((response) => response.json())
       .then((data) => {

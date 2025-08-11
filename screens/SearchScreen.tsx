@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   SafeAreaView,
+  Keyboard,
 } from "react-native";
 import SearchContainer from "../components/searchContainer";
 import UserBlock from "../components/userBlock";
@@ -20,6 +21,9 @@ export default function SearchScreen() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [viewAll, setViewAll] = useState<boolean>(true);
   const [viewFriend, setViewFriend] = useState<boolean>(false);
+  const [errorSearch, setErrorSearch] = useState<boolean>(false);
+  const [lengthError, setLengthError] = useState<boolean>(false);
+  // const [changeColor, setChangeColor] = useState<boolean>(false);
 
   const user = useSelector((state: any) => state.user.value);
   const dispatch = useDispatch();
@@ -39,7 +43,8 @@ export default function SearchScreen() {
 
   const handleSearch = () => {
     if (searchUsername.length < 3) {
-      console.log("Search term must be at least 3 characters long");
+      setLengthError(true);
+      // console.log("Search term must be at least 3 characters long");
       return;
     }
 
@@ -51,15 +56,14 @@ export default function SearchScreen() {
 
           // console.log("Search results:", data);
         } else {
+          setErrorSearch(true);
           // console.log("No users found");
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching search results:", error);
       });
   };
+  // console.log(errorSearch);
 
-  const handleAdd = (frienddata: string) => {
+  const handleAdd = (frienddata) => {
     // console.log("Adding user:", frienddata);
 
     fetch(`${lienExpo}users/addFriend`, {
@@ -135,21 +139,40 @@ export default function SearchScreen() {
   const handlePressOngletAll = () => {
     setViewAll(true);
     setViewFriend(false);
+    setErrorSearch(false);
+    setLengthError(false);
+    setSearchResults([]);
   };
 
   const handlePressOngletFriend = () => {
     setViewFriend(true), setViewAll(false);
+    setErrorSearch(false);
+    setLengthError(false);
   };
   return (
     <SafeAreaView style={styles.container}>
       <SearchContainer
         children={"search..."}
-        onChangeText={(value) => setSearchUsername(value)}
+        onChangeText={(value) => {
+          setSearchUsername(value),
+            setErrorSearch(false),
+            setLengthError(false);
+        }}
         value={searchUsername}
         onPress={() => {
           handleSearch();
         }}
       />
+      {lengthError && (
+        <Text style={{ marginBottom: 5, color: "#ac6139ff" }}>
+          username search must be at least 3 letters
+        </Text>
+      )}
+      {errorSearch && (
+        <Text style={{ marginBottom: 5, color: "#ac6139ff" }}>
+          no user found
+        </Text>
+      )}
       <View style={styles.onglets}>
         <TouchableOpacity
           style={styles.onglet}
@@ -172,14 +195,19 @@ export default function SearchScreen() {
         }}
         style={styles.usersDisplay}
       >
-        {viewAll && !viewFriend && (
+        {viewAll && !viewFriend && searchResults.length === 0 && (
           <>
             <Text>All users:</Text>
             {displayAllUsers}
           </>
         )}
-        {searchResults.length > 0 && <>{displaySearchResults}</>}
-        {!viewAll && viewFriend && (
+        {searchResults.length > 0 && (
+          <>
+            <Text>Search Result:</Text>
+            {displaySearchResults}
+          </>
+        )}
+        {!viewAll && viewFriend && searchResults.length === 0 && (
           <>
             <Text>Your friends:</Text>
             {displayMyFriends}
