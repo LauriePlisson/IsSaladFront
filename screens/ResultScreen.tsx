@@ -30,7 +30,7 @@ export default function ResultScreen({ route, navigation }) {
     }
 
     try {
-      const response = await fetch(`${lienExpo}/posts/updateDescription`, {
+      const response = await fetch(`${lienExpo}posts/updateDescription`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

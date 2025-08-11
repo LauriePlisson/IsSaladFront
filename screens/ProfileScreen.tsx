@@ -22,6 +22,7 @@ export default function ProfileScreen({ navigation }) {
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<any[]>([]);
   const [edit, setEdit] = useState<boolean>(false);
+  const [delet, setDelet] = useState(false);
   const [errorDesc, setErrorDesc] = useState(false);
 
   useEffect(() => {
@@ -31,14 +32,33 @@ export default function ProfileScreen({ navigation }) {
         // console.log(data);
         setPosts(data.postsList);
       });
-  }, []);
+  }, [delet]);
 
-  // console.log(posts);
+  const handleX = (url: string) => {
+    const toDelete = {
+      token: user.token,
+      photoUrl: url,
+    };
+
+    fetch(`${lienExpo}posts/deletePost`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(toDelete),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data), setDelet(!delet);
+      });
+  };
 
   const postDisplay = posts.map((post, i) => {
     return (
       <View key={i} style={styles.postContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handleX(post.photoUrl);
+          }}
+        >
           <Text>X</Text>
         </TouchableOpacity>
         <Image
@@ -83,7 +103,7 @@ export default function ProfileScreen({ navigation }) {
           style={{ width: 100, aspectRatio: 1, borderRadius: 100 }}
         />
         <View style={styles.userInfo}>
-          <View style={styles.username}>
+          <View>
             <Text>{user.username}</Text>
             <Text>{user.description}</Text>
             <TouchableOpacity onPress={() => setEdit(!edit)}>
