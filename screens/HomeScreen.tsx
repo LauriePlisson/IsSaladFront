@@ -161,12 +161,14 @@ export default function HomeScreen() {
             data={selectedPost?.comments ?? []}
             keyExtractor={(_, i) => i.toString()}
             renderItem={({ item }) => (
-              <View style={styles.commentRow}>
-                <Text style={styles.commentAuthor}>
-                  {item?.ownerComment?.username ?? "Utilisateur"}
-                </Text>
-                <Text>{item.text}</Text>
-              </View>
+              console.log(item),
+              <Comment ownerComment={item.ownerComment} text={item.text} position = {'first'}/>
+              // <View style={styles.commentRow}>
+              //   <Text style={styles.commentAuthor}>
+              //     {item?.ownerComment?.username ?? "Utilisateur"}
+              //   </Text>
+              //   <Text>{item.text}</Text>
+              // </View>
             )}
           />
 
