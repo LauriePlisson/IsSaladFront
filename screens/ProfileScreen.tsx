@@ -9,30 +9,45 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { UserState } from "../reducers/user";
 import { useSelector, useDispatch } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 import { editDescription } from "../reducers/user";
+
+export type PostState = {
+  _id: string;
+  photoUrl: string;
+  ownerPost: string;
+  date: Date;
+  result: string;
+  description: string;
+  like: string[];
+  dislike: string[];
+  comment: any[];
+};
 
 export default function ProfileScreen({ navigation }) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
-  const user = useSelector((state: any) => state.user.value);
+  const user = useSelector((state: UserState) => state.user.value);
   const dispatch = useDispatch();
 
   const [description, setDescription] = useState<string>("");
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<PostState[]>([]);
   const [edit, setEdit] = useState<boolean>(false);
-  const [delet, setDelet] = useState(false);
+  const [delet, setDelet] = useState<boolean>(false);
   const [errorDesc, setErrorDesc] = useState(false);
 
-  useEffect(() => {
-    fetch(`${lienExpo}users/${user.username}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(data);
-        setPosts(data.postsList);
-      });
-  }, [delet]);
+  useFocusEffect(
+    useCallback(() => {
+      fetch(`${lienExpo}users/${user.username}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data);
+          setPosts(data.postsList);
+        });
+    }, [delet])
+  );
 
   const handleX = (url: string) => {
     const toDelete = {
@@ -63,7 +78,7 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
         <Image
           source={{ uri: post.photoUrl }}
-          style={{ width: 150, aspectRatio: 1 }}
+          style={{ width: 120, aspectRatio: 1 }}
         />
       </View>
     );
@@ -142,9 +157,9 @@ export default function ProfileScreen({ navigation }) {
         contentContainerStyle={{
           flexDirection: "row",
           flexWrap: "wrap",
-          gap: 10,
-          justifyContent: "center",
-          alignItems: "center",
+          gap: 5,
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
         }}
         style={styles.display}
       >
