@@ -3,6 +3,9 @@ import Comment from "../components/comment";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserBlock from "../components/userBlock";
+import { useSelector } from "react-redux";
+import { UserState } from "../reducers/user";
+import Post from "../components/postContainer";
 
 export default function SignInScreen({ navigation }) {
   const user = {

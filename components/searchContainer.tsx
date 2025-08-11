@@ -1,8 +1,8 @@
-import React from "react";
-import { StyleProp, TextInput, View, ViewStyle } from "react-native";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import InputElem from "./InputElem";
+import React from 'react';
+import { StyleProp, TextInput, View, ViewStyle } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import InputElem from './InputElem';
 
 // Type declaration for the props of the LogButton component
 interface SearchProps {

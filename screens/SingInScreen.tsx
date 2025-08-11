@@ -93,6 +93,9 @@ export default function SignInScreen({ navigation }) {
             onPressSignIn();
           }}
         />
+        {/* <ButtonLog children='Admin' onPress={() => {
+          setUsername('Test'), setPassword('Test1234'), onPressSignIn();
+        }} /> */}
       </KeyboardAvoidingView>
 
       <ButtonLog

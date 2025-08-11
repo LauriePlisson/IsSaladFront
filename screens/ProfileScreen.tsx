@@ -9,9 +9,10 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { UserState } from "../reducers/user";
 import { useSelector, useDispatch } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 import { editDescription } from "../reducers/user";
 
 export default function ProfileScreen({ navigation }) {
@@ -22,23 +23,45 @@ export default function ProfileScreen({ navigation }) {
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<any[]>([]);
   const [edit, setEdit] = useState<boolean>(false);
+  const [delet, setDelet] = useState(false);
   const [errorDesc, setErrorDesc] = useState(false);
 
-  useEffect(() => {
-    fetch(`${lienExpo}users/${user.username}`)
+  useFocusEffect(
+    useCallback(() => {
+      fetch(`${lienExpo}users/${user.username}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data);
+          setPosts(data.postsList);
+        });
+    }, [delet])
+  );
+
+  const handleX = (url: string) => {
+    const toDelete = {
+      token: user.token,
+      photoUrl: url,
+    };
+
+    fetch(`${lienExpo}posts/deletePost`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(toDelete),
+    })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
-        setPosts(data.postsList);
+        console.log(data), setDelet(!delet);
       });
-  }, []);
-
-  // console.log(posts);
+  };
 
   const postDisplay = posts.map((post, i) => {
     return (
       <View key={i} style={styles.postContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handleX(post.photoUrl);
+          }}
+        >
           <Text>X</Text>
         </TouchableOpacity>
         <Image
@@ -83,7 +106,7 @@ export default function ProfileScreen({ navigation }) {
           style={{ width: 100, aspectRatio: 1, borderRadius: 100 }}
         />
         <View style={styles.userInfo}>
-          <View style={styles.username}>
+          <View>
             <Text>{user.username}</Text>
             <Text>{user.description}</Text>
             <TouchableOpacity onPress={() => setEdit(!edit)}>
@@ -123,8 +146,8 @@ export default function ProfileScreen({ navigation }) {
           flexDirection: "row",
           flexWrap: "wrap",
           gap: 10,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
         }}
         style={styles.display}
       >
