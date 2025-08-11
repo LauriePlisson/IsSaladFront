@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
@@ -26,10 +27,15 @@ export default function HomeScreen() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch(`${lienExpo}posts/getPosts`);
+      const response = await fetch(`${lienExpo}posts/getPosts`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
       const data = await response.json();
       if (data.result) {
-        setPosts(data.posts.slice(0, 5));
+        setPosts(data.posts.slice(0, 5)); // Limite à 5 posts
       } else {
         alert("Erreur lors de la récupération des posts");
       }
@@ -38,9 +44,11 @@ export default function HomeScreen() {
     }
   };
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchPosts();
+    }, [])
+  );
 
   const handleLike = async (post) => {
     try {
@@ -121,8 +129,6 @@ export default function HomeScreen() {
       <Text style={styles.title}>Fil d'actualité</Text>
       <View style={styles.postsContainer}>
         {posts.map((post, index) => {
-          const userHasLiked = post.like.includes(user.token);
-          const userHasDisliked = post.dislike.includes(user.token);
           return (
             <Post
               key={index}
@@ -133,9 +139,9 @@ export default function HomeScreen() {
               handleLike={() => {
                 handleLike(post);
               }}
-              hasLike={userHasLiked}
-              hasDislike={userHasDisliked}
-              onPress={() => openComments(post)}
+              onPress={() => {
+                openComments(post);
+              }}
             />
           );
         })}

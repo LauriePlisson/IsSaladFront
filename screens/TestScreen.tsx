@@ -7,22 +7,11 @@ import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
 
-export default function SignInScreen({ navigation }) {
-  const user = {
-    username: "Test",
-    avatar:
-      "https://res.cloudinary.com/dtaynthro/image/upload/v1754572742/IsSalad/avatars/ovs9tsmnbbrskt2rhi5l.jpg",
-    team: "Salad",
-    isFriend: false,
-  };
+// TestScreen component
+export default function TestScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <UserBlock
-        onPress={() => {
-          console.log("Click !");
-        }}
-        children={user}
-      ></UserBlock>
+      
     </SafeAreaView>
   );
 }
