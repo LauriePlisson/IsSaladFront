@@ -11,24 +11,17 @@ interface InputProps {
   value?: string;
 }
 
-export default function InputElem({
-  children,
-  onChangeText,
-  style,
-  secureTextEntry,
-  value,
-}: InputProps) {
-  return (
-    <TextInput
-      style={[styles.input, style]}
-      placeholder={children as string}
-      onChangeText={onChangeText}
-      value={value}
-      placeholderTextColor="#381D2A55"
-      secureTextEntry={secureTextEntry}
-    />
-  );
-}
+export default function InputElem({ children, onChangeText, style, secureTextEntry = false }: InputProps) {
+	return (
+		<TextInput
+			style={[styles.input, style]}
+			placeholder={children as string}
+			onChangeText={onChangeText}
+			placeholderTextColor="#381D2A55"
+			secureTextEntry={secureTextEntry}
+		/>
+	);
+};
 
 const styles = StyleSheet.create({
   input: {

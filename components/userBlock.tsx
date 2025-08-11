@@ -5,49 +5,32 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 // Type declaration for the props of the UserBlock component
 interface UserBlockProps {
-  children: {
-    username: string;
-    avatar: string;
-    team: string;
-  };
-  isFriend?: boolean;
-  onPress: () => void;
-  style?: StyleProp<ViewStyle>;
+	children?: {
+		username: string;
+		avatar: string;
+		team: string;
+	};
+	onPress: () => void;
+	isFriend?: boolean;
+	style?: StyleProp<ViewStyle>;
 }
 // UserBlock component
-export default function UserBlock({
-  children,
-  style,
-  onPress,
-  isFriend = false,
-}: UserBlockProps) {
-  return (
-    <View style={[styles.container, style]}>
-      <Image source={{ uri: children.avatar }} style={styles.avatar} />
-      <View style={styles.userInfo}>
-        <Text style={styles.username}>{children.username}</Text>
-        <Text style={styles.team}>{children.team}</Text>
-      </View>
-      {!isFriend ? (
-        <FontAwesome
-          name="plus"
-          size={24}
-          color="#381d2a"
-          style={styles.icon}
-          onPress={onPress}
-        />
-      ) : (
-        <FontAwesome
-          name="close"
-          size={24}
-          color="#381d2a"
-          style={styles.icon}
-          onPress={onPress}
-        />
-      )}
-    </View>
-  );
-}
+export default function UserBlock({children, style, onPress, isFriend = false}: UserBlockProps) {
+	return (
+		<View style={[styles.container, style]}>
+			<Image source={{ uri: children.avatar }} style={styles.avatar} />
+			<View style={styles.userInfo}>
+				<Text style={styles.username}>{children.username}</Text>
+				<Text style={styles.team}>{children.team}</Text>
+			</View>
+			{!isFriend ? (
+				<FontAwesome name='plus' size={24} color="#381d2a" style={styles.icon} onPress={onPress} />
+			) : (
+				<FontAwesome name="close" size={24} color="#381d2a" style={styles.icon} onPress={onPress} />
+			)}
+		</View>
+	);
+};
 
 const styles = StyleSheet.create({
   container: {
