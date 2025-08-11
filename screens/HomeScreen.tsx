@@ -48,6 +48,7 @@ export default function HomeScreen() {
       });
       const data = await response.json();
       if (data.result) {
+        console.log(data);
         fetchPosts(); // Recharge la liste
       }
     } catch (error) {
@@ -67,6 +68,7 @@ export default function HomeScreen() {
       });
       const data = await response.json();
       if (data.result) {
+        console.log(data);
         fetchPosts(); // Recharge la liste
       }
     } catch (error) {
@@ -79,10 +81,8 @@ export default function HomeScreen() {
       <Text style={styles.title}>Fil d'actualité</Text>
       <View style={styles.postsContainer}>
       {posts.map((post, index) => {
-        const userHasLiked = post.like.includes(user.token);
-        const userHasDisliked = post.dislike.includes(user.token);
         return (
-          <Post key={index} postBlock={post} handleDislike={() => {handleDislike(post)}} handleLike={() => {handleLike(post)}} hasLike={userHasLiked} hasDislike={userHasDisliked} onPress={() => {}}/>
+          <Post key={index} postBlock={post} handleDislike={() => {handleDislike(post)}} handleLike={() => {handleLike(post)}} hasLike={post.like.includes(user.token)} hasDislike={post.dislike.includes(user.token)} onPress={() => {}}/>
         );
       })}
       </View>

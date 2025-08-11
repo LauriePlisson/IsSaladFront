@@ -24,8 +24,8 @@ interface PostProps {
 			team?: string;
 			date: string;
 		}[] | undefined;
-		likes?: number | undefined;	
-		dislikes?: number | undefined;
+		likes?: { _id }[] | undefined;
+		dislikes?: { _id }[] | undefined;
 		result?: string;
 	};
 	handleLike: () => void;
@@ -40,17 +40,26 @@ interface PostProps {
 
 // Post component
 export default function Post({postBlock, style, onPress, handleLike, handleDislike, hasLike, hasDislike}: PostProps) {
-	let defaultPercentage = 100;
-	const time = moment(postBlock.date);
-	const formattedDate = moment(time).fromNow();
+	const time: any = moment(postBlock.date);
+	const formattedDate: string = moment(time).fromNow();
+	let defaultPercentage: number = 100;
+	let total: number = 0;
+	if (postBlock.likes && postBlock.dislikes) {
+		total = postBlock.likes.length + postBlock.dislikes.length;
+	} else if (!postBlock.likes && !postBlock.dislikes) {
+		total = defaultPercentage
+	} else if (!postBlock.likes || !postBlock.dislikes) {
+		defaultPercentage = 50;
+	};
+	console.log('Likes:', postBlock.likes, 'Dislikes:', postBlock.dislikes, 'Total:', total, 'Default Percentage:', defaultPercentage);
 	const likePercentage = (total: number) => {
-		return Math.round((postBlock.likes / total) * 100);
+		return Math.round((postBlock.likes.length / total) * 100);
 	};
 	const dislikePercentage = (total: number) => {
-		return Math.round((postBlock.dislikes / total) * 100);
+		return Math.round((postBlock.dislikes.length / total) * 100);
 	};
-	const likeWidth: number = postBlock.likes !== 0 ? likePercentage(postBlock.likes + postBlock.dislikes) : (postBlock.dislikes === 0 ? defaultPercentage : 0);
-	const dislikeWidth: number = postBlock.dislikes ? dislikePercentage(postBlock.likes + postBlock.dislikes) : 0;
+	const likeWidth: number = postBlock.likes ? likePercentage(postBlock.likes.length + postBlock.dislikes.length) : (postBlock.dislikes ? 0 : defaultPercentage);
+	const dislikeWidth: number = postBlock.dislikes ? dislikePercentage(postBlock.likes.length + postBlock.dislikes.length) : 0;
 	return (
 		<View style={[styles.container, style]}>
 			<Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
