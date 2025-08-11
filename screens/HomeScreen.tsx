@@ -152,7 +152,6 @@ export default function HomeScreen() {
         animationType="slide"
         onRequestClose={() => setCommentsVisible(false)}
         style={styles.globalModalStyle}
-        postComment={comment}
       >
         <View style={styles.modal}>
           <Text style={styles.modalTitle}>Commentaires</Text>
