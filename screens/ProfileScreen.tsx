@@ -9,9 +9,10 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { UserState } from "../reducers/user";
 import { useSelector, useDispatch } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 import { editDescription } from "../reducers/user";
 
 export default function ProfileScreen({ navigation }) {
@@ -25,14 +26,16 @@ export default function ProfileScreen({ navigation }) {
   const [delet, setDelet] = useState(false);
   const [errorDesc, setErrorDesc] = useState(false);
 
-  useEffect(() => {
-    fetch(`${lienExpo}users/${user.username}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(data);
-        setPosts(data.postsList);
-      });
-  }, [delet]);
+  useFocusEffect(
+    useCallback(() => {
+      fetch(`${lienExpo}users/${user.username}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data);
+          setPosts(data.postsList);
+        });
+    }, [delet])
+  );
 
   const handleX = (url: string) => {
     const toDelete = {
@@ -143,8 +146,8 @@ export default function ProfileScreen({ navigation }) {
           flexDirection: "row",
           flexWrap: "wrap",
           gap: 10,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
         }}
         style={styles.display}
       >

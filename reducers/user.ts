@@ -62,7 +62,6 @@ export const userSlice = createSlice({
           (e) => e.username === action.payload.username
         )
       ) {
-        console.log("coucou");
         state.value.friendList.push(action.payload);
       } else {
         state.value.friendList = state.value.friendList.filter(
