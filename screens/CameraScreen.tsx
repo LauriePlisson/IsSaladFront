@@ -117,13 +117,10 @@ export default function CameraScreen({ navigation }) {
           style={styles.headerButton}
           onPress={() => navigation.navigate("TabNavigator")}
         >
-          {/*@ts-ignore*/}
           <FontAwesome name="times" size={25} color="black" />
         </TouchableOpacity>
         <Text style={styles.text}>Nouvelle Publication</Text>
         <TouchableOpacity style={styles.headerButton}>
-          {/*@ts-ignore*/}
-
           <FontAwesome name="arrow-right" size={25} color="black" />
         </TouchableOpacity>
       </View>
@@ -141,8 +138,6 @@ export default function CameraScreen({ navigation }) {
         <View style={styles.modalContainer}>
           <View style={styles.headerModal}>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
-              {/*@ts-ignore*/}
-
               <FontAwesome name="times" size={25} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
@@ -150,8 +145,6 @@ export default function CameraScreen({ navigation }) {
                 uploadPhoto();
               }}
             >
-              {/*@ts-ignore*/}
-
               <FontAwesome name="arrow-right" size={25} color="white" />
             </TouchableOpacity>
           </View>
@@ -168,24 +161,18 @@ export default function CameraScreen({ navigation }) {
       </Modal>
       <View style={styles.footer}>
         <TouchableOpacity style={styles.footerButton} onPress={openGallery}>
-          {/*@ts-ignore*/}
-
           <FontAwesome name="image" size={40} color="black" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.footerBUttonCamera}
           onPress={takePicture}
         >
-          {/*@ts-ignore*/}
-
           <FontAwesome name="camera-retro" size={40} color="black" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.footerButton}
           onPress={toggleCameraFacing}
         >
-          {/*@ts-ignore*/}
-
           <FontAwesome name="rotate-right" size={40} color="black" />
         </TouchableOpacity>
       </View>
