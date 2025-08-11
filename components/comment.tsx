@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, Text, Image, View } from 'react-native';
+import Moment from 'moment';
 
 // Type declaration for the props of the Comment component
 interface CommentProps {
@@ -16,17 +17,18 @@ interface CommentProps {
 }
 // Comment component
 export default function Comment({ownerComment, text, style, position = 'first', date}: CommentProps) {
+	const formattedDate: string = Moment(date).fromNow();
 	return (
 			<View style={[styles.mid, styles[position === 'last' ? 'last' : 'first'], style]}>
 				<View style={[styles.user, style]}>
-					{ownerComment.avatar && <Image source={{ uri: ownerComment.avatar }} style={styles.avatar} />}
+					{ownerComment.avatar ? <Image source={{ uri: ownerComment.avatar }} style={styles.avatar} /> : <View style={styles.avatar} />}
 					<View style={styles.userInfo}>
 						<Text style={styles.username}>{ownerComment.username}</Text>
-						{date && <Text style={styles.date}>{date}</Text>}
+						<Text style={styles.date}>{formattedDate}</Text>
 					</View>
-					{ownerComment.team && <Image source={{ uri: ownerComment.team }} style={styles.team} />}
+					{ownerComment.team ? <Image source={{ uri: ownerComment.team }} style={styles.team} /> : <View style={styles.team} />}
 				</View>
-				{text && <Text style={styles.comment}>{text}</Text>}
+				<Text style={styles.comment}>{text}</Text>
 			</View>
 		);
 	};
@@ -86,10 +88,12 @@ export default function Comment({ownerComment, text, style, position = 'first', 
 			height: 44,
 			borderRadius: 100,
 			marginRight: 10,
+			backgroundColor: '#0f5519ff',
 		},
 		team: {
 			width: 44,
 			height: 44,
 			borderRadius: 100,
+			backgroundColor: '#1f6225ff',
 		},
 	});

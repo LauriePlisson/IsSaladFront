@@ -91,6 +91,7 @@ export default function HomeScreen() {
 
   // ouvrir la modal commentaires
   const openComments = (post: any) => {
+    console.log("Post sélectionné :", post.ownerComment);
     setSelectedPost(post);
     setCommentsVisible(true);
   };
@@ -154,16 +155,23 @@ export default function HomeScreen() {
         style={styles.globalModalStyle}
       >
         <View style={styles.modal}>
+          <TouchableOpacity
+            style={styles.closeBtn}
+            onPress={() => setCommentsVisible(false)}
+          >
+            <Text>Fermer</Text>
+          </TouchableOpacity>
           <Text style={styles.modalTitle}>Commentaires</Text>
-
-          <FlatList
-            data={selectedPost?.comments ?? []}
-            renderItem={({ item, index }) => (
-              <Comment ownerComment={item.ownerComment} text={item.text} position={index === 0 ? 'first' : (index === selectedPost?.comments.length - 1 ? 'last' : 'middle')} date={item.date} />
-            )}
-            keyExtractor={(item) => item._id}
-          />
-
+          <View style={styles.commentList}>
+            <FlatList
+              data={selectedPost?.comments ?? []}
+              renderItem={({ item, index }) => (
+                <Comment ownerComment={item.ownerComment} text={item.text} position={index === 0 ? 'first' : (index === selectedPost?.comments.length - 1 ? 'last' : 'middle')} date={item.date} />
+              )}
+              keyExtractor={(item) => item._id}
+              contentContainerStyle={{ alignItems: "center" }}
+            />
+          </View>
           <View style={styles.commentInputRow}>
             <TextInput
               value={commentText}
@@ -175,13 +183,6 @@ export default function HomeScreen() {
               <Text style={{ color: "#fff", fontWeight: "600" }}>Envoyer</Text>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={styles.closeBtn}
-            onPress={() => setCommentsVisible(false)}
-          >
-            <Text>Fermer</Text>
-          </TouchableOpacity>
         </View>
       </Modal>
     </ScrollView>
@@ -208,25 +209,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  modal: { flex: 1, backgroundColor: "#fff", padding: 16, paddingTop: 24 },
+  modal: { 
+    flex: 1,
+    backgroundColor: "#fff", 
+    paddingTop: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   modalTitle: {
-    fontSize: 18,
+    fontFamily: "Josefin Sans",
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
     marginTop: 50,
     textAlign: "center",
   },
-  commentRow: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+  commentList: {
+    flex: 1,
+    width: "100%",
   },
-  commentAuthor: { fontWeight: "600", marginBottom: 2 },
-
   commentInputRow: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
+    marginHorizontal: 10,
   },
   input: {
     flex: 1,
@@ -238,7 +244,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   sendBtn: {
-    backgroundColor: "#000",
+    backgroundColor: "#d67b1aff",
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 8,
