@@ -91,16 +91,20 @@ export default function SearchScreen() {
     // Logic to add a user to the friend list
   };
   const displayAllUsers = allUsers?.map((alluser, i) => {
-    return (
-      <UserBlock
-        key={i}
-        children={alluser}
-        onPress={() => {
-          handleAdd(alluser);
-        }}
-        isFriend={user.friendList.some((e) => e.username === alluser.username)}
-      />
-    );
+    if (alluser.username !== user.username) {
+      return (
+        <UserBlock
+          key={i}
+          children={alluser}
+          onPress={() => {
+            handleAdd(alluser);
+          }}
+          isFriend={user.friendList.some(
+            (e) => e.username === alluser.username
+          )}
+        />
+      );
+    }
   });
 
   const displayMyFriends = user.friendList?.map((friend, i) => {
@@ -188,6 +192,7 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },

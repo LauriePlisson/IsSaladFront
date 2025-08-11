@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -32,9 +33,11 @@ export default function HomeScreen() {
     }
   };
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchPosts();
+    }, [])
+  );
 
   const handleLike = async (post) => {
     try {
@@ -78,13 +81,25 @@ export default function HomeScreen() {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Fil d'actualité</Text>
       <View style={styles.postsContainer}>
-      {posts.map((post, index) => {
-        const userHasLiked = post.like.includes(user.token);
-        const userHasDisliked = post.dislike.includes(user.token);
-        return (
-          <Post key={index} postBlock={post} handleDislike={() => {handleDislike(post)}} handleLike={() => {handleLike(post)}} hasLike={userHasLiked} hasDislike={userHasDisliked} onPress={() => {}}/>
-        );
-      })}
+        {posts.map((post, index) => {
+          const userHasLiked = post.like.includes(user.token);
+          const userHasDisliked = post.dislike.includes(user.token);
+          return (
+            <Post
+              key={index}
+              postBlock={post}
+              handleDislike={() => {
+                handleDislike(post);
+              }}
+              handleLike={() => {
+                handleLike(post);
+              }}
+              hasLike={userHasLiked}
+              hasDislike={userHasDisliked}
+              onPress={() => {}}
+            />
+          );
+        })}
       </View>
     </ScrollView>
   );
