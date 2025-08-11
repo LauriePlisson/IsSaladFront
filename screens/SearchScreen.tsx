@@ -142,6 +142,7 @@ export default function SearchScreen() {
     setErrorSearch(false);
     setLengthError(false);
     setSearchResults([]);
+    setSearchUsername("");
   };
 
   const handlePressOngletFriend = () => {

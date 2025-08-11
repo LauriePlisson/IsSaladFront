@@ -73,6 +73,7 @@ export default function SignUpScreen({ navigation }) {
           secureTextEntry={false}
           onChangeText={(value) => setEmail(value)}
           value={email}
+          keyboardType="email-address"
         />
         <FormContainer
           text="Username"
@@ -81,6 +82,7 @@ export default function SignUpScreen({ navigation }) {
           onChangeText={(value) => setUsername(value)}
           value={username}
         />
+        <Text style={styles.info}>at least 3 letters</Text>
         <FormContainer
           text="Password"
           placeholder="Password"
@@ -88,6 +90,9 @@ export default function SignUpScreen({ navigation }) {
           onChangeText={(value) => setPassword(value)}
           value={password}
         />
+        <Text style={styles.info}>
+          8 characters needed & at least one number
+        </Text>
 
         <Text style={styles.errorText}>
           {error ? "Invalid username or mail or password" : ""}
@@ -133,5 +138,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: "#f39b6d",
     width: "80%",
+  },
+  info: {
+    color: "#381d2a5a",
   },
 });

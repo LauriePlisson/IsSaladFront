@@ -9,9 +9,10 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import FormContainer from "../components/formContainer";
 import ButtonLog from "../components/logButton";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../reducers/user";
 
@@ -21,21 +22,27 @@ export default function SignInScreen({ navigation }) {
   const [error, setError] = useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
-  // console.log("Lien Expo:", lienExpo);
+  const lienExpo: string = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
+
   // const user = useSelector((state: any) => state.user.value);
-  // console.log("Current user state:", user);
+
+  type logInState = {
+    username: string;
+    password: string;
+  };
 
   const onPressSignIn = () => {
+    const userlogin: logInState = {
+      username: username,
+      password: password,
+    };
+
     fetch(`${lienExpo}users/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
+      body: JSON.stringify(userlogin),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -93,15 +100,15 @@ export default function SignInScreen({ navigation }) {
             onPressSignIn();
           }}
         />
-        {/* <ButtonLog children='Admin' onPress={() => {
-          setUsername('Test'), setPassword('Test1234'), onPressSignIn();
-        }} /> */}
       </KeyboardAvoidingView>
 
       <ButtonLog
         children="Sign Up"
         onPress={() => {
-          setError(false), navigation.navigate("SignUp");
+          setError(false);
+          setUsername("");
+          setPassword("");
+          navigation.navigate("SignUp");
         }}
       />
     </SafeAreaView>

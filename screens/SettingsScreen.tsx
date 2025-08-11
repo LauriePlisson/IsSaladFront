@@ -193,7 +193,7 @@ export default function SettingsScreen({ navigation }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <SettingsInput
-          placeholder="Username"
+          placeholder={user.username}
           secureTextEntry={false}
           onChangeText={(value) => {
             setUsername(value), setErrorUsername(false);
