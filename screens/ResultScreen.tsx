@@ -30,7 +30,7 @@ export default function ResultScreen({ route, navigation }) {
     }
 
     try {
-      const response = await fetch(`${lienExpo}/posts/updateDescription`, {
+      const response = await fetch(`${lienExpo}posts/updateDescription`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -54,6 +54,34 @@ export default function ResultScreen({ route, navigation }) {
     }
   };
 
+  const deletePost = async () => {
+    try {
+      const response = await fetch(`${lienExpo}posts/deletePost`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          photoUrl, // vient de route.params.photoUrl
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.result) {
+        // option 1 : simple
+        // navigation.navigate("TabNavigator");
+
+        // option 2 : reset la stack pour ne pas revenir sur l’écran courant en "back"
+        navigation.navigate("TabNavigator");
+      } else {
+        alert("Suppression impossible : " + (data.error || "Erreur inconnue"));
+      }
+    } catch (err) {
+      console.error("Erreur suppression :", err);
+      alert("Erreur lors de la suppression.");
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -61,10 +89,7 @@ export default function ResultScreen({ route, navigation }) {
     >
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={() => navigation.navigate("TabNavigator")}
-          >
+          <TouchableOpacity style={styles.headerButton} onPress={deletePost}>
             {/*@ts-ignore*/}
             <FontAwesome name="times" size={25} color="black" />
           </TouchableOpacity>

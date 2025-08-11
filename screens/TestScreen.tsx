@@ -1,19 +1,25 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import Comment from "../components/comment";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserBlock from "../components/userBlock";
 
 export default function SignInScreen({ navigation }) {
-  const user = { username: "Test", avatar: "https://res.cloudinary.com/dtaynthro/image/upload/v1754572742/IsSalad/avatars/ovs9tsmnbbrskt2rhi5l.jpg", team: 'Salad' , isFriend: false };
+  const user = {
+    username: "Test",
+    avatar:
+      "https://res.cloudinary.com/dtaynthro/image/upload/v1754572742/IsSalad/avatars/ovs9tsmnbbrskt2rhi5l.jpg",
+    team: "Salad",
+    isFriend: false,
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <UserBlock onPress={() => {console.log('Click !')}} children={user}></UserBlock>
+      <UserBlock
+        onPress={() => {
+          console.log("Click !");
+        }}
+        children={user}
+      ></UserBlock>
     </SafeAreaView>
   );
 }
@@ -35,15 +41,15 @@ const styles = StyleSheet.create({
   },
   // avatar: {
   //   flex: 1,
-	// 	borderRadius: 100,
+  // 	borderRadius: 100,
   //   resizeMode: 'cover',
   //   aspectRatio: 1,
-	// },
+  // },
   avatar: {
-			width: 32,
-			height: 32,
-			borderRadius: 100,
-			marginHorizontal: 4,
-			backgroundColor: '#E9E3B4',
-		},
+    width: 32,
+    height: 32,
+    borderRadius: 100,
+    marginHorizontal: 4,
+    backgroundColor: "#E9E3B4",
+  },
 });
