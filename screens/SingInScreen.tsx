@@ -87,15 +87,15 @@ export default function SignInScreen({ navigation }) {
         <Text style={styles.errorText}>
           {error ? "Invalid username or password" : ""}
         </Text>
-        {/* <ButtonLog
+        <ButtonLog
           children="Log In"
           onPress={() => {
             onPressSignIn();
           }}
-        /> */}
-        <ButtonLog children='Admin' onPress={() => {
+        />
+        {/* <ButtonLog children='Admin' onPress={() => {
           setUsername('Test'), setPassword('Test1234'), onPressSignIn();
-        }} />
+        }} /> */}
       </KeyboardAvoidingView>
 
       <ButtonLog

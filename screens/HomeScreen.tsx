@@ -10,6 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Post from "../components/postContainer";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -76,45 +77,15 @@ export default function HomeScreen() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Fil d'actualité</Text>
+      <View style={styles.postsContainer}>
       {posts.map((post, index) => {
         const userHasLiked = post.like.includes(user.token);
         const userHasDisliked = post.dislike.includes(user.token);
-
         return (
-          <View key={index} style={styles.card}>
-            <Image source={{ uri: post.photoUrl }} style={styles.image} />
-            <Text style={styles.username}>@{post.ownerPost.username}</Text>
-            <Text style={styles.result}>Résultat : {post.result}</Text>
-            <Text style={styles.description}>{post.description}</Text>
-
-            <View style={styles.actions}>
-              <TouchableOpacity
-                onPress={() => handleLike(post)}
-                style={styles.likeButton}
-              >
-                <FontAwesome
-                  name="heart"
-                  size={24}
-                  color={userHasLiked ? "red" : "gray"}
-                />
-                <Text style={styles.likeCount}>{post.like.length}</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => handleDislike(post)}
-                style={styles.likeButton}
-              >
-                <FontAwesome
-                  name="thumbs-down"
-                  size={24}
-                  color={userHasDisliked ? "blue" : "gray"}
-                />
-                <Text style={styles.likeCount}>{post.dislike.length}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <Post key={index} postBlock={post} handleDislike={() => {handleDislike(post)}} handleLike={() => {handleLike(post)}} hasLike={userHasLiked} hasDislike={userHasDisliked} onPress={() => {}}/>
         );
       })}
+      </View>
     </ScrollView>
   );
 }
@@ -122,58 +93,16 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+  },
+  postsContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
     marginVertical: 20,
     textAlign: "center",
-  },
-  card: {
-    backgroundColor: "#fff",
-    marginHorizontal: 20,
-    marginBottom: 20,
-    padding: 15,
-    borderRadius: 10,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  image: {
-    width: "100%",
-    height: 200,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  username: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  result: {
-    fontStyle: "italic",
-    marginBottom: 5,
-  },
-  description: {
-    fontSize: 14,
-    color: "#333",
-    marginBottom: 10,
-  },
-  actions: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    gap: 15,
-  },
-  likeButton: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  likeCount: {
-    marginLeft: 6,
-    fontSize: 16,
-    color: "#333",
   },
 });

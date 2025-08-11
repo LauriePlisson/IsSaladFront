@@ -10,9 +10,7 @@ interface PostProps {
 		ownerPost: {
 			_id: string;
 			username: string;
-			avatar: string;
-			team?: string;
-			friendList?: string[];
+			avatar?: string;
 		};
 		username: string;
 		description: string;
@@ -30,14 +28,18 @@ interface PostProps {
 		dislikes?: number | undefined;
 		result?: string;
 	};
+	handleLike: () => void;
+	handleDislike: () => void;
 	onPress: () => void;
+	hasLike?: boolean;
+	hasDislike?: boolean;
 	style?: StyleProp<ViewStyle>;
 }
 
 
 
 // Post component
-export default function Post({postBlock, style, onPress}: PostProps) {
+export default function Post({postBlock, style, onPress, handleLike, handleDislike, hasLike, hasDislike}: PostProps) {
 	let defaultPercentage = 100;
 	const time = moment(postBlock.date);
 	const formattedDate = moment(time).fromNow();
@@ -53,23 +55,23 @@ export default function Post({postBlock, style, onPress}: PostProps) {
 		<View style={[styles.container, style]}>
 			<Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
 			<View style={styles.userContainer}>
-				<Image source={{ uri: postBlock.ownerPost.avatar }} style={styles.avatar} />
+				<Image source={{ uri: postBlock.ownerPost.avatar }} style={postBlock.ownerPost.avatar ? styles.avatar : styles.avatarPlaceholder} />
 				<View style={styles.userInfo}>
-					<Text style={styles.username}>{postBlock.ownerPost.username}</Text>
+					<Text style={styles.username}>@{postBlock.ownerPost.username}</Text>
 					<Text style={styles.description}>{postBlock.description.length > 180 ? postBlock.description.substring(0, 180) + '...' : postBlock.description}</Text>
 				</View>
 				<View style={styles.postInfos}>
 					<Text style={styles.date}>{formattedDate}</Text>
-					{postBlock.ownerPost.team && (
-						<Image source={{ uri: postBlock.ownerPost.team }} style={styles.team} />
+					{postBlock.result && (
+						<Image source={{ uri: postBlock.result }} style={styles.team} />
 					)}
 				</View>
 			</View>
 			<View style={styles.separator} />
 			<View style={styles.interactContainer}>
 				<>
-					{postBlock.likes ? <FontAwesome name="heart" size={24} color="#f39b6d" style={styles.icon} onPress={onPress} /> : <FontAwesome name="heart-o" size={24} color="#f39b6d" style={styles.icon} onPress={onPress} />}
-					{postBlock.dislikes ? <FontAwesome name="thumbs-down" size={24} color="#f39b6d" style={styles.icon} onPress={onPress} /> : <FontAwesome name="thumbs-down-o" size={24} color="#f39b6d" style={styles.icon} onPress={onPress} />}
+					{hasLike ? <FontAwesome name="heart" size={24} color="#f39b6d" style={styles.icon} onPress={handleLike} /> : <FontAwesome name="heart-o" size={24} color="#f39b6d" style={styles.icon} onPress={handleLike} />}
+					{hasDislike ? <FontAwesome name="thumbs-down" size={24} color="#f39b6d" style={styles.icon} onPress={handleDislike} /> : <FontAwesome name="thumbs-down" size={24} color="#5a2b11ff" style={styles.icon} onPress={handleDislike} />}
 					{/* {postBlock.comments && postBlock.comments.map((comment) => (
 						<View key={comment._id} style={styles.userContainer}>
 							<Image source={{ uri: comment.avatar }} style={styles.avatar} />
@@ -92,7 +94,6 @@ export default function Post({postBlock, style, onPress}: PostProps) {
 const styles = StyleSheet.create({
 	container: {
 		width: '80%',
-		// maxHeight: 400,
 		backgroundColor: '#fff',
 		marginVertical: 10,
 		borderRadius: 8,
@@ -101,13 +102,10 @@ const styles = StyleSheet.create({
 	},
 	image: {
 		width: '100%',
-		height: '65%',
-		// height: 200,
-		// maxHeight: 360,
-		// maxWidth: 360,
 		borderTopLeftRadius: 8,
 		borderTopRightRadius: 8,
 		resizeMode: 'cover',
+		aspectRatio: 1,
 	},
 	userContainer: {
 		flexDirection: 'row',
@@ -115,10 +113,15 @@ const styles = StyleSheet.create({
 		padding: 12,
 	},
 	avatar: {
-		width: 32,
-		height: 32,
+		width: 40,
+		height: 40,
 		borderRadius: 100,
-		marginHorizontal: 4,
+	},
+	avatarPlaceholder: {
+		width: 40,
+		height: 40,
+		borderRadius: 100,
+		backgroundColor: '#0f5519ff',
 	},
 	userInfo: {
 		flex: 1,
@@ -138,21 +141,20 @@ const styles = StyleSheet.create({
 		lineHeight: 20,
 	},
 	postInfos: {
-		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'space-between',
+		justifyContent: 'center',
 	},
 	date: {
 		fontFamily: 'Josefin Sans',
-		fontSize: 14,
+		fontSize: 12,
 		color: '#381d2a55',
 		lineHeight: 18,
+		marginBottom: 4,
 	},
 	team: {
-		width: 32,
-		height: 32,
+		width: 40,
+		height: 40,
 		borderRadius: 100,
-		marginHorizontal: 4,
 		backgroundColor: '#E9E3B4',
 	},
 	separator: {
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
 	voteContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
-		width: '69%',
+		width: '60%',
 		height: 30,
 		padding: 10,
 		borderRadius: 8,
