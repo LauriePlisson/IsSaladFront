@@ -12,7 +12,8 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Icon from "../components/icons";
+import { ChevronRight } from "lucide-react-native";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -90,18 +91,16 @@ export default function ResultScreen({ route, navigation }) {
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.headerButton} onPress={deletePost}>
-            {/*@ts-ignore*/}
-            <FontAwesome name="times" size={25} color="black" />
+            <Icon name="x" size={25} color="black" />
           </TouchableOpacity>
           <Text style={styles.text}>Nouvelle Publication</Text>
           <TouchableOpacity style={styles.headerButton}>
-            {/*@ts-ignore*/}
-            <FontAwesome name="arrow-right" size={25} color="black" />
+            <ChevronRight size={25} color="black" />
           </TouchableOpacity>
         </View>
 
         <Image source={{ uri: photoUrl }} style={styles.image} />
-        <Text style={styles.result}>Résultat : {result}</Text>
+        <Text style={styles.result}>IS... {result} !!!</Text>
 
         <TextInput
           placeholder="Ajouter une description..."

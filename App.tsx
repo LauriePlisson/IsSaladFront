@@ -6,10 +6,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-
+import search from "./reducers/search";
 import user from "./reducers/user";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import Icon from "./components/icons";
+import OptionSearchScreen from "./screens/OptionSearchScreen";
 import SignInScreen from "./screens/SingInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -24,13 +24,15 @@ import tabBar from "./components/tabBar";
 import headerLeftBtn from "./components/headerLeftBtn";
 import PhotoButton from "./components/photoBtn";
 import TestScreen from "./screens/TestScreen";
+import UserScreen from "./screens/UserScreen";
 import { ScreenStackHeaderLeftView } from "react-native-screens";
+import { Camera, Settings } from "lucide-react-native";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, search },
 });
 
 const TabNavigator = ({ navigation }) => {
@@ -44,28 +46,27 @@ const TabNavigator = ({ navigation }) => {
         },
         headerBackImageSource: headerLeftBtn,
         tabBarIcon: ({ color }) => {
-          let iconName;
+          let iconName: string;
           switch (route.name) {
             case "Home":
-              iconName = "home";
+              iconName = "house";
               break;
             case "Search":
-              iconName = "search";
+              iconName = "user-plus";
               break;
             case "Doc":
-              iconName = "book";
+              iconName = "notebook-text";
               break;
             case "Profile":
               iconName = "user";
               break;
             case "Test":
-              iconName = "meh-o";
+              iconName = "meh";
               break;
             case "TabCamera":
               return null; // Camera button will be handled separately
           }
-          //@ts-ignore
-          return <FontAwesome name={iconName} size={24} color={color} />;
+          return <Icon name={iconName} size={24} color={color} />;
         },
         tabBarActiveTintColor: "#ac6139ff",
         tabBarInactiveTintColor: "#381D2A",
@@ -77,9 +78,9 @@ const TabNavigator = ({ navigation }) => {
         },
         headerTitleStyle: {
           color: "#ac6139ff",
-          fontWeight: "15",
+          fontWeight: "bold",
           fontSize: 25,
-          // fontFamily: "josephin sans",
+          fontFamily: "josephin sans",
         },
         headerTitle: "IsSalad?",
       })}
@@ -99,7 +100,7 @@ const TabNavigator = ({ navigation }) => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
         name="Search"
-        component={SearchScreen}
+        component={OptionSearchScreen}
         // options={{ headerLeft: false }}
       />
       <Tab.Screen
@@ -120,7 +121,7 @@ const TabNavigator = ({ navigation }) => {
                 }}
                 onPress={() => navigation.navigate("Camera")}
               >
-                <FontAwesome name="camera" size={24} color="#381D2A" />
+                <Camera size={24} color="#381D2A" />
               </TouchableOpacity>
             );
           },
@@ -137,13 +138,12 @@ const TabNavigator = ({ navigation }) => {
         options={{
           headerRight: () => {
             return (
-              <FontAwesome
-                name="cog"
-                size={24}
-                color="#381d2a"
+              <TouchableOpacity
                 style={{ marginRight: 20, marginBottom: 5 }}
                 onPress={() => navigation.navigate("Settings")}
-              />
+              >
+                <Settings size={24} color="#381d2a" />
+              </TouchableOpacity>
             );
           },
         }}
@@ -177,6 +177,18 @@ export default function App({ navigation }) {
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Result" component={ResultScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
+          <Stack.Screen
+            name="UserScreen"
+            component={UserScreen}
+            options={{
+              headerShown: true,
+              headerBackVisible: true,
+              headerStyle: { backgroundColor: "#aabd8c" },
+              headerTitleStyle: { color: "transparent" },
+              headerTintColor: "#381d2aff",
+              headerBackTitleVisible: false,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

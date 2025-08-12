@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Pencil } from 'lucide-react-native';
 
 
 // Type declaration for the props of the ChangeAvatar component
@@ -16,7 +16,7 @@ interface ChangeAvatarProps {
 export default function ChangeAvatar({ name, onPress, style, photoPath }: ChangeAvatarProps) {
 	return (
 			<TouchableOpacity style={[styles.button, styles[name === 'modify' ? 'modify' : 'display'], style]} onPress={onPress}>
-				{name && <FontAwesome name='pencil' size={20} style={styles.icon} />}
+				{name && <View style={styles.icon}><Pencil size={20} color="#f39b6d" /></View>}
 				<Image source={{ uri: photoPath }} style={styles.avatar} />
 			</TouchableOpacity>
 		);
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 	},
 	icon: {
-		color: '#f39b6d',
 		position: 'absolute',
 		top: 10,
 		right: -6,

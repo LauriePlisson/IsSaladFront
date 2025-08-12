@@ -13,8 +13,9 @@ import UserBlock from "../components/userBlock";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addFriendtoFriendList } from "../reducers/user";
+import { newSearch } from "../reducers/search";
 
-export default function SearchScreen() {
+export default function SearchScreen(props) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
   const [searchUsername, setSearchUsername] = useState<string>("");
   const [allUsers, setAllUsers] = useState<any[]>([]);
@@ -62,6 +63,11 @@ export default function SearchScreen() {
       });
   };
   // console.log(errorSearch);
+  const handlePressProfil = (name: string) => {
+    // console.log(name);
+    dispatch(newSearch(name));
+    props.change();
+  };
 
   const handleAdd = (frienddata) => {
     // console.log("Adding user:", frienddata);
@@ -103,6 +109,9 @@ export default function SearchScreen() {
           onPress={() => {
             handleAdd(alluser);
           }}
+          redirect={() => {
+            handlePressProfil(alluser.username);
+          }}
           isFriend={user.friendList.some(
             (e) => e.username === alluser.username
           )}
@@ -119,6 +128,9 @@ export default function SearchScreen() {
         onPress={() => {
           handleAdd(friend);
         }}
+        redirect={() => {
+          handlePressProfil(friend.username);
+        }}
         isFriend={true}
       />
     );
@@ -131,6 +143,9 @@ export default function SearchScreen() {
         children={result}
         onPress={() => {
           handleAdd(result);
+        }}
+        redirect={() => {
+          handlePressProfil(result.username);
         }}
         isFriend={user.friendList.some((e) => e.username === result.username)}
       />
@@ -151,7 +166,7 @@ export default function SearchScreen() {
     setLengthError(false);
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <>
       <SearchContainer
         children={"search..."}
         onChangeText={(value) => {
@@ -215,7 +230,7 @@ export default function SearchScreen() {
           </>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 }
 

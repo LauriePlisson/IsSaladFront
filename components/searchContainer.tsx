@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleProp, TextInput, View, ViewStyle } from "react-native";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Icon from "./icons";
 import InputElem from "./InputElem";
+import { Search } from "lucide-react-native";
 
 // Type declaration for the props of the LogButton component
 interface SearchProps {
@@ -22,14 +23,13 @@ export default function SearchContainer({
 }: SearchProps) {
   return (
     <View style={[styles.inputContainer, style]}>
-      {/* <FontAwesome name="search" size={20} color="#381D2A" /> */}
       <InputElem
         children={children}
         onChangeText={onChangeText}
         value={value}
       />
       <TouchableOpacity onPress={onPress}>
-        <FontAwesome name="search" size={20} color="#381D2A" />
+        <Search size={20} color="#381D2A" />
       </TouchableOpacity>
     </View>
   );

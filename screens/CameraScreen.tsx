@@ -9,13 +9,15 @@ import {
   Image,
 } from "react-native";
 
+import Icon from "../components/icons";
+
 import { CameraView, Camera, CameraType } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 
 import * as ImagePicker from "expo-image-picker";
+import { CameraIcon, ChevronRight, Images, SwitchCameraIcon } from "lucide-react-native";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -117,11 +119,11 @@ export default function CameraScreen({ navigation }) {
           style={styles.headerButton}
           onPress={() => navigation.navigate("TabNavigator")}
         >
-          <FontAwesome name="times" size={25} color="black" />
+          <Icon name="x" size={25} color="black" />
         </TouchableOpacity>
         <Text style={styles.text}>Nouvelle Publication</Text>
         <TouchableOpacity style={styles.headerButton}>
-          <FontAwesome name="arrow-right" size={25} color="black" />
+          <ChevronRight size={25} color="black" />
         </TouchableOpacity>
       </View>
       <CameraView
@@ -138,14 +140,14 @@ export default function CameraScreen({ navigation }) {
         <View style={styles.modalContainer}>
           <View style={styles.headerModal}>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <FontAwesome name="times" size={25} color="white" />
+              <Icon name="x" size={25} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 uploadPhoto();
               }}
             >
-              <FontAwesome name="arrow-right" size={25} color="white" />
+              <ChevronRight size={25} color="white" />
             </TouchableOpacity>
           </View>
           <View style={styles.modalContent}>
@@ -161,19 +163,19 @@ export default function CameraScreen({ navigation }) {
       </Modal>
       <View style={styles.footer}>
         <TouchableOpacity style={styles.footerButton} onPress={openGallery}>
-          <FontAwesome name="image" size={40} color="black" />
+          <Images size={40} color="black" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.footerBUttonCamera}
           onPress={takePicture}
         >
-          <FontAwesome name="camera-retro" size={40} color="black" />
+          <CameraIcon size={40} color="black" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.footerButton}
           onPress={toggleCameraFacing}
         >
-          <FontAwesome name="rotate-right" size={40} color="black" />
+          <SwitchCameraIcon size={40} color="black" />
         </TouchableOpacity>
       </View>
     </View>

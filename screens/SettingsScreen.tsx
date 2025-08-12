@@ -8,8 +8,11 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  Modal,
+  Alert,
 } from "react-native";
 import LogOut from "../components/logOut";
+import ButtonLog from "../components/logButton";
 import SettingsInput from "../components/settingsInput";
 import ChangeAvatar from "../components/changeAvatar";
 import { useState } from "react";
@@ -26,8 +29,10 @@ export default function SettingsScreen({ navigation }) {
   const [errorPassword, setErrorPassword] = useState<boolean>(false);
   const [errorUsername, setErrorUsername] = useState<boolean>(false);
   const [errorAvatar, setErrorAvatar] = useState<boolean>(false);
-
   const [errorDelete, setErrorDelete] = useState<boolean>(false);
+
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [openFrom, setOpenFrom] = useState<string>("");
 
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user.value);
@@ -69,13 +74,7 @@ export default function SettingsScreen({ navigation }) {
       });
   };
 
-  const handleChangeUsername = () => {
-    if (username.length < 3) {
-      // console.log("Invalid username");
-      setErrorUsername(true);
-      setUsername("");
-      return;
-    }
+  const changeUsername = () => {
     fetch(`${lienExpo}users/changeUsername/${username}`, {
       method: "PUT",
       headers: {
@@ -90,23 +89,19 @@ export default function SettingsScreen({ navigation }) {
         if (data.result === true) {
           // console.log("Username changed successfully", data);
           dispatch(editUsername(username));
+          setModalVisible(!modalVisible);
           setUsername("");
+          navigation.navigate("TabNavigator", "Profile");
         } else {
           // console.log("Failed to change username:", data.error);
           setErrorUsername(true);
           setUsername("");
+          setModalVisible(!modalVisible);
         }
       });
   };
 
-  const handleChangePassword = () => {
-    if (!regexPassword.test(password)) {
-      //   console.log("Invalid password");
-      setErrorPassword(true);
-      setPassword("");
-      setNewPassword("");
-      return;
-    }
+  const changePassword = () => {
     fetch(`${lienExpo}users/changePassword`, {
       method: "PUT",
       headers: {
@@ -122,11 +117,14 @@ export default function SettingsScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result === true) {
-          console.log("Password changed successfully", data);
+          // console.log("Password changed successfully", data);
           setPassword("");
           setNewPassword("");
           setErrorPassword(false);
+          setModalVisible(!modalVisible);
+          navigation.navigate("TabNavigator", "Profile");
         } else {
+          setModalVisible(!modalVisible);
           setPassword("");
           setNewPassword("");
           setErrorPassword(true);
@@ -135,12 +133,12 @@ export default function SettingsScreen({ navigation }) {
       });
   };
 
-  const handleLogout = () => {
+  const logout = () => {
     dispatch(logOutUser());
     navigation.navigate("SignIn");
   };
 
-  const handleDeleteAccount = () => {
+  const deleteAccount = () => {
     fetch(`${lienExpo}posts/deleteAllFromOne`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -162,20 +160,93 @@ export default function SettingsScreen({ navigation }) {
           .then((reponse) => reponse.json())
           .then((dataSuppr) => {
             if (dataSuppr.result === true) {
-              // console.log("Account deleted successfully", data);
               dispatch(logOutUser());
               navigation.navigate("SignIn");
               setErrorDelete(false);
             } else {
-              // console.log("Failed to delete account:", data.error);
               setErrorDelete(true);
             }
           });
       });
   };
 
+  const handleUsernameButton = () => {
+    if (username.length < 3) {
+      // console.log("Invalid username");
+      setErrorUsername(true);
+      setUsername("");
+      return;
+    } else {
+      setModalVisible(true), setOpenFrom("username");
+    }
+  };
+
+  const handlePasswordButton = () => {
+    if (!regexPassword.test(password)) {
+      //   console.log("Invalid password");
+      setErrorPassword(true);
+      setPassword("");
+      setNewPassword("");
+      setModalVisible(!modalVisible);
+      return;
+    } else {
+      setModalVisible(true), setOpenFrom("password");
+    }
+  };
+
+  const handlePressYes = () => {
+    if (openFrom === "username") {
+      changeUsername();
+    } else if (openFrom === "password") {
+      // console.log("password");
+      changePassword();
+    } else if (openFrom === "logOut") {
+      logout();
+    } else if (openFrom === "delete") {
+      deleteAccount();
+    }
+  };
+
+  const handlePressNo = () => {
+    setUsername("");
+    setPassword("");
+    setNewPassword("");
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Are you sure ?</Text>
+            <View style={styles.reponseModal}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "#f39b6d" }]}
+                onPress={() => handlePressNo()}
+              >
+                <Text style={styles.textStyle}>No</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  handlePressYes();
+                }}
+              >
+                <Text style={styles.textStyle}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <ChangeAvatar
         name="modify"
         onPress={() => {
@@ -199,7 +270,9 @@ export default function SettingsScreen({ navigation }) {
             setUsername(value), setErrorUsername(false);
           }}
           value={username}
-          onPress={() => handleChangeUsername()}
+          onPress={() => {
+            handleUsernameButton();
+          }}
         />
         <Text style={styles.errorText}>
           {errorUsername ? "Invalid Username or Empty Field" : ""}
@@ -225,7 +298,7 @@ export default function SettingsScreen({ navigation }) {
           onChangeText={(value) => setNewPassword(value)}
           value={newpassword}
           onPress={() => {
-            handleChangePassword();
+            handlePasswordButton();
           }}
         />
 
@@ -239,12 +312,12 @@ export default function SettingsScreen({ navigation }) {
       <LogOut
         children="Log Out"
         onPress={() => {
-          handleLogout();
+          setModalVisible(true), setOpenFrom("logOut");
         }}
       />
       <LogOut
         onPress={() => {
-          handleDeleteAccount();
+          setModalVisible(true), setOpenFrom("delete");
         }}
         children="Delete Account"
       />
@@ -275,5 +348,50 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     resizeMode: "cover",
     aspectRatio: 1,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    width: "70%",
+    height: "20%",
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#381D2A",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 30,
+    color: "#381D2A",
+    fontSize: 25,
+  },
+  reponseModal: {
+    flexDirection: "row",
+    gap: 20,
+  },
+  button: {
+    backgroundColor: "#aabd8c",
+    width: 70,
+    height: 40,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+  },
+  textStyle: {
+    color: "#381D2A",
+    fontSize: 15,
+    fontWeight: "bold",
   },
 });

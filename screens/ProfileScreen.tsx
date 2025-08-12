@@ -16,6 +16,8 @@ import { editDescription, UserState } from "../reducers/user";
 import MiniPost from "../components/miniPost";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
+import Icon from "../components/icons";
+import { Sandwich, Sprout } from "lucide-react-native";
 
 export type PostState = {
   _id: string;
@@ -69,7 +71,7 @@ export default function ProfileScreen({ navigation }) {
           // console.log(data);
           setPosts(data.postsList);
         });
-    }, [delet])
+    }, [delet, user.username])
   );
 
   const handleX = (url: string) => {
@@ -213,11 +215,18 @@ export default function ProfileScreen({ navigation }) {
   });
 
   const handleChangeDescription = () => {
+    let newDescription = description;
+    if (description === "") {
+      newDescription = "@" + user.username;
+    }
+    console.log(newDescription);
+
     const changeDescription: changeDescr = {
       username: user.username,
-      description: description,
+      description: newDescription,
       token: user.token,
     };
+
     fetch(`${lienExpo}users/changeDescription`, {
       method: "PUT",
       headers: {
@@ -229,7 +238,7 @@ export default function ProfileScreen({ navigation }) {
       .then((data) => {
         if (data.result === true) {
           // console.log("Description changed successfully", data);
-          dispatch(editDescription(description));
+          dispatch(editDescription(newDescription));
           setDescription("");
           setEdit(false);
         } else {
@@ -253,8 +262,20 @@ export default function ProfileScreen({ navigation }) {
         />
         <View style={styles.userInfo}>
           <View>
-            <Text style={styles.username}>{user.username}</Text>
+            <Text
+              style={[
+                styles.username,
+                user.team ? styles[user.team] : { color: "#381d2a" },
+              ]}
+            >
+              {user.username}
+            </Text>
             <Text style={styles.description}>{user.description}</Text>
+            {!edit && (
+              <TouchableOpacity onPress={() => setEdit(!edit)}>
+                <Text style={styles.editButton}>edit description</Text>
+              </TouchableOpacity>
+            )}
             {!edit && (
               <TouchableOpacity onPress={() => setEdit(!edit)}>
                 <Text style={styles.editButton}>edit description</Text>
@@ -287,11 +308,10 @@ export default function ProfileScreen({ navigation }) {
             )}
           </View>
           <View style={styles.userTeam}>
-            {user.team && (
-              <Image
-                source={{ uri: user.team }}
-                style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
-              />
+            {user.team ? (
+              <Icon name={user.team} size={40} />
+            ) : (
+              <Sprout size={40} />
             )}
           </View>
           {/* <View style={styles.userNumber}>
@@ -439,17 +459,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    marginTop: 15,
+    marginTop: 20,
     width: "95%",
-    // backgroundColor: "#e9e3b4",
   },
   userInfo: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     width: "70%",
+    width: "70%",
     marginLeft: 10,
-    // backgroundColor: "#948b49ff",
   },
   username: {
     fontFamily: "Josefin Sans",
@@ -472,7 +491,8 @@ const styles = StyleSheet.create({
     width: 60,
     aspectRatio: 1,
     borderRadius: 100,
-    backgroundColor: "#1f6225ff",
+    borderColor: "#d67b1aff",
+    marginRight: 15,
   },
   stats: {
     alignItems: "center",
@@ -533,5 +553,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#f39b6d",
     alignItems: "center",
     justifyContent: "center",
+  },
+  salad: {
+    color: "#AABD8C",
+  },
+  sandwich: {
+    color: "#F39B6D",
+  },
+  soup: {
+    color: "#F2C94C",
   },
 });
