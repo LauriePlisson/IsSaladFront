@@ -173,14 +173,11 @@ export default function ProfileScreen({ navigation }) {
             )}
           </View>
           <View style={styles.userTeam}>
-            {user.team ? <Icon
-              name={user.team}
-              color="#f39b6d"
-              size={60}
-            /> : <Sprout
-              color="#f39b6d"
-              size={60}
-            />}
+            {user.team ? (
+              <Icon name={user.team} color="#f39b6d" size={60} />
+            ) : (
+              <Sprout color="#f39b6d" size={60} />
+            )}
           </View>
           {/* <View style={styles.userNumber}>
             <View style={styles.stats}>
@@ -223,8 +220,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    marginTop: 15,
+    marginTop: 20,
     width: "95%",
+    marginBottom: 15,
     // backgroundColor: "#e9e3b4",
   },
   userInfo: {
@@ -232,7 +230,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     width: "70%",
-    marginLeft: 10,
+    marginLeft: 15,
     // backgroundColor: "#948b49ff",
   },
   username: {
@@ -257,6 +255,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 100,
     borderColor: "#d67b1aff",
+    marginRight: 15,
   },
   stats: {
     alignItems: "center",

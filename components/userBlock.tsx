@@ -14,26 +14,35 @@ interface UserBlockProps {
   onPress: () => void;
   isFriend?: boolean;
   style?: StyleProp<ViewStyle>;
+  redirect: () => void;
 }
 // UserBlock component
-export default function UserBlock({children, style, onPress, isFriend = false}: UserBlockProps) {
-	return (
-		<View style={[styles.container, style]}>
-			<Image source={{ uri: children.avatar }} style={styles.avatar} />
-			<View style={styles.userInfo}>
-				<Text style={styles.username}>{children.username}</Text>
-				<Text style={styles.team}>{children.team}</Text>
-			</View>
+export default function UserBlock({
+  children,
+  style,
+  onPress,
+  isFriend = false,
+  redirect,
+}: UserBlockProps) {
+  return (
+    <View style={[styles.container, style]}>
+      <TouchableOpacity style={styles.info} onPress={redirect}>
+        <Image source={{ uri: children.avatar }} style={styles.avatar} />
+        <View style={styles.userInfo}>
+          <Text style={styles.username}>{children.username}</Text>
+          <Text style={styles.team}>{children.team}</Text>
+        </View>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.icon} onPress={onPress}>
         {!isFriend ? (
-          <UserPlus size={24} color="#381d2a"/>
+          <UserPlus size={24} color="#381d2a" />
         ) : (
-          <UserMinus size={24} color="#381d2a"/>
+          <UserMinus size={24} color="#381d2a" />
         )}
       </TouchableOpacity>
-		</View>
-	);
-};
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -47,8 +56,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
   },
+  info: {
+    flexDirection: "row",
+    // borderWidth: 2,
+    width: "80%",
+  },
   userInfo: {
-    flex: 1,
+    // flex: 1,
   },
   username: {
     fontFamily: "Josefin Sans",
@@ -70,6 +84,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   icon: {
+    // borderWidth: 2,
     width: 24,
     height: 24,
     marginLeft: 10,

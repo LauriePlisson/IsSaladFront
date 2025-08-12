@@ -9,7 +9,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import search from "./reducers/search";
 import user from "./reducers/user";
 import Icon from "./components/icons";
-
+import OptionSearchScreen from "./screens/OptionSearchScreen";
 import SignInScreen from "./screens/SingInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -46,13 +46,12 @@ const TabNavigator = ({ navigation }) => {
         },
         headerBackImageSource: headerLeftBtn,
         tabBarIcon: ({ color }) => {
-          let iconName : string;
+          let iconName: string;
           switch (route.name) {
             case "Home":
               iconName = "house";
               break;
             case "Search":
-              iconName = "user-plus";
               iconName = "user-plus";
               break;
             case "Doc":
@@ -101,7 +100,7 @@ const TabNavigator = ({ navigation }) => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
         name="Search"
-        component={SearchScreen}
+        component={OptionSearchScreen}
         // options={{ headerLeft: false }}
       />
       <Tab.Screen
@@ -143,10 +142,7 @@ const TabNavigator = ({ navigation }) => {
                 style={{ marginRight: 20, marginBottom: 5 }}
                 onPress={() => navigation.navigate("Settings")}
               >
-                <Settings
-                  size={24}
-                  color="#381d2a"
-                />
+                <Settings size={24} color="#381d2a" />
               </TouchableOpacity>
             );
           },
@@ -181,7 +177,18 @@ export default function App({ navigation }) {
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Result" component={ResultScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
-          <Stack.Screen name="UserScreen" component={UserScreen} />
+          <Stack.Screen
+            name="UserScreen"
+            component={UserScreen}
+            options={{
+              headerShown: true,
+              headerBackVisible: true,
+              headerStyle: { backgroundColor: "#aabd8c" },
+              headerTitleStyle: { color: "transparent" },
+              headerTintColor: "#381d2aff",
+              headerBackTitleVisible: false,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

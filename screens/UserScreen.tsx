@@ -14,6 +14,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import { editDescription, UserState } from "../reducers/user";
 import { SearchState } from "../reducers/search";
 import MiniPost from "../components/miniPost";
+import TabBar from "../components/tabBar";
+import { useNavigation } from "@react-navigation/native";
 
 export type PostState = {
   _id: string;
@@ -31,7 +33,7 @@ export type PostState = {
   comments: any[];
 };
 
-export default function UserScreen({ navigation }) {
+export default function UserScreen(props) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
   const dispatch = useDispatch();
 
@@ -40,6 +42,8 @@ export default function UserScreen({ navigation }) {
   );
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<PostState[]>([]);
+  const [avatar, setAvatar] = useState<string>("");
+  const [team, setTeam] = useState("");
 
   useFocusEffect(
     useCallback(() => {
@@ -48,6 +52,9 @@ export default function UserScreen({ navigation }) {
         .then((data) => {
           // console.log(data);
           setPosts(data.postsList);
+          setDescription(data.description);
+          setAvatar(data.avatar);
+          setTeam(data.team);
         });
     }, [])
   );
@@ -65,26 +72,30 @@ export default function UserScreen({ navigation }) {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.User}>
-        <Image
-          source={{ uri: user.avatar }}
-          style={{ width: 100, aspectRatio: 1, borderRadius: 100 }}
-        />
-        <View style={styles.userInfo}>
-          <View>
-            <Text style={styles.username}>{user.username}</Text>
-            <Text style={styles.description}>{user.description}</Text>
-          </View>
-          <View style={styles.userTeam}>
-            {user.team && (
-              <Image
-                source={{ uri: user.team }}
-                style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
-              />
-            )}
-          </View>
-          {/* <View style={styles.userNumber}>
+    <>
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity onPress={() => props.change()}>
+          <Text>Back</Text>
+        </TouchableOpacity>
+        <View style={styles.User}>
+          <Image
+            source={{ uri: avatar }}
+            style={{ width: 100, aspectRatio: 1, borderRadius: 100 }}
+          />
+          <View style={styles.userInfo}>
+            <View>
+              <Text style={styles.username}>{userName}</Text>
+              <Text style={styles.description}>{description}</Text>
+            </View>
+            <View style={styles.userTeam}>
+              {team && (
+                <Image
+                  source={{ uri: team }}
+                  style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
+                />
+              )}
+            </View>
+            {/* <View style={styles.userNumber}>
             <View style={styles.stats}>
               <Text>Posts: </Text>
               <Text>{posts.length}</Text>
@@ -94,21 +105,25 @@ export default function UserScreen({ navigation }) {
               <Text>{user.friendList.length}</Text>
             </View>
           </View> */}
+          </View>
         </View>
-      </View>
-      <ScrollView
-        contentContainerStyle={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          gap: 5,
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-        }}
-        style={styles.display}
-      >
-        {postDisplay}
-      </ScrollView>
-    </SafeAreaView>
+        <ScrollView
+          contentContainerStyle={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: 5,
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+          style={styles.display}
+        >
+          {postDisplay}
+        </ScrollView>
+      </SafeAreaView>
+      {/* <View style={styles.tabBarContainer}>
+        <TabBar />
+      </View> */}
+    </>
   );
 }
 
@@ -165,5 +180,11 @@ const styles = StyleSheet.create({
   },
   postContainer: {
     alignItems: "flex-end",
+  },
+  tabBarContainer: {
+    borderTopStartRadius: 15,
+    borderTopEndRadius: 15,
+    // borderWidth: 2,
+    backgroundColor: "#aabd8c",
   },
 });
