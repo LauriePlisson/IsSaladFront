@@ -14,7 +14,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { editDescription, UserState } from "../reducers/user";
 import MiniPost from "../components/miniPost";
 import Icon from "../components/icons";
-import { Sprout } from "lucide-react-native";
+import { Sandwich, Sprout } from "lucide-react-native";
 
 export type PostState = {
   _id: string;
@@ -139,7 +139,7 @@ export default function ProfileScreen({ navigation }) {
         />
         <View style={styles.userInfo}>
           <View>
-            <Text style={styles.username}>{user.username}</Text>
+            <Text style={[styles.username, user.team ? styles[user.team] : {color: '#381d2a'}]}>{user.username}</Text>
             <Text style={styles.description}>{user.description}</Text>
             {!edit && (
               <TouchableOpacity onPress={() => setEdit(!edit)}>
@@ -175,11 +175,9 @@ export default function ProfileScreen({ navigation }) {
           <View style={styles.userTeam}>
             {user.team ? <Icon
               name={user.team}
-              color="#f39b6d"
-              size={60}
+              size={40}
             /> : <Sprout
-              color="#f39b6d"
-              size={60}
+              size={40}
             />}
           </View>
           {/* <View style={styles.userNumber}>
@@ -225,7 +223,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginTop: 15,
     width: "95%",
-    // backgroundColor: "#e9e3b4",
   },
   userInfo: {
     flexDirection: "row",
@@ -233,7 +230,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "70%",
     marginLeft: 10,
-    // backgroundColor: "#948b49ff",
   },
   username: {
     fontFamily: "Josefin Sans",
@@ -263,5 +259,14 @@ const styles = StyleSheet.create({
   },
   postContainer: {
     alignItems: "flex-end",
+  },
+  salad: {
+    color: "#AABD8C",
+  },
+  sandwich: {
+    color: "#F39B6D",
+  },
+  soup: {
+    color: "#F2C94C",
   },
 });

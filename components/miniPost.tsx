@@ -32,7 +32,7 @@ export default function MiniPost({ postBlock, style, onPress, toDelete, isMine =
 
 	return (
 		<View style={[styles.container, style]}>
-			{isMine && <TouchableOpacity style={styles.icon} onPress={toDelete} ><Trash2 size={16} color="#381d2a7e" /></TouchableOpacity>}
+			{isMine && <TouchableOpacity style={styles.icon} onPress={toDelete} ><Trash2 size={12} color="#381d2a7e" /></TouchableOpacity>}
 			<TouchableOpacity onPress={onPress}>
 				<Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
 			</TouchableOpacity>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     top: 5,
     zIndex: 1,
     position: "absolute",
-    backgroundColor: "#f39c6d8d",
+    backgroundColor: "#f39c6dff",
     borderRadius: 100,
     padding: 5,
   },

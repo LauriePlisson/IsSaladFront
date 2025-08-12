@@ -42,7 +42,6 @@ interface PostProps {
 export default function Post({postBlock, style, onPress, handleLike, handleDislike}: PostProps) {
 	const time: any = moment(postBlock.date);
 	const formattedDate: string = moment(time).fromNow();
-	let defaultPercentage: number = 100;
 	let total: number = postBlock.likeCount + postBlock.dislikeCount;
 	const likePercentage = (total: number) => {
 		return Math.round((postBlock.likeCount / total) * 100);
@@ -50,35 +49,35 @@ export default function Post({postBlock, style, onPress, handleLike, handleDisli
 	const dislikePercentage = (total: number) => {
 		return Math.round((postBlock.dislikeCount / total) * 100);
 	};
-	const likeWidth: number = postBlock.likeCount ? likePercentage(total) : (postBlock.dislikeCount ? 0 : defaultPercentage);
-	const dislikeWidth: number = postBlock.dislikeCount ? dislikePercentage(total) : 0;
+	const likeWidth: number = postBlock.likeCount ? likePercentage(total) : (postBlock.dislikeCount ? 0 : 50);
+	const dislikeWidth: number = postBlock.dislikeCount ? dislikePercentage(total) : (postBlock.likeCount ? 0 : 50);
 	return (
 		<View style={[styles.container, style]}>
 			<Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
 			<View style={styles.userContainer}>
-				<View style={{ alignItems: 'center', justifyContent: 'center' }}>
 					<Image source={{ uri: postBlock.ownerPost.avatar }} style={postBlock.ownerPost.avatar ? styles.avatar : styles.avatarPlaceholder} />
-					<TouchableOpacity style={[styles.icon, { marginRight: 10 }]} onPress={onPress}>{postBlock.comments[0] ? <MessageSquareText size={24} color="#f39b6d" /> : <MessageSquare size={24} color="#f39b6d" />}</TouchableOpacity>
-				</View>
 				<View style={styles.userInfo}>
-					<Text style={styles.username}>@{postBlock.ownerPost.username}</Text>
-					<Text style={styles.description}>{postBlock.description.length > 120 ? postBlock.description.substring(0, 120) + '...' : postBlock.description}</Text>
+					<Text style={styles.username}>{postBlock.ownerPost.username}</Text>
+					<Text style={styles.date}>{formattedDate}</Text>
 				</View>
 				<View style={styles.postInfos}>
-					<Text style={styles.date}>{formattedDate}</Text>
 					{postBlock.result && (
-						<Icon name={postBlock.result} color="#381d2a" size={36} />
+						<Icon name={postBlock.result} size={36} />
 					)}
 				</View>
+			</View>
+			<View style={styles.message} >
+				<Text style={styles.description}>{postBlock.description.length > 180 ? postBlock.description.substring(0, 180) + '...' : postBlock.description}</Text>
+				<TouchableOpacity style={[styles.icon, { marginRight: 10 }]} onPress={onPress}>{postBlock.comments[0] ? <MessageSquareText size={24} color="#f39b6d" /> : <MessageSquare size={24} color="#f39b6d" />}</TouchableOpacity>
 			</View>
 			<View style={styles.separator} />
 			<View style={styles.interactContainer}>
 				<TouchableOpacity onPress={handleDislike}>{postBlock.userHasDisliked ? <UtensilsCrossed size={24} color={"#f39b6d"} /> : <Utensils size={24} color={"#381d2a"} />}</TouchableOpacity>
 				<View style={styles.voteContainer}>
+					<View style={[StyleSheet.absoluteFillObject, { width: `${dislikeWidth}%` }, { backgroundColor: '#f39b6d', borderRadius: 8, zIndex: 1 }]}/>
 					<View style={[StyleSheet.absoluteFillObject, { width: `${dislikeWidth + likeWidth}%` }, { backgroundColor: '#aabd8c', borderRadius: 8 }]}/>
-					<View style={[StyleSheet.absoluteFillObject, { width: `${dislikeWidth}%` }, { backgroundColor: '#f39b6d', borderRadius: 8 }]}/>
 				</View>
-				<TouchableOpacity style={styles.icon} onPress={handleLike}>{postBlock.userHasLiked ? <Icon name={postBlock.result} size={24} color={"#aabd8c"} /> : <Icon name={postBlock.result} size={24} color={"#381d2a"} />}</TouchableOpacity>
+				<TouchableOpacity onPress={handleLike} style={{ left: -10}} >{postBlock.userHasLiked ? <Icon name={postBlock.result} size={24} /> : <Icon name={postBlock.result} size={24} color={"#381d2a"} />}</TouchableOpacity>
 			</View>
 		</View>
 	);
@@ -103,6 +102,7 @@ const styles = StyleSheet.create({
 	userContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
+		justifyContent: 'center',
 		padding: 12,
 	},
 	avatar: {
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		color: '#381d2a',
 		lineHeight: 20,
+		width: '90%',
 	},
 	postInfos: {
 		alignItems: 'center',
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
 		fontFamily: 'Josefin Sans',
 		fontSize: 12,
 		color: '#381d2a55',
-		lineHeight: 18,
+		lineHeight: 12,
 		marginBottom: 4,
 	},
 	team: {
@@ -153,6 +154,14 @@ const styles = StyleSheet.create({
 		backgroundColor: '#E9E3B4',
 		color: '#381d2a',
 	},
+	message: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		width: '100%',
+		paddingHorizontal: 12,
+		paddingVertical: 8,
+	},
 	separator: {
 		width: '80%',
 		height: 1,
@@ -161,21 +170,22 @@ const styles = StyleSheet.create({
 	},
 	interactContainer: {
 		flexDirection: 'row',
-		justifyContent: 'space-evenly',
+		justifyContent: 'space-around',
 		alignItems: 'center',
 		width: '100%',
 		padding: 10,
 	},
 	icon: {
-		marginLeft: 10,
+		marginHorizontal: 10,
 	},
 	voteContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
-		width: '60%',
+		width: '80%',
 		height: 30,
 		padding: 10,
 		borderRadius: 8,
 		marginHorizontal: 10,
+		left: 5,
 	},
 });

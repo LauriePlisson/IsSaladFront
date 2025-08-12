@@ -19,7 +19,19 @@ export default function Icon({ name, color, size = 24 }: IconProps) {
 		'user': User,
 		'x': X,
 	};
+	let colorIcon: string = color || '#381d2a'; // Default color if not provided
   const LucideIcon = icons[name];
+	if (!color) {
+		if (name === 'salad') {
+			colorIcon = '#AABD8C'; // Change color for salad icon
+		} else if (name === 'soup') {
+			colorIcon = '#F2C94C'; // Change color for soup icon
+		} else if (name === 'sandwich') {
+			colorIcon = '#F39B6D'; // Change color for sandwich icon
+		}
+	}
+	// F2C94C
+	// e9e3b4
 
-  return (<LucideIcon color={color} size={size} />);
+  return (<LucideIcon color={colorIcon} size={size} />);
 };

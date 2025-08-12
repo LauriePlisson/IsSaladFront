@@ -3,7 +3,7 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Icon from './icons';
 import { useIsFocused } from '@react-navigation/native';
-import { CameraIcon, House, NotebookText, User, User, UserPlus } from 'lucide-react-native';
+import { CameraIcon, House, NotebookText, User, UserPlus } from 'lucide-react-native';
 
 // Type declaration for the props of the tabBar component
 interface tabBarProps {
@@ -11,7 +11,7 @@ interface tabBarProps {
 	style?: StyleProp<ViewStyle>;
 }
 
-export default function tabBar({ onPress, style }: tabBarProps) {
+export default function TabBar({ onPress, style }: tabBarProps) {
 	let color: string = '#381d2a';
 	if (onPress) {
 		color = '#f39b6d';

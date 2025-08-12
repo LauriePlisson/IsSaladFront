@@ -28,7 +28,7 @@ export default function Comment({ownerComment, text, style, position = 'first', 
 						<Text style={styles.username}>{ownerComment.username}</Text>
 						<Text style={styles.date}>{formattedDate}</Text>
 					</View>
-					{ownerComment.team ? <Icon name={ownerComment.team} size={44} /> : <Sprout size={44} />}
+					{ownerComment.team ? <Icon name={ownerComment.team} size={24} /> : <Sprout size={24} color="#381d2a" />}
 				</View>
 				<Text style={styles.comment}>{text}</Text>
 			</View>
