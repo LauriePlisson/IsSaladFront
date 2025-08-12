@@ -15,6 +15,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { editDescription, UserState } from "../reducers/user";
 import MiniPost from "../components/miniPost";
 import Post from "../components/postContainer";
+import Comment from "../components/comment";
 
 export type PostState = {
   _id: string;
@@ -56,6 +57,9 @@ export default function ProfileScreen({ navigation }) {
 
   const [postModalVisible, setPostModalVisible] = useState(false);
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
+  const [showComments, setShowComments] = useState(false);
+  // input pour taper un nouveau commentaire
+  const [newComment, setNewComment] = useState("");
 
   useFocusEffect(
     useCallback(() => {
@@ -104,8 +108,11 @@ export default function ProfileScreen({ navigation }) {
 
   const openPostModal = (post: any) => {
     setSelectedPost(buildPostView(post));
+    setShowComments(false); // reset
     setPostModalVisible(true);
   };
+
+  const toggleComments = () => setShowComments((s) => !s);
 
   const closePostModal = () => {
     setPostModalVisible(false);
@@ -165,6 +172,34 @@ export default function ProfileScreen({ navigation }) {
     }
   };
 
+  const sendComment = async () => {
+    if (!selectedPost || !newComment.trim()) return;
+
+    try {
+      const res = await fetch(`${lienExpo}posts/addComment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          postId: selectedPost._id,
+          text: newComment.trim(),
+        }),
+      });
+      const data = await res.json();
+
+      if (data.result) {
+        // le back renvoie le post MAJ + populate + tri
+        setSelectedPost(buildPostView(data.post));
+        setNewComment("");
+        setShowComments(true);
+      } else {
+        alert(data.error || "Erreur ajout commentaire");
+      }
+    } catch (e) {
+      console.log("sendComment error:", e);
+    }
+  };
+
   const postDisplay = posts.map((post, i) => {
     return (
       <MiniPost
@@ -205,6 +240,9 @@ export default function ProfileScreen({ navigation }) {
         }
       });
   };
+
+  const comments =
+    selectedPost && selectedPost.comments ? selectedPost.comments : [];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -289,7 +327,7 @@ export default function ProfileScreen({ navigation }) {
       >
         <View style={styles.modalBackdrop}>
           <View style={styles.modalSheet}>
-            {/* header du modal */}
+            {/* Header du modal */}
             <View style={styles.modalHeader}>
               <Text style={{ fontWeight: "bold", fontSize: 16 }}>
                 Publication
@@ -299,33 +337,88 @@ export default function ProfileScreen({ navigation }) {
               </TouchableOpacity>
             </View>
 
-            {/* contenu: ton Post */}
-            <View style={{ flex: 1, alignItems: "center" }}>
-              {selectedPost && (
-                <Post
-                  postBlock={{
-                    ownerPost: {
-                      _id: selectedPost.ownerPost?._id || "",
-                      username:
-                        selectedPost.ownerPost?.username || user.username,
-                      avatar: selectedPost.ownerPost?.avatar || user.avatar,
-                    },
-                    description: selectedPost.description || "",
-                    date: selectedPost.date,
-                    photoUrl: selectedPost.photoUrl,
-                    comments: selectedPost.comments || [],
-                    likeCount: selectedPost.likeCount || 0,
-                    dislikeCount: selectedPost.dislikeCount || 0,
-                    userHasLiked: selectedPost.userHasLiked || false,
-                    userHasDisliked: selectedPost.userHasDisliked || false,
-                    result: selectedPost.result,
-                  }}
-                  handleLike={likeFromModal}
-                  handleDislike={dislikeFromModal}
-                  onPress={() => {}}
-                />
+            {/* Post complet */}
+            <ScrollView
+              contentContainerStyle={{ paddingBottom: 16 }}
+              keyboardShouldPersistTaps="handled"
+            >
+              <View style={{ alignItems: "center" }}>
+                {selectedPost && (
+                  <Post
+                    postBlock={{
+                      ownerPost: {
+                        _id: selectedPost.ownerPost?._id || "",
+                        username:
+                          selectedPost.ownerPost?.username || user.username,
+                        avatar:
+                          selectedPost.ownerPost?.avatar || user.avatar || "",
+                      },
+                      description: selectedPost.description || "",
+                      date: selectedPost.date,
+                      photoUrl: selectedPost.photoUrl,
+                      comments: selectedPost.comments || [],
+                      likeCount: selectedPost.likeCount || 0,
+                      dislikeCount: selectedPost.dislikeCount || 0,
+                      userHasLiked: selectedPost.userHasLiked || false,
+                      userHasDisliked: selectedPost.userHasDisliked || false,
+                      result: selectedPost.result,
+                    }}
+                    handleLike={likeFromModal}
+                    handleDislike={dislikeFromModal}
+                    onPress={toggleComments} // clic sur l’icône 💬
+                  />
+                )}
+              </View>
+
+              {/* Zone commentaires (toggle) */}
+              {showComments && selectedPost && (
+                <View style={styles.commentsWrap}>
+                  <Text style={styles.commentsTitle}>
+                    Commentaires ({selectedPost.comments?.length || 0})
+                  </Text>
+
+                  {/* Liste scrollable */}
+                  <ScrollView
+                    style={styles.commentsScroll}
+                    contentContainerStyle={{ paddingBottom: 12 }}
+                  >
+                    {comments.map((comment, index) => {
+                      const author = comment.ownerComment || {};
+                      const username = author.username || "Utilisateur";
+                      const avatar =
+                        author.avatar || "https://via.placeholder.com/44";
+                      const isLast = index === comments.length - 1;
+
+                      return (
+                        <Comment
+                          key={comment._id || index}
+                          ownerComment={{ username, avatar, team: "" }}
+                          text={comment.text || ""}
+                          date={comment.date}
+                          position={isLast ? "last" : "first"}
+                        />
+                      );
+                    })}
+                  </ScrollView>
+
+                  {/* Input + Envoyer */}
+                  <View style={styles.addRow}>
+                    <TextInput
+                      placeholder="Écrire un commentaire…"
+                      value={newComment}
+                      onChangeText={setNewComment}
+                      style={styles.input}
+                    />
+                    <TouchableOpacity
+                      onPress={sendComment}
+                      style={styles.sendBtn}
+                    >
+                      <Text style={{ color: "#fff" }}>Envoyer</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               )}
-            </View>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -393,7 +486,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalSheet: {
-    height: "70%",
+    height: "80%",
     backgroundColor: "#fff",
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
@@ -404,5 +497,41 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 8,
+  },
+  commentsWrap: {
+    marginTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
+    paddingTop: 8,
+  },
+  commentsTitle: {
+    fontWeight: "600",
+    marginBottom: 6,
+  },
+  commentsScroll: {
+    maxHeight: 220, // NOTE: hauteur scrollable (ajuste)
+  },
+  addRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 8,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    backgroundColor: "#fff",
+  },
+  sendBtn: {
+    paddingHorizontal: 14,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: "#f39b6d",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
