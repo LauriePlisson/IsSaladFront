@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -36,7 +37,7 @@ export default function HomeScreen() {
       });
       const data = await response.json();
       if (data.result) {
-        setPosts(data.posts.slice(0, 5)); // Limite à 5 posts
+        setPosts(data.posts.slice(0, 8)); // Limite à 8 posts
       } else {
         alert("Erreur lors de la récupération des posts");
       }
@@ -152,36 +153,57 @@ export default function HomeScreen() {
         visible={commentsVisible}
         animationType="slide"
         onRequestClose={() => setCommentsVisible(false)}
-        style={styles.globalModalStyle}
+        transparent
+        presentationStyle="overFullScreen"
       >
-        <View style={styles.modal}>
+        <View style={styles.backdrop}>
           <TouchableOpacity
-            style={styles.closeBtn}
+            style={styles.backdropTouch}
+            activeOpacity={1}
             onPress={() => setCommentsVisible(false)}
-          >
-            <Text>Fermer</Text>
-          </TouchableOpacity>
-          <Text style={styles.modalTitle}>Commentaires</Text>
-          <View style={styles.commentList}>
-            <FlatList
-              data={selectedPost?.comments ?? []}
-              renderItem={({ item, index }) => (
-                <Comment ownerComment={item.ownerComment} text={item.text} position={index === 0 ? 'first' : (index === selectedPost?.comments.length - 1 ? 'last' : 'middle')} date={item.date} />
-              )}
-              keyExtractor={(item) => item._id}
-              contentContainerStyle={{ alignItems: "center" }}
-            />
-          </View>
-          <View style={styles.commentInputRow}>
-            <TextInput
-              value={commentText}
-              onChangeText={setCommentText}
-              placeholder="Écrire un commentaire…"
-              style={styles.input}
-            />
-            <TouchableOpacity style={styles.sendBtn} onPress={sendComment}>
-              <Text style={{ color: "#fff", fontWeight: "600" }}>Envoyer</Text>
+          />
+          <View style={styles.modalSheet}>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => setCommentsVisible(false)}
+            >
+              <FontAwesome name="bars" size={25} color="black" />
             </TouchableOpacity>
+            <Text style={styles.modalTitle}>Commentaires</Text>
+            <View style={styles.commentList}>
+              <FlatList
+                data={selectedPost?.comments ?? []}
+                renderItem={({ item, index }) => (
+                  <Comment
+                    ownerComment={item.ownerComment}
+                    text={item.text}
+                    position={
+                      index === 0
+                        ? "first"
+                        : index === selectedPost?.comments.length - 1
+                        ? "last"
+                        : "middle"
+                    }
+                    date={item.date}
+                  />
+                )}
+                keyExtractor={(item) => item._id}
+                contentContainerStyle={{ alignItems: "center" }}
+              />
+            </View>
+            <View style={styles.commentInputRow}>
+              <TextInput
+                value={commentText}
+                onChangeText={setCommentText}
+                placeholder="Écrire un commentaire…"
+                style={styles.input}
+              />
+              <TouchableOpacity style={styles.sendBtn} onPress={sendComment}>
+                <Text style={{ color: "#fff", fontWeight: "600" }}>
+                  Envoyer
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -209,23 +231,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  modal: { 
-    flex: 1,
-    backgroundColor: "#fff", 
-    paddingTop: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   modalTitle: {
     fontFamily: "Josefin Sans",
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
-    marginTop: 50,
+    marginBottom: 20,
+    marginTop: 20,
     textAlign: "center",
   },
   commentList: {
-    flex: 1,
+    flex: 0.9,
     width: "100%",
   },
   commentInputRow: {
@@ -233,6 +249,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     marginHorizontal: 10,
+    marginBottom: 30,
+    width: "90%",
   },
   input: {
     flex: 1,
@@ -241,13 +259,30 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     height: 40,
-    marginRight: 10,
+    marginRight: 20,
   },
   sendBtn: {
     backgroundColor: "#d67b1aff",
     paddingHorizontal: 12,
     paddingVertical: 10,
+
     borderRadius: 8,
   },
   closeBtn: { alignSelf: "center", marginTop: 16 },
+  backdrop: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  backdropTouch: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  modalSheet: {
+    height: "70%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    backgroundColor: "#fff",
+  },
 });
