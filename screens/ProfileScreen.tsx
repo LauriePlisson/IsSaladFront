@@ -7,18 +7,20 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  Modal,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import { editDescription, UserState } from "../reducers/user";
 import MiniPost from "../components/miniPost";
+import Post from "../components/postContainer";
 
 export type PostState = {
   _id: string;
   photoUrl: string;
-  ownerPost: string;
-  date: Date;
+  ownerPost: any;
+  date: string | Date;
   result: string;
   description: string;
   like: string[];
@@ -52,6 +54,9 @@ export default function ProfileScreen({ navigation }) {
   const [delet, setDelet] = useState<boolean>(false);
   const [errorDesc, setErrorDesc] = useState<boolean>(false);
 
+  const [postModalVisible, setPostModalVisible] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<any | null>(null);
+
   useFocusEffect(
     useCallback(() => {
       fetch(`${lienExpo}users/${user.username}`)
@@ -80,9 +85,95 @@ export default function ProfileScreen({ navigation }) {
       });
   };
 
+  const buildPostView = (p: any) => {
+    const likeCount = Array.isArray(p.like) ? p.like.length : 0;
+    const dislikeCount = Array.isArray(p.dislike) ? p.dislike.length : 0;
+
+    // TODO si tu veux : calcule si l'user a liké/diskliké
+    const userHasLiked = false;
+    const userHasDisliked = false;
+
+    return {
+      ...p,
+      likeCount,
+      dislikeCount,
+      userHasLiked,
+      userHasDisliked,
+    };
+  };
+
+  const openPostModal = (post: any) => {
+    setSelectedPost(buildPostView(post));
+    setPostModalVisible(true);
+  };
+
+  const closePostModal = () => {
+    setPostModalVisible(false);
+    setSelectedPost(null);
+  };
+
+  const likeFromModal = async () => {
+    if (!selectedPost) return;
+    try {
+      const response = await fetch(`${lienExpo}posts/likePost`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          photoUrl: selectedPost.photoUrl,
+        }),
+      });
+      const data = await response.json();
+      if (data.result) {
+        // on recharge les posts, puis on met à jour le post du modal
+        const r = await fetch(`${lienExpo}users/${user.username}`);
+        const d = await r.json();
+        setPosts(d.postsList || []);
+        const updated = (d.postsList || []).find(
+          (p: any) => p._id === selectedPost._id
+        );
+        if (updated) setSelectedPost(buildPostView(updated));
+      }
+    } catch (e) {
+      console.log("likeFromModal error:", e);
+    }
+  };
+
+  const dislikeFromModal = async () => {
+    if (!selectedPost) return;
+    try {
+      const response = await fetch(`${lienExpo}posts/dislikePost`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          photoUrl: selectedPost.photoUrl,
+        }),
+      });
+      const data = await response.json();
+      if (data.result) {
+        const r = await fetch(`${lienExpo}users/${user.username}`);
+        const d = await r.json();
+        setPosts(d.postsList || []);
+        const updated = (d.postsList || []).find(
+          (p: any) => p._id === selectedPost._id
+        );
+        if (updated) setSelectedPost(buildPostView(updated));
+      }
+    } catch (e) {
+      console.log("dislikeFromModal error:", e);
+    }
+  };
+
   const postDisplay = posts.map((post, i) => {
     return (
-      <MiniPost postBlock={post} key={i} onPress={() => {}} toDelete={() => handleX(post.photoUrl)} isMine={true} />
+      <MiniPost
+        postBlock={post}
+        key={i}
+        onPress={() => openPostModal(post)}
+        toDelete={() => handleX(post.photoUrl)}
+        isMine={true}
+      />
     );
   });
 
@@ -126,9 +217,11 @@ export default function ProfileScreen({ navigation }) {
           <View>
             <Text style={styles.username}>{user.username}</Text>
             <Text style={styles.description}>{user.description}</Text>
-            {!edit && <TouchableOpacity onPress={() => setEdit(!edit)}>
+            {!edit && (
+              <TouchableOpacity onPress={() => setEdit(!edit)}>
               <Text style={styles.editButton}>edit description</Text>
-            </TouchableOpacity>}
+              </TouchableOpacity>
+            )}
             {edit && (
               <>
                 <TextInput
@@ -156,10 +249,12 @@ export default function ProfileScreen({ navigation }) {
             )}
           </View>
           <View style={styles.userTeam}>
-            {user.team && <Image
-              source={{ uri: user.team }}
-              style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
-            />}
+            {user.team && (
+              <Image
+                source={{ uri: user.team }}
+                style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
+              />
+            )}
           </View>
           {/* <View style={styles.userNumber}>
             <View style={styles.stats}>
@@ -185,6 +280,55 @@ export default function ProfileScreen({ navigation }) {
       >
         {postDisplay}
       </ScrollView>
+      {/*  MODAL POST */}
+      <Modal
+        visible={postModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={closePostModal}
+      >
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalSheet}>
+            {/* header du modal */}
+            <View style={styles.modalHeader}>
+              <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                Publication
+              </Text>
+              <TouchableOpacity onPress={closePostModal}>
+                <Text style={{ fontSize: 16 }}>Fermer</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* contenu: ton Post */}
+            <View style={{ flex: 1, alignItems: "center" }}>
+              {selectedPost && (
+                <Post
+                  postBlock={{
+                    ownerPost: {
+                      _id: selectedPost.ownerPost?._id || "",
+                      username:
+                        selectedPost.ownerPost?.username || user.username,
+                      avatar: selectedPost.ownerPost?.avatar || user.avatar,
+                    },
+                    description: selectedPost.description || "",
+                    date: selectedPost.date,
+                    photoUrl: selectedPost.photoUrl,
+                    comments: selectedPost.comments || [],
+                    likeCount: selectedPost.likeCount || 0,
+                    dislikeCount: selectedPost.dislikeCount || 0,
+                    userHasLiked: selectedPost.userHasLiked || false,
+                    userHasDisliked: selectedPost.userHasDisliked || false,
+                    result: selectedPost.result,
+                  }}
+                  handleLike={likeFromModal}
+                  handleDislike={dislikeFromModal}
+                  onPress={() => {}}
+                />
+              )}
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -210,7 +354,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: '70%',
+    width: "70%",
     marginLeft: 10,
     // backgroundColor: "#948b49ff",
   },
@@ -242,5 +386,23 @@ const styles = StyleSheet.create({
   },
   postContainer: {
     alignItems: "flex-end",
+  },
+  modalBackdrop: {
+    flex: 1,
+
+    justifyContent: "flex-end",
+  },
+  modalSheet: {
+    height: "70%",
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    padding: 10,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
   },
 });
