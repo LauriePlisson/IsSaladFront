@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import { editDescription, UserState } from "../reducers/user";
 import MiniPost from "../components/miniPost";
+import Icon from "../components/icons";
+import { Sprout } from "lucide-react-native";
 
 export type PostState = {
   _id: string;
@@ -156,9 +158,13 @@ export default function ProfileScreen({ navigation }) {
             )}
           </View>
           <View style={styles.userTeam}>
-            {user.team && <Image
-              source={{ uri: user.team }}
-              style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
+            {user.team ? <Icon
+              name={user.team}
+              color="#f39b6d"
+              size={60}
+            /> : <Sprout
+              color="#f39b6d"
+              size={60}
             />}
           </View>
           {/* <View style={styles.userNumber}>
@@ -235,7 +241,7 @@ const styles = StyleSheet.create({
     width: 60,
     aspectRatio: 1,
     borderRadius: 100,
-    backgroundColor: "#1f6225ff",
+    borderColor: "#d67b1aff",
   },
   stats: {
     alignItems: "center",

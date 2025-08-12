@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleProp, ViewStyle } from "react-native";
+import { StyleProp, TouchableOpacity, ViewStyle } from "react-native";
 import { StyleSheet, Text, Image, View } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Icon from "./icons";
+import { UserMinus, UserPlus } from "lucide-react-native";
 
 // Type declaration for the props of the UserBlock component
 interface UserBlockProps {
@@ -23,11 +24,13 @@ export default function UserBlock({children, style, onPress, isFriend = false}: 
 				<Text style={styles.username}>{children.username}</Text>
 				<Text style={styles.team}>{children.team}</Text>
 			</View>
-			{!isFriend ? (
-				<FontAwesome name='plus' size={24} color="#381d2a" style={styles.icon} onPress={onPress} />
-			) : (
-				<FontAwesome name="close" size={24} color="#381d2a" style={styles.icon} onPress={onPress} />
-			)}
+      <TouchableOpacity style={styles.icon} onPress={onPress}>
+        {!isFriend ? (
+          <UserPlus size={24} color="#381d2a"/>
+        ) : (
+          <UserMinus size={24} color="#381d2a"/>
+        )}
+      </TouchableOpacity>
 		</View>
 	);
 };

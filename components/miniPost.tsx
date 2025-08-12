@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
 import { StyleSheet, Image, View } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Icon from './icons';
+import { Trash2 } from 'lucide-react-native';
 
 
 interface MiniPostProps {
@@ -31,7 +32,7 @@ export default function MiniPost({ postBlock, style, onPress, toDelete, isMine =
 
 	return (
 		<View style={[styles.container, style]}>
-			{isMine && <FontAwesome name="trash" size={16} color="#381d2a7e" style={styles.icon} onPress={toDelete} />}
+			{isMine && <TouchableOpacity style={styles.icon} onPress={toDelete} ><Trash2 size={16} color="#381d2a7e" /></TouchableOpacity>}
 			<TouchableOpacity onPress={onPress}>
 				<Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
 			</TouchableOpacity>

@@ -1,20 +1,19 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useNavigation } from '@react-navigation/native';
+import Icon from './icons';
+import { Camera, CameraIcon } from 'lucide-react-native';
 
 // Type declaration for the props of the PhotoButton component
 interface PhotoButtonProps {
-	children?: React.ReactNode;
 	onPress?: () => void;
 	style?: StyleProp<ViewStyle>;
 }
 
-export default function PhotoButton({ children, onPress, style }: PhotoButtonProps) {
+export default function PhotoButton({ onPress, style }: PhotoButtonProps) {
 	return (
 		<TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-			<FontAwesome name='camera' size={20} color={'#381d2a'} />
+			<CameraIcon size={20} color={'#381d2a'} />
 		</TouchableOpacity>
 	);
 };

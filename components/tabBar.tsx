@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Icon from './icons';
+import { useIsFocused } from '@react-navigation/native';
+import { CameraIcon, House, NotebookText, User, User, UserPlus } from 'lucide-react-native';
 
 // Type declaration for the props of the tabBar component
 interface tabBarProps {
@@ -10,23 +12,27 @@ interface tabBarProps {
 }
 
 export default function tabBar({ onPress, style }: tabBarProps) {
+	let color: string = '#381d2a';
+	if (onPress) {
+		color = '#f39b6d';
+	}
 	return (
 		<View style={[styles.menuBar, style]}>
 			<View style={[styles.background, style]}>
 				<TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-					<FontAwesome name="home" size={24} style={styles.icon} />
+					<House size={24} color={color} />
 				</TouchableOpacity>
 				<TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-					<FontAwesome name="search" size={24} style={styles.icon} />
+					<UserPlus size={24} color={color} />
 				</TouchableOpacity>
 				<TouchableOpacity onPress={onPress} style={[styles.camBtn, style]}>
-					<FontAwesome name="camera" size={24} style={styles.icon} />
+					<CameraIcon size={24} color={color} />
 				</TouchableOpacity>
 				<TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-					<FontAwesome name="book" size={24} style={styles.icon} />
+					<NotebookText size={24} color={color} />
 				</TouchableOpacity>
 				<TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-					<FontAwesome name="avatar" size={24} style={styles.icon} />
+					<User size={24} color={color} />
 				</TouchableOpacity>
 			</View>
 		</View>

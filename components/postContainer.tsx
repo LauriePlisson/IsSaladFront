@@ -1,8 +1,9 @@
 const moment = require('moment');
 import React from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
 import { StyleSheet, Text, Image, View } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import  Icon  from '../components/icons';
+import { MessageSquareText,MessageSquare, Utensils, UtensilsCrossed } from 'lucide-react-native';
 
 // Type declaration for the props of the Post component
 interface PostProps {
@@ -55,37 +56,29 @@ export default function Post({postBlock, style, onPress, handleLike, handleDisli
 		<View style={[styles.container, style]}>
 			<Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
 			<View style={styles.userContainer}>
-				<Image source={{ uri: postBlock.ownerPost.avatar }} style={postBlock.ownerPost.avatar ? styles.avatar : styles.avatarPlaceholder} />
+				<View style={{ alignItems: 'center', justifyContent: 'center' }}>
+					<Image source={{ uri: postBlock.ownerPost.avatar }} style={postBlock.ownerPost.avatar ? styles.avatar : styles.avatarPlaceholder} />
+					<TouchableOpacity style={[styles.icon, { marginRight: 10 }]} onPress={onPress}>{postBlock.comments[0] ? <MessageSquareText size={24} color="#f39b6d" /> : <MessageSquare size={24} color="#f39b6d" />}</TouchableOpacity>
+				</View>
 				<View style={styles.userInfo}>
 					<Text style={styles.username}>@{postBlock.ownerPost.username}</Text>
-					<Text style={styles.description}>{postBlock.description.length > 180 ? postBlock.description.substring(0, 180) + '...' : postBlock.description}</Text>
+					<Text style={styles.description}>{postBlock.description.length > 120 ? postBlock.description.substring(0, 120) + '...' : postBlock.description}</Text>
 				</View>
 				<View style={styles.postInfos}>
 					<Text style={styles.date}>{formattedDate}</Text>
 					{postBlock.result && (
-						<Image source={{ uri: postBlock.result }} style={styles.team} />
+						<Icon name={postBlock.result} color="#381d2a" size={36} />
 					)}
 				</View>
 			</View>
 			<View style={styles.separator} />
 			<View style={styles.interactContainer}>
-				<>
-					{postBlock.userHasLiked ? <FontAwesome name="heart" size={24} color={"#f39b6d"} style={styles.icon} onPress={handleLike} /> : <FontAwesome name="heart-o" size={24} color={"#f39b6d"} style={styles.icon} onPress={handleLike} />}
-					{postBlock.userHasDisliked ? <FontAwesome name="thumbs-down" size={24} color={"#f39b6d"} style={styles.icon} onPress={handleDislike} /> : <FontAwesome name="thumbs-down" size={24} color={"#5a2b11ff"} style={styles.icon} onPress={handleDislike} />}
-					{/* {postBlock.comments && postBlock.comments.map((comment) => (
-						<View key={comment._id} style={styles.userContainer}>
-							<Image source={{ uri: comment.avatar }} style={styles.avatar} />
-							<Text style={styles.username}>{comment.username}</Text>
-							<Text style={styles.date}>{moment(comment.date).fromNow()}</Text>
-							<Text style={styles.description}>{comment.content}</Text>
-						</View>
-					))} */}
-					{postBlock.comments[0] ? <FontAwesome name="comment" size={24} color="#f39b6d" style={styles.icon} onPress={onPress} /> : <FontAwesome name="comment-o" size={24} color="#f39b6d" style={styles.icon} onPress={onPress} />}
-				</>
+				<TouchableOpacity onPress={handleDislike}>{postBlock.userHasDisliked ? <UtensilsCrossed size={24} color={"#f39b6d"} /> : <Utensils size={24} color={"#381d2a"} />}</TouchableOpacity>
 				<View style={styles.voteContainer}>
 					<View style={[StyleSheet.absoluteFillObject, { width: `${dislikeWidth + likeWidth}%` }, { backgroundColor: '#aabd8c', borderRadius: 8 }]}/>
 					<View style={[StyleSheet.absoluteFillObject, { width: `${dislikeWidth}%` }, { backgroundColor: '#f39b6d', borderRadius: 8 }]}/>
 				</View>
+				<TouchableOpacity style={styles.icon} onPress={handleLike}>{postBlock.userHasLiked ? <Icon name={postBlock.result} size={24} color={"#aabd8c"} /> : <Icon name={postBlock.result} size={24} color={"#381d2a"} />}</TouchableOpacity>
 			</View>
 		</View>
 	);
@@ -116,11 +109,13 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 40,
 		borderRadius: 100,
+		marginBottom: 10,
 	},
 	avatarPlaceholder: {
 		width: 40,
 		height: 40,
 		borderRadius: 100,
+		marginBottom: 10,
 		backgroundColor: '#0f5519ff',
 	},
 	userInfo: {
@@ -156,6 +151,7 @@ const styles = StyleSheet.create({
 		height: 40,
 		borderRadius: 100,
 		backgroundColor: '#E9E3B4',
+		color: '#381d2a',
 	},
 	separator: {
 		width: '80%',

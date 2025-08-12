@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
 import user from "./reducers/user";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Icon from "./components/icons";
 
 import SignInScreen from "./screens/SingInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
@@ -25,6 +25,7 @@ import headerLeftBtn from "./components/headerLeftBtn";
 import PhotoButton from "./components/photoBtn";
 import TestScreen from "./screens/TestScreen";
 import { ScreenStackHeaderLeftView } from "react-native-screens";
+import { Camera, Settings } from "lucide-react-native";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,28 +45,27 @@ const TabNavigator = ({ navigation }) => {
         },
         headerBackImageSource: headerLeftBtn,
         tabBarIcon: ({ color }) => {
-          let iconName;
+          let iconName : string;
           switch (route.name) {
             case "Home":
-              iconName = "home";
+              iconName = "house";
               break;
             case "Search":
-              iconName = "search";
+              iconName = "user-plus";
               break;
             case "Doc":
-              iconName = "book";
+              iconName = "notebook-text";
               break;
             case "Profile":
               iconName = "user";
               break;
             case "Test":
-              iconName = "meh-o";
+              iconName = "meh";
               break;
             case "TabCamera":
               return null; // Camera button will be handled separately
           }
-          //@ts-ignore
-          return <FontAwesome name={iconName} size={24} color={color} />;
+          return <Icon name={iconName} size={24} color={color} />;
         },
         tabBarActiveTintColor: "#ac6139ff",
         tabBarInactiveTintColor: "#381D2A",
@@ -77,9 +77,9 @@ const TabNavigator = ({ navigation }) => {
         },
         headerTitleStyle: {
           color: "#ac6139ff",
-          fontWeight: "15",
+          fontWeight: "bold",
           fontSize: 25,
-          // fontFamily: "josephin sans",
+          fontFamily: "josephin sans",
         },
         headerTitle: "IsSalad?",
       })}
@@ -120,7 +120,7 @@ const TabNavigator = ({ navigation }) => {
                 }}
                 onPress={() => navigation.navigate("Camera")}
               >
-                <FontAwesome name="camera" size={24} color="#381D2A" />
+                <Camera size={24} color="#381D2A" />
               </TouchableOpacity>
             );
           },
@@ -137,13 +137,15 @@ const TabNavigator = ({ navigation }) => {
         options={{
           headerRight: () => {
             return (
-              <FontAwesome
-                name="cog"
-                size={24}
-                color="#381d2a"
+              <TouchableOpacity
                 style={{ marginRight: 20, marginBottom: 5 }}
                 onPress={() => navigation.navigate("Settings")}
-              />
+              >
+                <Settings
+                  size={24}
+                  color="#381d2a"
+                />
+              </TouchableOpacity>
             );
           },
         }}

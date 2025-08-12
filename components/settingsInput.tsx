@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleProp, TextInput, View, ViewStyle } from "react-native";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Icon from "./icons";
+import { Check, Pencil } from "lucide-react-native";
 
 // Type declaration for the props of the SettingsInput component
 interface SettingsInputProps {
@@ -35,21 +36,20 @@ export default function SettingsInput({
       />
 
       {onChangeText && !value && !confirm && (
-        <FontAwesome
-          name="pencil"
-          size={20}
-          color="#f39b6d"
-          style={styles.icon}
-        />
+        <View style={styles.icon}>
+          <Pencil
+            size={20}
+            color="#f39b6d"
+          />
+        </View>
       )}
       {value && !confirm && (
-        <FontAwesome
-          name="check"
-          size={20}
-          color="#f39b6d"
-          style={styles.icon}
-          onPress={onPress}
-        />
+        <TouchableOpacity onPress={onPress} style={styles.icon}>
+          <Check
+            size={20}
+            color="#f39b6d"
+          />
+        </TouchableOpacity>
       )}
     </View>
   );
