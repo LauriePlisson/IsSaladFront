@@ -12,9 +12,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import { editDescription, UserState } from "../reducers/user";
+import { SearchState } from "../reducers/search";
 import MiniPost from "../components/miniPost";
-import Icon from "../components/icons";
-import { Sprout } from "lucide-react-native";
 
 export type PostState = {
   _id: string;
@@ -32,55 +31,26 @@ export type PostState = {
   comments: any[];
 };
 
-type toDeleteState = {
-  token: string;
-  photoUrl: string;
-};
-
-type changeDescr = {
-  username: string;
-  description: string;
-  token: string;
-};
-
-export default function ProfileScreen({ navigation }) {
+export default function UserScreen({ navigation }) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
-  const user = useSelector((state: { user: UserState }) => state.user.value);
   const dispatch = useDispatch();
 
+  const userName = useSelector(
+    (state: { search: SearchState }) => state.search.value.username
+  );
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<PostState[]>([]);
-  const [edit, setEdit] = useState<boolean>(false);
-  const [delet, setDelet] = useState<boolean>(false);
-  const [errorDesc, setErrorDesc] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
-      fetch(`${lienExpo}users/${user.username}`)
+      fetch(`${lienExpo}users/${userName}`)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data);
           setPosts(data.postsList);
         });
-    }, [delet, user.username])
+    }, [])
   );
-
-  const handleX = (url: string) => {
-    const toDelete: toDeleteState = {
-      token: user.token,
-      photoUrl: url,
-    };
-
-    fetch(`${lienExpo}posts/deletePost`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(toDelete),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data), setDelet(!delet);
-      });
-  };
 
   const postDisplay = posts.map((post, i) => {
     return (
@@ -88,47 +58,11 @@ export default function ProfileScreen({ navigation }) {
         postBlock={post}
         key={i}
         onPress={() => {}}
-        toDelete={() => handleX(post.photoUrl)}
-        isMine={true}
+        toDelete={() => {}}
+        isMine={false}
       />
     );
   });
-
-  const handleChangeDescription = () => {
-    let newDescription = description;
-    if (description === "") {
-      newDescription = "@" + user.username;
-    }
-    console.log(newDescription);
-
-    const changeDescription: changeDescr = {
-      username: user.username,
-      description: newDescription,
-      token: user.token,
-    };
-
-    fetch(`${lienExpo}users/changeDescription`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(changeDescription),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result === true) {
-          // console.log("Description changed successfully", data);
-          dispatch(editDescription(newDescription));
-          setDescription("");
-          setEdit(false);
-        } else {
-          setErrorDesc(true);
-          // console.log("Failed to change description:", data.error);
-          setDescription("");
-          setEdit(false);
-        }
-      });
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -141,46 +75,14 @@ export default function ProfileScreen({ navigation }) {
           <View>
             <Text style={styles.username}>{user.username}</Text>
             <Text style={styles.description}>{user.description}</Text>
-            {!edit && (
-              <TouchableOpacity onPress={() => setEdit(!edit)}>
-                <Text style={styles.editButton}>edit description</Text>
-              </TouchableOpacity>
-            )}
-            {edit && (
-              <>
-                <TextInput
-                  placeholder="Change description"
-                  onChangeText={(value) => setDescription(value)}
-                  value={description}
-                  style={{
-                    width: "100%",
-                    height: 40,
-                    borderColor: "#e9e3b4",
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    paddingHorizontal: 10,
-                    marginVertical: 10,
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    handleChangeDescription();
-                  }}
-                >
-                  <Text style={styles.editButton}>Save Description</Text>
-                </TouchableOpacity>
-              </>
-            )}
           </View>
           <View style={styles.userTeam}>
-            {user.team ? <Icon
-              name={user.team}
-              color="#f39b6d"
-              size={60}
-            /> : <Sprout
-              color="#f39b6d"
-              size={60}
-            />}
+            {user.team && (
+              <Image
+                source={{ uri: user.team }}
+                style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
+              />
+            )}
           </View>
           {/* <View style={styles.userNumber}>
             <View style={styles.stats}>
@@ -256,7 +158,7 @@ const styles = StyleSheet.create({
     width: 60,
     aspectRatio: 1,
     borderRadius: 100,
-    borderColor: "#d67b1aff",
+    backgroundColor: "#1f6225ff",
   },
   stats: {
     alignItems: "center",

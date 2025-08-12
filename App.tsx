@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-
+import search from "./reducers/search";
 import user from "./reducers/user";
 import Icon from "./components/icons";
 
@@ -24,6 +24,7 @@ import tabBar from "./components/tabBar";
 import headerLeftBtn from "./components/headerLeftBtn";
 import PhotoButton from "./components/photoBtn";
 import TestScreen from "./screens/TestScreen";
+import UserScreen from "./screens/UserScreen";
 import { ScreenStackHeaderLeftView } from "react-native-screens";
 import { Camera, Settings } from "lucide-react-native";
 
@@ -31,7 +32,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, search },
 });
 
 const TabNavigator = ({ navigation }) => {
@@ -51,6 +52,7 @@ const TabNavigator = ({ navigation }) => {
               iconName = "house";
               break;
             case "Search":
+              iconName = "user-plus";
               iconName = "user-plus";
               break;
             case "Doc":
@@ -179,6 +181,7 @@ export default function App({ navigation }) {
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Result" component={ResultScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
+          <Stack.Screen name="UserScreen" component={UserScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

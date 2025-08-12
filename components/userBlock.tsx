@@ -6,14 +6,14 @@ import { UserMinus, UserPlus } from "lucide-react-native";
 
 // Type declaration for the props of the UserBlock component
 interface UserBlockProps {
-	children?: {
-		username: string;
-		avatar: string;
-		team: string;
-	};
-	onPress: () => void;
-	isFriend?: boolean;
-	style?: StyleProp<ViewStyle>;
+  children?: {
+    username: string;
+    avatar: string;
+    team: string;
+  };
+  onPress: () => void;
+  isFriend?: boolean;
+  style?: StyleProp<ViewStyle>;
 }
 // UserBlock component
 export default function UserBlock({children, style, onPress, isFriend = false}: UserBlockProps) {
