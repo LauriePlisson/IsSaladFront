@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-
+import search from "./reducers/search";
 import user from "./reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -24,13 +24,14 @@ import tabBar from "./components/tabBar";
 import headerLeftBtn from "./components/headerLeftBtn";
 import PhotoButton from "./components/photoBtn";
 import TestScreen from "./screens/TestScreen";
+import UserScreen from "./screens/UserScreen";
 import { ScreenStackHeaderLeftView } from "react-native-screens";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, search },
 });
 
 const TabNavigator = ({ navigation }) => {
@@ -50,7 +51,7 @@ const TabNavigator = ({ navigation }) => {
               iconName = "home";
               break;
             case "Search":
-              iconName = "search";
+              iconName = "user-plus";
               break;
             case "Doc":
               iconName = "book";
@@ -58,8 +59,8 @@ const TabNavigator = ({ navigation }) => {
             case "Profile":
               iconName = "user";
               break;
-            case "Test":
-              iconName = "meh-o";
+              // case "Test":
+              //   iconName = "meh-o";
               break;
             case "TabCamera":
               return null; // Camera button will be handled separately
@@ -177,6 +178,7 @@ export default function App({ navigation }) {
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Result" component={ResultScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
+          <Stack.Screen name="UserScreen" component={UserScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
