@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    marginTop: 15,
+    marginTop: 20,
     width: "95%",
   },
   userInfo: {
@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 100,
     borderColor: "#d67b1aff",
+    marginRight: 15,
   },
   stats: {
     alignItems: "center",
