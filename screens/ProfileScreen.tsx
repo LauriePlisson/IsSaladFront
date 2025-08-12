@@ -219,7 +219,7 @@ export default function ProfileScreen({ navigation }) {
             <Text style={styles.description}>{user.description}</Text>
             {!edit && (
               <TouchableOpacity onPress={() => setEdit(!edit)}>
-              <Text style={styles.editButton}>edit description</Text>
+                <Text style={styles.editButton}>edit description</Text>
               </TouchableOpacity>
             )}
             {edit && (
