@@ -1,16 +1,15 @@
-import React from 'react';
-import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
-import { StyleSheet, Image, View } from 'react-native';
-import Icon from './icons';
-import { Trash2 } from 'lucide-react-native';
-
+import React from "react";
+import { StyleProp, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleSheet, Image, View } from "react-native";
+import Icon from "./icons";
+import { Trash2 } from "lucide-react-native";
 
 interface MiniPostProps {
   postBlock: {
     _id: string;
     photoUrl: string;
     ownerPost: string;
-    date: Date;
+    date: string | Date;
     result: string;
     description: string;
     like: string[];
@@ -27,17 +26,25 @@ interface MiniPostProps {
   style?: StyleProp<ViewStyle>;
 }
 
-
-export default function MiniPost({ postBlock, style, onPress, toDelete, isMine = false }: MiniPostProps) {
-
-	return (
-		<View style={[styles.container, style]}>
-			{isMine && <TouchableOpacity style={styles.icon} onPress={toDelete} ><Trash2 size={12} color="#381d2a7e" /></TouchableOpacity>}
-			<TouchableOpacity onPress={onPress}>
-				<Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
-			</TouchableOpacity>
-		</View>
-	);
+export default function MiniPost({
+  postBlock,
+  style,
+  onPress,
+  toDelete,
+  isMine = false,
+}: MiniPostProps) {
+  return (
+    <View style={[styles.container, style]}>
+      {isMine && (
+        <TouchableOpacity style={styles.icon} onPress={toDelete}>
+          <Trash2 size={12} color="#381d2a7e" />
+        </TouchableOpacity>
+      )}
+      <TouchableOpacity onPress={onPress}>
+        <Image source={{ uri: postBlock.photoUrl }} style={styles.image} />
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

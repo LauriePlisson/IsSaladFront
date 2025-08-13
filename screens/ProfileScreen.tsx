@@ -62,14 +62,16 @@ export default function ProfileScreen({ navigation }) {
   const [showComments, setShowComments] = useState(false);
   // input pour taper un nouveau commentaire
   const [newComment, setNewComment] = useState("");
+  const [userInfos, setUserInfos] = useState<any>({});
 
   useFocusEffect(
     useCallback(() => {
       fetch(`${lienExpo}users/${user.username}`)
         .then((response) => response.json())
         .then((data) => {
-          // console.log(data);
+          //console.log(data);
           setPosts(data.postsList);
+          setUserInfos(data);
         });
     }, [delet, user.username])
   );
@@ -257,7 +259,7 @@ export default function ProfileScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.User}>
         <Image
-          source={{ uri: user.avatar }}
+          source={{ uri: userInfos.avatar }}
           style={{ width: 100, aspectRatio: 1, borderRadius: 100 }}
         />
         <View style={styles.userInfo}>
@@ -265,12 +267,14 @@ export default function ProfileScreen({ navigation }) {
             <Text
               style={[
                 styles.username,
-                user.team ? styles[user.team] : { color: "#381d2a" },
+                userInfos.team?.name
+                  ? styles[userInfos.team.name]
+                  : { color: "#381d2a" },
               ]}
             >
-              {user.username}
+              {userInfos.username}
             </Text>
-            <Text style={styles.description}>{user.description}</Text>
+            <Text style={styles.description}>{userInfos.description}</Text>
             {!edit && (
               <TouchableOpacity onPress={() => setEdit(!edit)}>
                 <Text style={styles.editButton}>edit description</Text>
@@ -308,8 +312,8 @@ export default function ProfileScreen({ navigation }) {
             )}
           </View>
           <View style={styles.userTeam}>
-            {user.team ? (
-              <Icon name={user.team} size={40} />
+            {userInfos.team?.name ? (
+              <Icon name={userInfos.team.name} size={40} />
             ) : (
               <Sprout size={40} />
             )}
@@ -466,7 +470,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "70%",
     width: "70%",
     marginLeft: 10,
   },

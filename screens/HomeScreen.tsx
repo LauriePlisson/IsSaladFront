@@ -16,6 +16,7 @@ import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Meh } from "lucide-react-native";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -26,6 +27,7 @@ export default function HomeScreen() {
   const [commentsVisible, setCommentsVisible] = useState(false);
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
   const [commentText, setCommentText] = useState("");
+  const [userInfos, setUserInfos] = useState<any>({});
 
   const fetchPosts = async () => {
     try {
@@ -167,7 +169,7 @@ export default function HomeScreen() {
               style={styles.closeBtn}
               onPress={() => setCommentsVisible(false)}
             >
-              <FontAwesome name="bars" size={25} color="black" />
+              <Meh size={25} color="black" />
             </TouchableOpacity>
             <Text style={styles.modalTitle}>Commentaires</Text>
             <View style={styles.commentList}>
