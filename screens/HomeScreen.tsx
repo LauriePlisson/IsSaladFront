@@ -216,6 +216,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
   },
   postsContainer: {
     flex: 1,

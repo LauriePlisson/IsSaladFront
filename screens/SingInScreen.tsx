@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import FormContainer from "../components/formContainer";
@@ -73,6 +74,20 @@ export default function SignInScreen({ navigation }) {
         style={styles.signInContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
+        <Image
+          source={{
+            uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091143/ChatGPT_Image_13_aou%CC%82t_2025_15_18_25_nxdfto.png",
+          }}
+          style={{
+            width: 150,
+            aspectRatio: 1,
+            borderRadius: 5,
+            // borderColor: "#ac6139ff",
+            // borderWidth: 1,
+            marginBottom: 20,
+          }}
+        />
+        <Text style={styles.appName}>IsSalad?</Text>
         <FormContainer
           text="Username"
           placeholder="Username"
@@ -119,9 +134,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "#f1d5a9ff",
   },
   signInContainer: {
+    marginTop: 50,
     alignItems: "center",
     justifyContent: "center",
     borderBottomWidth: 2,
@@ -139,5 +156,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#f39b6d",
+  },
+  appName: {
+    color: "#ac6139ff",
+    fontWeight: "400",
+    fontSize: 35,
+    marginBottom: 20,
+    letterSpacing: 2,
   },
 });

@@ -30,7 +30,9 @@ export default function DocScreen({}) {
       >
         <View style={styles.child}>
           <Image
-            source={require("../assets/img/string_in_salad.png")}
+            source={{
+              uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091143/ChatGPT_Image_13_aou%CC%82t_2025_15_18_25_nxdfto.png",
+            }}
             // style={[styles.child, { aspectRatio: 1 }]}
             style={styles.image}
           />
@@ -47,7 +49,9 @@ export default function DocScreen({}) {
         </View>
         <View style={styles.child}>
           <Image
-            source={require("../assets/img/cabage_string.png")}
+            source={{
+              uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091050/ChatGPT_Image_13_aou%CC%82t_2025_15_03_04_quzmal.png",
+            }}
             // style={[styles.child, { aspectRatio: 1 }]}
             style={styles.image}
           />
@@ -63,7 +67,9 @@ export default function DocScreen({}) {
         </View>
         <View style={styles.child}>
           <Image
-            source={require("../assets/img/ramen_string.png")}
+            source={{
+              uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091050/ChatGPT_Image_13_aou%CC%82t_2025_15_11_25_mvkmhf.png",
+            }}
             // style={[styles.child, { aspectRatio: 1 }]}
             style={styles.image}
           />
@@ -79,7 +85,9 @@ export default function DocScreen({}) {
         </View>
         <View style={styles.child}>
           <Image
-            source={require("../assets/img/sandwich_string.png")}
+            source={{
+              uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091050/ChatGPT_Image_13_aou%CC%82t_2025_15_08_15_owsfll.png",
+            }}
             // style={[styles.child, { aspectRatio: 1 }]}
             style={styles.image}
           />
