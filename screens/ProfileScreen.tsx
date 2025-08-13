@@ -453,6 +453,7 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
     alignItems: "center",
     justifyContent: "flex-start",
   },
@@ -510,7 +511,7 @@ const styles = StyleSheet.create({
   },
   modalSheet: {
     height: "80%",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(253, 249, 242, 1)",
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     padding: 10,

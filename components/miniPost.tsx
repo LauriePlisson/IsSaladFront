@@ -53,6 +53,13 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 8,
     alignItems: "flex-end",
+    shadowColor: "#ac6139c8",
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
   },
   imgContainer: {
     alignItems: "flex-end",

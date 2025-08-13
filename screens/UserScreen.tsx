@@ -16,6 +16,7 @@ import { SearchState } from "../reducers/search";
 import MiniPost from "../components/miniPost";
 import TabBar from "../components/tabBar";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "../components/icons";
 
 export type PostState = {
   _id: string;
@@ -74,8 +75,11 @@ export default function UserScreen(props) {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity onPress={() => props.change()}>
-          <Text>Back</Text>
+        <TouchableOpacity
+          style={styles.buttonBack}
+          onPress={() => props.change()}
+        >
+          <Icon name="x" size={24} />
         </TouchableOpacity>
         <View style={styles.User}>
           <Image
@@ -132,6 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
   },
   display: {
     margin: 10,
@@ -186,5 +191,15 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 15,
     // borderWidth: 2,
     backgroundColor: "#aabd8c",
+  },
+  buttonBack: {
+    left: 150,
+    marginTop: 15,
+    height: 40,
+    width: 70,
+    // backgroundColor: "#aabd8c",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 8,
   },
 });
