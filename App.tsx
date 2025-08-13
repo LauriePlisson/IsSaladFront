@@ -4,8 +4,11 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { persistStore, persistReducer } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import search from "./reducers/search";
 import user from "./reducers/user";
 import Icon from "./components/icons";
@@ -31,9 +34,16 @@ import { Camera, Settings } from "lucide-react-native";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const reducers = combineReducers({ user, search });
+const persistConfig = { key: "isSalad?", storage: AsyncStorage };
+
 const store = configureStore({
-  reducer: { user, search },
+  reducer: persistReducer(persistConfig, reducers),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
+
+const persistor = persistStore(store);
 
 const TabNavigator = ({ navigation }) => {
   return (
@@ -156,41 +166,43 @@ const TabNavigator = ({ navigation }) => {
 export default function App({ navigation }) {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="SignIn" component={SignInScreen} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{
-              headerShown: true,
-              headerBackVisible: true,
-              headerStyle: { backgroundColor: "#aabd8c" },
-              headerTitleStyle: { color: "transparent" },
-              headerTintColor: "#381d2aff",
-              headerBackTitleVisible: false,
-            }}
-          />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="Result" component={ResultScreen} />
-          <Stack.Screen name="Camera" component={CameraScreen} />
-          <Stack.Screen
-            name="UserScreen"
-            component={UserScreen}
-            options={{
-              headerShown: true,
-              headerBackVisible: true,
-              headerStyle: { backgroundColor: "#aabd8c" },
-              headerTitleStyle: { color: "transparent" },
-              headerTintColor: "#381d2aff",
-              headerBackTitleVisible: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="SignIn" component={SignInScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                headerShown: true,
+                headerBackVisible: true,
+                headerStyle: { backgroundColor: "#aabd8c" },
+                headerTitleStyle: { color: "transparent" },
+                headerTintColor: "#381d2aff",
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Result" component={ResultScreen} />
+            <Stack.Screen name="Camera" component={CameraScreen} />
+            <Stack.Screen
+              name="UserScreen"
+              component={UserScreen}
+              options={{
+                headerShown: true,
+                headerBackVisible: true,
+                headerStyle: { backgroundColor: "#aabd8c" },
+                headerTitleStyle: { color: "transparent" },
+                headerTintColor: "#381d2aff",
+                headerBackTitleVisible: false,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }

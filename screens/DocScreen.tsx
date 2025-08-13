@@ -4,20 +4,138 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Dimensions,
+  SafeAreaView,
+  Pressable,
+  Image,
 } from "react-native";
+
+import { useState, useRef } from "react";
+import { SwiperFlatList } from "react-native-swiper-flatlist";
 
 export default function DocScreen({}) {
   return (
-    <View style={styles.container}>
-      <Text /*style={styles.title}*/>Bienvenue dans IsSalad? !</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <SwiperFlatList
+        autoplay={false}
+        // autoplayDelay={0}
+        autoplayLoop={true}
+        index={0}
+        showPagination
+        paginationStyle={{ height: 50 }}
+        // style={{ alignItems: "center" }}
+        contentContainerStyle={{ alignItems: "center" }}
+        paginationActiveColor="#f39b6d"
+        paginationDefaultColor="#aabd8c"
+      >
+        <View style={styles.child}>
+          <Image
+            source={require("../assets/img/string_in_salad.png")}
+            // style={[styles.child, { aspectRatio: 1 }]}
+            style={styles.image}
+          />
+          <Text style={styles.text}>
+            <Text style={styles.title}>Bienvenue dans IsSalad? !</Text> {"\n"}{" "}
+            {"\n"}Parce que tout est soit une soupe, soit une salade, soit un
+            sandwich… même si vous refusez d’y croire.{"\n"} {"\n"}Taco ou
+            salade pliée ? Smoothie ou soupe froide ? Cornet de glace ou
+            sandwich sucré ? En un clic, IsSalad? tranche avec froideur
+            scientifique (et un petit sourire en coin).
+            {"\n"} {"\n"}Dites adieu aux débats sans fin. Dites bonjour à la
+            paix culinaire.
+          </Text>
+        </View>
+        <View style={styles.child}>
+          <Image
+            source={require("../assets/img/cabage_string.png")}
+            // style={[styles.child, { aspectRatio: 1 }]}
+            style={styles.image}
+          />
+          <Text style={styles.text}>
+            <Text style={styles.title}>Salade 🥗</Text> {"\n"} {"\n"}Définition
+            : Mélange d’éléments distincts, sans liquide couvrant complètement
+            le tout et sans enveloppe comestible.{"\n"}
+            {"\n"}Exemples : Salade de légumes, taboulé, poke bowl, riz sauté,
+            popcorn. {"\n"}
+            {"\n"}Règle pratique : Les ingrédients sont visibles, mélangés, mais
+            pas « enfermés ».
+          </Text>
+        </View>
+        <View style={styles.child}>
+          <Image
+            source={require("../assets/img/ramen_string.png")}
+            // style={[styles.child, { aspectRatio: 1 }]}
+            style={styles.image}
+          />
+          <Text style={styles.text}>
+            <Text style={styles.title}>Soupe 🍲</Text> {"\n"} {"\n"}Définition :
+            Plat contenu dans un récipient, composé d’une base liquide (totale
+            ou partielle) avec les ingrédients dedans.{"\n"}
+            {"\n"}Exemples : Soupe traditionnelle, bouillon, ramen, céréales
+            dans du lait, smoothie.{"\n"}
+            {"\n"}Règle pratique : S’il faut une cuillère (ou boire
+            directement), c’est une soupe.
+          </Text>
+        </View>
+        <View style={styles.child}>
+          <Image
+            source={require("../assets/img/sandwich_string.png")}
+            // style={[styles.child, { aspectRatio: 1 }]}
+            style={styles.image}
+          />
+          <Text style={styles.text}>
+            <Text style={styles.title}>Sandwich 🥪</Text> {"\n"} {"\n"}
+            Définition : Plat dont les ingrédients sont enfermés, totalement ou
+            partiellement, dans un élément comestible (pain, pâte, feuille,
+            etc.).{"\n"}
+            {"\n"}Exemples : Sandwich classique, burger, taco, burrito, sushi.
+            {"\n"}
+            {"\n"}Règle pratique : Il y a un contenant comestible autour du
+            contenu.
+          </Text>
+        </View>
+      </SwiperFlatList>
+    </SafeAreaView>
   );
 }
+
+const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    backgroundColor: "white",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 18,
+    textAlign: "justify",
+    borderTopWidth: 2,
+    height: 300,
+    borderColor: "#f39b6d",
+    paddingTop: 25,
+    paddingHorizontal: 20,
+  },
+  child: {
+    top: 200,
+    width,
+    height: 50,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    // marginTop: 200,
+  },
+  image: {
+    height: 200,
+    aspectRatio: 1,
+    marginBottom: 15,
+    borderRadius: 10,
+  },
+  title: {
+    textAlign: "center",
+    fontWeight: "600",
+    textDecorationLine: "underline",
+    textDecorationColor: "#f39b6d",
+    fontSize: 22,
   },
 });
