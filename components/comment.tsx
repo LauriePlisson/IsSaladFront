@@ -3,14 +3,15 @@ import { StyleProp, ViewStyle } from "react-native";
 import { StyleSheet, Text, Image, View } from "react-native";
 import Moment from "moment";
 import Icon from "./icons";
-import { Sprout } from "lucide-react-native";
 
 // Type declaration for the props of the Comment component
 interface CommentProps {
   ownerComment: {
     username: string;
     avatar?: string;
-    team?: string;
+    team?: {
+      name: string;
+    };
   };
   date?: number;
   text: string;
@@ -45,9 +46,9 @@ export default function Comment({
           <Text style={styles.date}>{formattedDate}</Text>
         </View>
         {ownerComment.team ? (
-          <Icon name={ownerComment.team?.toLowerCase()} size={24} />
+          <Icon name={ownerComment.team.name} size={24} />
         ) : (
-          <Sprout size={24} color="#381d2a" />
+          <Icon name="frown" size={24} color="#381d2a" />
         )}
       </View>
       <Text style={styles.comment}>{text}</Text>

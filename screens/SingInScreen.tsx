@@ -54,7 +54,7 @@ export default function SignInScreen({ navigation }) {
               friendList: data.friendsList,
               avatar: data.avatar,
               description: data.description,
-              team: data.team,
+              team: data.team.name,
             })
           );
 

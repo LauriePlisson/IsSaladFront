@@ -8,8 +8,10 @@ import { UserMinus, UserPlus } from "lucide-react-native";
 interface UserBlockProps {
   children?: {
     username: string;
-    avatar: string;
-    team: string;
+    avatar?: string;
+    team?: {
+      name: string;
+    };
   };
   onPress: () => void;
   isFriend?: boolean;
@@ -30,7 +32,7 @@ export default function UserBlock({
         <Image source={{ uri: children.avatar }} style={styles.avatar} />
         <View style={styles.userInfo}>
           <Text style={styles.username}>{children.username}</Text>
-          <Text style={styles.team}>{children.team}</Text>
+          <Text style={styles.team}>{children.team?.name}</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity style={styles.icon} onPress={onPress}>

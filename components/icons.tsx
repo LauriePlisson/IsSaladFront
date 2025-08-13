@@ -1,4 +1,4 @@
-import { Salad, Soup, Sandwich, Frown, NotebookText, House, UserPlus, User, X } from 'lucide-react-native';
+import { Salad, Soup, Sandwich, Frown, NotebookText, House, UserPlus, User, X, Croissant } from 'lucide-react-native';
 import React from 'react';
 
 interface IconProps {
@@ -12,6 +12,7 @@ export default function Icon({ name, color, size = 24 }: IconProps) {
 		'salad': Salad,
 		'soup': Soup,
 		'sandwich': Sandwich,
+		'raviolis': Croissant,
 		'frown': Frown,
 		'notebook-text': NotebookText,
 		'house': House,
