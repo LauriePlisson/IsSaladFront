@@ -12,6 +12,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import search from "./reducers/search";
 import user from "./reducers/user";
 import Icon from "./components/icons";
+import WelcomeScreen from "./screens/WelcomeScreen";
 import OptionSearchScreen from "./screens/OptionSearchScreen";
 import SignInScreen from "./screens/SingInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
@@ -30,6 +31,7 @@ import TestScreen from "./screens/TestScreen";
 import UserScreen from "./screens/UserScreen";
 import { ScreenStackHeaderLeftView } from "react-native-screens";
 import { Camera, Settings } from "lucide-react-native";
+import { Image } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,6 +57,24 @@ const TabNavigator = ({ navigation }) => {
           borderTopRightRadius: 8,
         },
         headerBackImageSource: headerLeftBtn,
+        headerLeft(props) {
+          return (
+            <Image
+              source={{
+                uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091143/ChatGPT_Image_13_aou%CC%82t_2025_15_18_25_nxdfto.png",
+              }}
+              style={{
+                aspectRatio: 1,
+                width: 40,
+                borderRadius: 100,
+                borderColor: "#ac6139ff",
+                borderWidth: 1,
+                marginLeft: 15,
+                marginBottom: 5,
+              }}
+            />
+          );
+        },
         tabBarIcon: ({ color }) => {
           let iconName: string;
           switch (route.name) {
@@ -91,6 +111,7 @@ const TabNavigator = ({ navigation }) => {
           fontWeight: "bold",
           fontSize: 25,
           fontFamily: "josephin sans",
+          letterSpacing: 2,
         },
         headerTitle: "IsSalad?",
       })}
@@ -169,6 +190,7 @@ export default function App({ navigation }) {
       <PersistGate persistor={persistor}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Welcome" component={WelcomeScreen} />
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
