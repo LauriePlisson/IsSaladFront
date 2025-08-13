@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,16 @@ import {
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Icon from "../components/icons";
-import { ChevronRight } from "lucide-react-native";
+import { ChevronRight, Frown, Scroll } from "lucide-react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from "@react-navigation/native";
+
+interface teamType {
+  name?: string;
+  icon?: string;
+  color?: string;
+  description?: string;
+}
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -22,7 +31,9 @@ export default function ResultScreen({ route, navigation }) {
   const result = route.params.result;
   const user = useSelector((state: { user: UserState }) => state.user.value);
 
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState<string>("");
+  const [team, setTeam] = useState<teamType>({});
+  const [open, setOpen] = useState<boolean>(false);
 
   const UpdateDescription = async () => {
     if (!description.trim()) {
@@ -83,38 +94,83 @@ export default function ResultScreen({ route, navigation }) {
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      fetch(`${lienExpo}teams/${result}`)
+        .then(res => res.json())
+        .then(team => {
+          if (team.result) {
+            setTeam({
+              name: team.name,
+              icon: team.icon,
+              color: team.color,
+              description: team.description
+            });
+          }
+        });
+    }, [])
+  );
+
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.headerButton} onPress={deletePost}>
-            <Icon name="x" size={25} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.text}>Nouvelle Publication</Text>
-          <TouchableOpacity style={styles.headerButton}>
-            <ChevronRight size={25} color="black" />
-          </TouchableOpacity>
-        </View>
-
-        <Image source={{ uri: photoUrl }} style={styles.image} />
-        <Text style={styles.result}>IS... {result} !!!</Text>
-
-        <TextInput
-          placeholder="Ajouter une description..."
-          value={description}
-          onChangeText={setDescription}
-          style={styles.input}
-          multiline
-        />
-
-        <TouchableOpacity onPress={UpdateDescription} style={styles.button}>
-          <Text style={styles.buttonText}>Valider</Text>
+    <>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.headerButton} onPress={deletePost}>
+          <Icon name="x" size={25} color="#381d2a" />
         </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        <Text style={styles.text}>Nouvelle Publication</Text>
+        <TouchableOpacity style={styles.headerButton}>
+          <ChevronRight size={25} color="#381d2a" />
+        </TouchableOpacity>
+      </View>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView contentContainerStyle={styles.scroll}>
+          <View style={styles.resultContainer}>
+            <Icon
+              name={team.name?.toLowerCase() || "frown"}
+              size={50}
+              color={team.color || "#381d2a"}
+              />
+            <Text style={styles.result}>Is... 
+            <Text style={{fontWeight: 900,fontFamily: "Josefin Sans", color: team.color || "#381d2a"}}>
+              {team.name?.toUpperCase() || "Pas une salade/Sandwich/Soupe"}
+            </Text></Text>
+            <Icon
+              name={team.icon?.toLowerCase() || "frown"}
+              size={50}
+              color={team.color || "#381d2a"}
+            />
+          </View>
+          <Image source={{ uri: photoUrl }} style={styles.image} />
+          {open && 
+            <Text style={styles.textDesc}>
+            {team.description || "Pas de description disponible. :("}
+            </Text>
+          }
+          {open ? <TouchableOpacity onPress={() => {setOpen(false)}} style={styles.button}>
+            <Text style={styles.buttonText}>close</Text>
+          </TouchableOpacity> : <TouchableOpacity onPress={() => {setOpen(true)}} style={styles.button}>
+            <Text style={styles.buttonText}>{result} ?</Text>
+          </TouchableOpacity>}
+
+          {!open && <>
+          <TextInput
+            placeholder="Ajouter une description..."
+            value={description}
+            onChangeText={setDescription}
+            style={styles.input}
+            multiline
+          />
+
+          <TouchableOpacity onPress={UpdateDescription} style={styles.button}>
+            <Text style={styles.buttonText}>Valider</Text>
+          </TouchableOpacity>
+          </>}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </>
   );
 }
 
@@ -124,54 +180,75 @@ const styles = StyleSheet.create({
     // backgroundColor: "#fff",
   },
   header: {
-    backgroundColor: "#eee5b3",
+    backgroundColor: "#AABD8C",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: 30,
+    height: '10%',
     flexDirection: "row",
     width: "100%",
   },
   headerButton: {
-    padding: 7,
-    borderRadius: 50,
-    backgroundColor: "#eee5b3",
-    borderWidth: 3,
+    paddingTop: 10,
+    top: 10,
   },
   text: {
-    fontSize: 15,
-    borderWidth: 1,
+    fontSize: 18,
+    paddingTop: 10,
+    fontFamily: "Josefin Sans",
+    color: "#381d2a",
+    fontWeight: "bold",
+    top: 10,
+  },
+  textDesc: {
+    fontSize: 16,
+    fontFamily: "Josefin Sans",
+    color: "#381d2a",
+    marginVertical: 10,
+    textAlign: "justify",
+  },
+  resultContainer: {
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "space-around",
+    marginVertical: 10,
   },
   image: {
-    width: "90%",
-    height: 300,
-    resizeMode: "cover",
-    marginTop: 50,
-    marginBottom: 20,
-    borderRadius: 10,
+    width: "100%",
+    aspectRatio: 1,
+    marginVertical: 20,
+    borderRadius: 8,
   },
   result: {
-    fontSize: 20,
-    marginBottom: 20,
+    fontSize: 24,
+    fontFamily: "Josefin Sans",
+    color: "#381d2a",
+    fontWeight: "bold",
+    marginTop: 10,
     textAlign: "center",
   },
   input: {
-    width: "90%",
-    borderColor: "black",
-    borderWidth: 1,
+    width: "100%",
+    borderColor: "#f39c6dff",
+    borderBottomWidth: 1,
     borderRadius: 8,
     padding: 15,
     marginBottom: 20,
     fontSize: 16,
+    marginVertical: 10,
   },
   button: {
-    backgroundColor: "#de5e1eff",
+    backgroundColor: "#f39c6dff",
     paddingVertical: 12,
     paddingHorizontal: 24,
-    borderRadius: 4,
+    borderRadius: 8,
+    marginVertical: 10,
   },
   buttonText: {
     color: "white",
     fontSize: 20,
+    fontFamily: "Josefin Sans",
+    textAlign: "center",
   },
   SignUpContainer: {
     alignItems: "center",

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Image,
+  SafeAreaView,
 } from "react-native";
 
 import Icon from "../components/icons";
@@ -18,6 +19,7 @@ import { UserState } from "../reducers/user";
 
 import * as ImagePicker from "expo-image-picker";
 import { CameraIcon, ChevronRight, Images, SwitchCameraIcon } from "lucide-react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -113,72 +115,76 @@ export default function CameraScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("TabNavigator")}
-        >
-          <Icon name="x" size={25} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.text}>Nouvelle Publication</Text>
-        <TouchableOpacity style={styles.headerButton}>
-          <ChevronRight size={25} color="black" />
-        </TouchableOpacity>
-      </View>
-      <CameraView
-        style={styles.camera}
-        facing={facing}
-        ref={(ref: any) => (cameraRef.current = ref)}
-      />
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.headerModal}>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Icon name="x" size={25} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                uploadPhoto();
-              }}
-            >
-              <ChevronRight size={25} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.modalContent}>
-            {previewImage && (
-              <Image
-                source={{ uri: previewImage }}
-                style={styles.previewImage}
-                resizeMode="cover"
-              />
-            )}
-          </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={() => navigation.navigate("TabNavigator")}
+          >
+            <Icon name="x" size={25} color="#381d2a" />
+          </TouchableOpacity>
+          <Text style={styles.text}>Nouvelle Publication</Text>
+          <TouchableOpacity style={styles.headerButton}>
+            <ChevronRight size={25} color="#381d2a" />
+          </TouchableOpacity>
         </View>
-      </Modal>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton} onPress={openGallery}>
-          <Images size={40} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.footerBUttonCamera}
-          onPress={takePicture}
+        <CameraView
+          style={styles.camera}
+          facing={facing}
+          ref={(ref: any) => (cameraRef.current = ref)}
+        />
+        <Modal
+          animationType="slide"
+          statusBarTranslucent={true} //Android only
+          navigationBarTranslucent={true} //Android only
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
         >
-          <CameraIcon size={40} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.footerButton}
-          onPress={toggleCameraFacing}
-        >
-          <SwitchCameraIcon size={40} color="black" />
-        </TouchableOpacity>
-      </View>
-    </View>
+          <View style={styles.modalContainer}>
+            <View style={styles.headerModal}>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Icon name="x" size={25} color="#f39b6d" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  uploadPhoto();
+                }}
+              >
+                <ChevronRight size={25} color="#f39b6d" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalContent}>
+              {previewImage && (
+                <Image
+                  source={{ uri: previewImage }}
+                  style={styles.previewImage}
+                  resizeMode="cover"
+                />
+              )}
+            </View>
+          </View>
+        </Modal>
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.footerButton} onPress={openGallery}>
+            <Images size={40} color="#381d2a" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.footerBUttonCamera}
+            onPress={takePicture}
+          >
+            <CameraIcon size={40} color="#381d2a" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.footerButton}
+            onPress={toggleCameraFacing}
+          >
+            <SwitchCameraIcon size={40} color="#381d2a" />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -188,40 +194,42 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   header: {
-    backgroundColor: "#eee5b3",
+    backgroundColor: "#aabd8c",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: 30,
+    height: '10%',
     flexDirection: "row",
   },
   text: {
-    fontSize: 15,
-    borderWidth: 1,
+    fontSize: 18,
+    fontFamily: "Josefin Sans",
+    color: "#381d2a",
+    fontWeight: "bold",
+    top: 15,
   },
   headerButton: {
-    padding: 7,
-    borderRadius: 50,
-    backgroundColor: "#eee5b3",
-    borderWidth: 3,
+    top: 15,
   },
   camera: {
     flex: 1,
   },
   footer: {
-    backgroundColor: "#eee5b3",
+    backgroundColor: "#aabd8c",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: 20,
+    height: '11%',
+    borderRadius: 8,
     flexDirection: "row",
   },
   footerButton: {
-    padding: 7,
+    paddingVertical: 20,
+    bottom: 15,
   },
   footerBUttonCamera: {
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: "#c24c11ff",
-    borderWidth: 3,
+    padding: 10,
+    bottom: 15,
+    borderRadius: 8,
+    backgroundColor: "#f39b6d",
   },
   modalContainer: {
     flex: 1,
@@ -236,10 +244,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalContent: {
-    width: 300,
-    height: 300,
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    width: '80%',
+    aspectRatio: 1,
+    backgroundColor: "#f39b6d",
+    borderRadius: 8,
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -247,6 +255,6 @@ const styles = StyleSheet.create({
   previewImage: {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
+    borderRadius: 8,
   },
 });
