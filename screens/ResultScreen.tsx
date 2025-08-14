@@ -127,11 +127,15 @@ export default function ResultScreen({ route, navigation }) {
       >
         <ScrollView contentContainerStyle={styles.scroll}>
           <View style={styles.resultContainer}>
-            {team ? <Icon
-              name={team.name?.toLowerCase()}
-              size={50}
-              color={team.color}
-            /> : <Frown size={50} color="#381d2a" />}
+            {team ? (
+              <Icon
+                name={team.name?.toLowerCase()}
+                size={50}
+                color={team.color}
+              />
+            ) : (
+              <Frown size={50} color="#381d2a" />
+            )}
             <Text style={styles.result}>
               Is...
               <Text
@@ -141,14 +145,18 @@ export default function ResultScreen({ route, navigation }) {
                   color: team.color || "#381d2a",
                 }}
               >
-                {team.name?.toUpperCase() || "No Food"}
+                {team.name?.toUpperCase() || "other"}
               </Text>
             </Text>
-            {team ? <Icon
-              name={team.icon?.toLowerCase()}
-              size={50}
-              color={team.color}
-            /> : <Frown size={50} color="#381d2a" />}
+            {team ? (
+              <Icon
+                name={team.icon?.toLowerCase()}
+                size={50}
+                color={team.color}
+              />
+            ) : (
+              <Frown size={50} color="#381d2a" />
+            )}
           </View>
           <Image source={{ uri: photoUrl }} style={styles.image} />
           {open && (
