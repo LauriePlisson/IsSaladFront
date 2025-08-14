@@ -116,7 +116,7 @@ export default function UserScreen(props) {
       const data = await response.json();
       if (data.result) {
         // on recharge les posts, puis on met à jour le post du modal
-        const r = await fetch(`${lienExpo}users/${user.username}`);
+        const r = await fetch(`${lienExpo}users/${userInfos.username}`);
         const d = await r.json();
         setPosts(d.postsList || []);
         const updated = (d.postsList || []).find(
@@ -142,7 +142,7 @@ export default function UserScreen(props) {
       });
       const data = await response.json();
       if (data.result) {
-        const r = await fetch(`${lienExpo}users/${user.username}`);
+        const r = await fetch(`${lienExpo}users/${userInfos.username}`);
         const d = await r.json();
         setPosts(d.postsList || []);
         const updated = (d.postsList || []).find(
