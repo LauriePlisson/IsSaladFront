@@ -416,7 +416,11 @@ export default function ProfileScreen({ navigation }) {
                       return (
                         <Comment
                           key={comment._id || index}
-                          ownerComment={{ username, avatar, team: "" }}
+                          ownerComment={{
+                            username,
+                            avatar,
+                            team: { name: "" },
+                          }}
                           text={comment.text || ""}
                           date={comment.date}
                           position={isLast ? "last" : "first"}

@@ -15,10 +15,10 @@ import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
+//import Icon from "../components/icons";
 // import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Meh } from "lucide-react-native";
 
-// const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function HomeScreen() {
   const user = useSelector((state: { user: UserState }) => state.user.value);
