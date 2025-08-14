@@ -169,7 +169,7 @@ export default function HomeScreen() {
               style={styles.closeBtn}
               onPress={() => setCommentsVisible(false)}
             >
-              <Meh size={25} color="black" />
+              <Meh size={25} color="#000000ff" />
             </TouchableOpacity>
             <Text style={styles.modalTitle}>Commentaires</Text>
             <View style={styles.commentList}>
