@@ -142,26 +142,36 @@ export default function SettingsScreen({ navigation }) {
   };
 
   const handleDeleteAccount = () => {
-    fetch(`${lienExpo}users/`, {
+    fetch(`${lienExpo}posts/deleteAllFromOne`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: user.token,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: user.token }),
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.result === true) {
-          // console.log("Account deleted successfully", data);
-          dispatch(logOutUser());
-          navigation.navigate("SignIn");
-          setErrorDelete(false);
-        } else {
-          // console.log("Failed to delete account:", data.error);
-          setErrorDelete(true);
-        }
+        console.log(data);
+
+        fetch(`${lienExpo}users/`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: user.token,
+          }),
+        })
+          .then((reponse) => reponse.json())
+          .then((dataSuppr) => {
+            if (dataSuppr.result === true) {
+              // console.log("Account deleted successfully", data);
+              dispatch(logOutUser());
+              navigation.navigate("SignIn");
+              setErrorDelete(false);
+            } else {
+              // console.log("Failed to delete account:", data.error);
+              setErrorDelete(true);
+            }
+          });
       });
   };
 
