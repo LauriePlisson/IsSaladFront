@@ -89,7 +89,8 @@ export default function ProfileScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data), setDelet(!delet);
+        // console.log(data),
+        setDelet(!delet);
       });
   };
 
@@ -267,9 +268,7 @@ export default function ProfileScreen({ navigation }) {
             <Text
               style={[
                 styles.username,
-                userInfos.team?.name
-                  ? styles[userInfos.team.name]
-                  : { color: "#381d2a" },
+                userInfos.team ? styles[userInfos.team] : { color: "#381d2a" },
               ]}
             >
               {userInfos.username}
@@ -279,7 +278,7 @@ export default function ProfileScreen({ navigation }) {
               <TouchableOpacity onPress={() => setEdit(!edit)}>
                 <Text style={styles.editButton}>edit description</Text>
               </TouchableOpacity>
-            )} */}
+            )}
             {edit && (
               <>
                 <TextInput
@@ -307,22 +306,12 @@ export default function ProfileScreen({ navigation }) {
             )}
           </View>
           <View style={styles.userTeam}>
-            {userInfos.team?.name ? (
-              <Icon name={userInfos.team.name} size={40} />
+            {userInfos.team ? (
+              <Icon name={userInfos.team} size={40} />
             ) : (
               <Sprout size={40} />
             )}
           </View>
-          {/* <View style={styles.userNumber}>
-            <View style={styles.stats}>
-              <Text>Posts: </Text>
-              <Text>{posts.length}</Text>
-            </View>
-            <View style={styles.stats}>
-              <Text>Friends: </Text>
-              <Text>{user.friendList.length}</Text>
-            </View>
-          </View> */}
         </View>
       </View>
       <ScrollView
@@ -404,7 +393,8 @@ export default function ProfileScreen({ navigation }) {
                     {comments.map((comment, index) => {
                       const author = comment.ownerComment || {};
                       const username = author.username || "Utilisateur";
-                      const avatar = author.avatar || "https://via.placeholder.com/44";
+                      const avatar =
+                        author.avatar || "https://via.placeholder.com/44";
                       const team = author.team;
                       const isLast = index === comments.length - 1;
 
