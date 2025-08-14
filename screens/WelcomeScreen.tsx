@@ -10,7 +10,53 @@ import {
   Image,
 } from "react-native";
 
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { UserState } from "../reducers/user";
+import { addUser } from "../reducers/user";
+
 export default function WelcomeScreen({ navigation }) {
+  const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
+  const [loadingOver, setLoadingOver] = useState<boolean>(false);
+  const userToken = useSelector(
+    (state: { user: UserState }) => state.user.value.token
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      if (!userToken) {
+        setLoadingOver(true);
+        return;
+      }
+      const response = await fetch(lienExpo + "users/signinToken", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: userToken,
+        }),
+      });
+      const data = await response.json();
+      if (!data.result) {
+        setLoadingOver(true);
+        return;
+      }
+      dispatch(
+        addUser({
+          username: data.username,
+          token: data.token,
+          friendList: data.friendsList,
+          avatar: data.avatar,
+          description: data.description,
+          team: data.team.name,
+        })
+      );
+      navigation.navigate("TabNavigator");
+    })();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -25,14 +71,16 @@ export default function WelcomeScreen({ navigation }) {
         {"\n"}Parce que tout est soit une soupe, soit une salade, soit un
         sandwich… même si vous refusez d’y croire.
       </Text>
-      <TouchableOpacity
-        style={styles.welcome}
-        onPress={() => {
-          navigation.navigate("SignIn");
-        }}
-      >
-        <Text style={styles.textWelcome}>WELCOME</Text>
-      </TouchableOpacity>
+      {loadingOver && (
+        <TouchableOpacity
+          style={styles.welcome}
+          onPress={() => {
+            navigation.navigate("SignIn");
+          }}
+        >
+          <Text style={styles.textWelcome}>WELCOME</Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }
