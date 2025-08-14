@@ -17,7 +17,6 @@ import Post from "../components/postContainer";
 import Comment from "../components/comment";
 import { Meh, Minus, SendHorizonal } from "lucide-react-native";
 
-
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function HomeScreen() {
   const user = useSelector((state: { user: UserState }) => state.user.value);
@@ -282,7 +281,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
   },
-  closeBtn: { alignSelf: 'stretch' },
+  closeBtn: { alignSelf: "stretch" },
   backdrop: {
     flex: 1,
     justifyContent: "flex-end",
