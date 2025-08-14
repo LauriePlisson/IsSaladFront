@@ -30,7 +30,8 @@ export default function Icon({ name, color, size = 24 }: IconProps) {
     sandwich: Sandwich,
     raviolis: Croissant,
     frown: Frown,
-    undefined: Frown, // Default icon if name is undefined
+    'no food': Frown, // Default icon for 'no food'
+    undefined: CircleAlert, // Default icon if name is undefined
     "notebook-text": NotebookText,
     house: House,
     "user-plus": UserPlus,
