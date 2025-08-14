@@ -20,7 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "../components/icons";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
-import { Sandwich, Sprout } from "lucide-react-native";
+import { Sandwich, SendHorizonal, Sprout } from "lucide-react-native";
 
 export type PostState = {
   _id: string;
@@ -40,22 +40,22 @@ export type PostState = {
 
 export default function UserScreen(props) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
+  const user = useSelector((state: { user: UserState }) => state.user.value);
   const dispatch = useDispatch();
 
-  const user = useSelector((state: { user: UserState }) => state.user.value);
   const userName = useSelector(
     (state: { search: SearchState }) => state.search.value.username
   );
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<PostState[]>([]);
   const [avatar, setAvatar] = useState<string>("");
-  const [team, setTeam] = useState("");
+  const [team, setTeam] = useState<string>("");
 
-  const [postModalVisible, setPostModalVisible] = useState(false);
+  const [postModalVisible, setPostModalVisible] = useState<boolean>(false);
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState<boolean>(false);
   // input pour taper un nouveau commentaire
-  const [newComment, setNewComment] = useState("");
+  const [newComment, setNewComment] = useState<string>("");
   const [userInfos, setUserInfos] = useState<any>({});
 
   useFocusEffect(
@@ -63,11 +63,11 @@ export default function UserScreen(props) {
       fetch(`${lienExpo}users/${userName}`)
         .then((response) => response.json())
         .then((data) => {
-          // console.log(data);
           setPosts(data.postsList);
-          setDescription(data.description);
-          setAvatar(data.avatar);
-          setTeam(data.team);
+          setUserInfos(data);
+          // setDescription(data.description);
+          // setAvatar(data.avatar);
+          // setTeam(data.team);
         });
     }, [])
   );
@@ -200,36 +200,30 @@ export default function UserScreen(props) {
 
   return (
     <>
+      <TouchableOpacity
+        style={styles.buttonBack}
+        onPress={() => props.change()}
+      >
+        <Icon name="x" size={24} />
+      </TouchableOpacity>
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity
-          style={styles.buttonBack}
-          onPress={() => props.change()}
-        >
-          <Icon name="x" size={24} />
-        </TouchableOpacity>
         <View style={styles.User}>
           <Image
-            source={{ uri: avatar }}
+            source={{ uri: userInfos.avatar }}
             style={{ width: 100, aspectRatio: 1, borderRadius: 100 }}
           />
           <View style={styles.userInfo}>
             <View>
-              <Text style={styles.username}>{userName}</Text>
-              <Text style={styles.description}>{description}</Text>
+              <Text style={styles.username}>{userInfos.username}</Text>
+              <Text style={styles.description}>{userInfos.description}</Text>
             </View>
             <View style={styles.userTeam}>
-              {team ? <Icon name={team} size={40} /> : <Sprout size={40} />}
+              {userInfos.team ? (
+                <Icon name={userInfos.team} size={40} />
+              ) : (
+                <Icon name={undefined} size={40} /> // Error icon if no team
+              )}
             </View>
-            {/* <View style={styles.userNumber}>
-            <View style={styles.stats}>
-              <Text>Posts: </Text>
-              <Text>{posts.length}</Text>
-            </View>
-            <View style={styles.stats}>
-              <Text>Friends: </Text>
-              <Text>{user.friendList.length}</Text>
-            </View>
-          </View> */}
           </View>
         </View>
         <ScrollView
@@ -278,6 +272,9 @@ export default function UserScreen(props) {
                             selectedPost.ownerPost?.username || userName,
                           avatar:
                             selectedPost.ownerPost?.avatar || avatar || "",
+                          team: {
+                            name: selectedPost.ownerPost?.team?.name || "no team",
+                          },
                         },
                         description: selectedPost.description || "",
                         date: selectedPost.date,
@@ -313,12 +310,13 @@ export default function UserScreen(props) {
                         const username = author.username || "Utilisateur";
                         const avatar =
                           author.avatar || "https://via.placeholder.com/44";
+                        const team = author.team || "no team";
                         const isLast = index === comments.length - 1;
 
                         return (
                           <Comment
                             key={comment._id || index}
-                            ownerComment={{ username, avatar, team: "" }}
+                            ownerComment={{ username, avatar, team }}
                             text={comment.text || ""}
                             date={comment.date}
                             position={isLast ? "last" : "first"}
@@ -339,7 +337,8 @@ export default function UserScreen(props) {
                         onPress={sendComment}
                         style={styles.sendBtn}
                       >
-                        <Text style={{ color: "#fff" }}>Envoyer</Text>
+                        {/* <Text style={{ color: "#fff" }}>Envoyer</Text> */}
+                        <SendHorizonal color="#fff" size={20} />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -349,15 +348,13 @@ export default function UserScreen(props) {
           </View>
         </Modal>
       </SafeAreaView>
-      {/* <View style={styles.tabBarContainer}>
-        <TabBar />
-      </View> */}
     </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    top: -40,
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
@@ -370,9 +367,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    marginTop: 15,
+    marginTop: 20,
     width: "95%",
-    // backgroundColor: "#e9e3b4",
   },
   userInfo: {
     flexDirection: "row",
@@ -380,30 +376,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "70%",
     marginLeft: 10,
-    // backgroundColor: "#948b49ff",
   },
   username: {
     fontFamily: "Josefin Sans",
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: 900,
+    top: -10,
     color: "#381d2a",
   },
   description: {
     fontFamily: "Josefin Sans",
     fontSize: 16,
     color: "#381d2a9d",
-  },
-  editButton: {
-    fontFamily: "Josefin Sans",
-    fontSize: 12,
-    color: "#d67b1aff",
-    textDecorationLine: "underline",
+    top: -5,
   },
   userTeam: {
     width: 60,
     aspectRatio: 1,
     borderRadius: 100,
-    // backgroundColor: "#1f6225ff",
+    borderColor: "#d67b1aff",
+    marginRight: 15,
   },
   stats: {
     alignItems: "center",
@@ -411,25 +403,18 @@ const styles = StyleSheet.create({
   postContainer: {
     alignItems: "flex-end",
   },
-  tabBarContainer: {
-    borderTopStartRadius: 15,
-    borderTopEndRadius: 15,
-    // borderWidth: 2,
-    backgroundColor: "#aabd8c",
-  },
   buttonBack: {
     left: 150,
-    marginTop: 15,
+    top: -48,
     height: 40,
     width: 70,
-    // backgroundColor: "#aabd8c",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
+    zIndex: 1,
   },
   modalBackdrop: {
     flex: 1,
-
     justifyContent: "flex-end",
   },
   modalSheet: {
@@ -489,5 +474,8 @@ const styles = StyleSheet.create({
   },
   soup: {
     color: "#F2C94C",
+  },
+  ravioli: {
+    color: "#8a4d2dff",
   },
 });

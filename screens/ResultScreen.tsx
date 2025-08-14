@@ -131,24 +131,24 @@ export default function ResultScreen({ route, navigation }) {
               name={team.name?.toLowerCase()}
               size={50}
               color={team.color}
-            /> : <Frown size={50} color="#381d2a" />}
+            /> : <Icon name={undefined} size={50} />}
             <Text style={styles.result}>
               Is...
               <Text
                 style={{
                   fontWeight: 900,
                   fontFamily: "Josefin Sans",
-                  color: team.color || "#381d2a",
+                  color: team.color || "red",
                 }}
               >
-                {team.name?.toUpperCase() || "No Food"}
+                {team.name?.toUpperCase() || "ERROR"}
               </Text>
             </Text>
             {team ? <Icon
               name={team.icon?.toLowerCase()}
               size={50}
               color={team.color}
-            /> : <Frown size={50} color="#381d2a" />}
+            /> : <Icon name={undefined} size={50} />}
           </View>
           <Image source={{ uri: photoUrl }} style={styles.image} />
           {open && (

@@ -58,11 +58,11 @@ export default function ProfileScreen({ navigation }) {
   const [delet, setDelet] = useState<boolean>(false);
   const [errorDesc, setErrorDesc] = useState<boolean>(false);
 
-  const [postModalVisible, setPostModalVisible] = useState(false);
+  const [postModalVisible, setPostModalVisible] = useState<boolean>(false);
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState<boolean>(false);
   // input pour taper un nouveau commentaire
-  const [newComment, setNewComment] = useState("");
+  const [newComment, setNewComment] = useState<string>("");
   const [userInfos, setUserInfos] = useState<any>({});
 
   useFocusEffect(
@@ -310,7 +310,7 @@ export default function ProfileScreen({ navigation }) {
             {userInfos.team ? (
               <Icon name={userInfos.team} size={40} />
             ) : (
-              <Frown size={40} />
+              <Icon name={undefined} size={40} /> // Error icon if no team
             )}
           </View>
         </View>
@@ -361,6 +361,9 @@ export default function ProfileScreen({ navigation }) {
                           selectedPost.ownerPost?.username || user.username,
                         avatar:
                           selectedPost.ownerPost?.avatar || user.avatar || "",
+                        team: {
+                          name: selectedPost.ownerPost?.team?.name || "no team",
+                        },
                       },
                       description: selectedPost.description || "",
                       date: selectedPost.date,
@@ -494,7 +497,6 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-
     justifyContent: "flex-end",
   },
   modalSheet: {
@@ -554,5 +556,8 @@ const styles = StyleSheet.create({
   },
   soup: {
     color: "#F2C94C",
+  },
+  ravioli: {
+    color: "#8a4d2dff",
   },
 });
