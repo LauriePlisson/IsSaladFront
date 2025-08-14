@@ -18,6 +18,7 @@ import Post from "../components/postContainer";
 import Comment from "../components/comment";
 import Icon from "../components/icons";
 import { Sandwich, Sprout } from "lucide-react-native";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export type PostState = {
   _id: string;
@@ -69,7 +70,6 @@ export default function ProfileScreen({ navigation }) {
       fetch(`${lienExpo}users/${user.username}`)
         .then((response) => response.json())
         .then((data) => {
-          //console.log(data);
           setPosts(data.postsList);
           setUserInfos(data);
         });
@@ -280,11 +280,6 @@ export default function ProfileScreen({ navigation }) {
                 <Text style={styles.editButton}>edit description</Text>
               </TouchableOpacity>
             )}
-            {!edit && (
-              <TouchableOpacity onPress={() => setEdit(!edit)}>
-                <Text style={styles.editButton}>edit description</Text>
-              </TouchableOpacity>
-            )}
             {edit && (
               <>
                 <TextInput
@@ -409,14 +404,14 @@ export default function ProfileScreen({ navigation }) {
                     {comments.map((comment, index) => {
                       const author = comment.ownerComment || {};
                       const username = author.username || "Utilisateur";
-                      const avatar =
-                        author.avatar || "https://via.placeholder.com/44";
+                      const avatar = author.avatar || "https://via.placeholder.com/44";
+                      const team = author.team;
                       const isLast = index === comments.length - 1;
 
                       return (
                         <Comment
                           key={comment._id || index}
-                          ownerComment={{ username, avatar, team: "" }}
+                          ownerComment={{ username, avatar, team }}
                           text={comment.text || ""}
                           date={comment.date}
                           position={isLast ? "last" : "first"}

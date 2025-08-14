@@ -2,7 +2,7 @@ import { Salad, Soup, Sandwich, Frown, NotebookText, House, UserPlus, User, X, C
 import React from 'react';
 
 interface IconProps {
-	name: string;
+	name: string | undefined;
 	color?: string;
 	size?: number;
 }
@@ -14,6 +14,7 @@ export default function Icon({ name, color, size = 24 }: IconProps) {
 		'sandwich': Sandwich,
 		'raviolis': Croissant,
 		'frown': Frown,
+		undefined: Frown, // Default icon if name is undefined
 		'notebook-text': NotebookText,
 		'house': House,
 		'user-plus': UserPlus,

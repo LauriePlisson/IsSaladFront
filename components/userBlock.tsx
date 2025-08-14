@@ -32,7 +32,7 @@ export default function UserBlock({
         <Image source={{ uri: children.avatar }} style={styles.avatar} />
         <View style={styles.userInfo}>
           <Text style={styles.username}>{children.username}</Text>
-          <Text style={styles.team}>{children.team?.name}</Text>
+          {children.team?.name ? <Text style={styles.team}>{children.team?.name}</Text> : <Text style={styles.team}>Pas d'équipe</Text>}
         </View>
       </TouchableOpacity>
       <TouchableOpacity style={styles.icon} onPress={onPress}>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   team: {
     fontFamily: "Josefin Sans",
-    fontSize: 16,
+    fontSize: 14,
     color: "#381d2a55",
     lineHeight: 20,
   },

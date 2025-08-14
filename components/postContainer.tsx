@@ -12,6 +12,9 @@ interface PostProps {
 			_id: string;
 			username: string;
 			avatar?: string;
+			team?: {
+				name: string;
+			};
 		};
 		description: string;
 		date: string;
@@ -77,7 +80,7 @@ export default function Post({postBlock, style, onPress, handleLike, handleDisli
 					<View style={[StyleSheet.absoluteFillObject, { width: `${dislikeWidth}%` }, { backgroundColor: '#f39b6d', borderRadius: 8, zIndex: 1 }]}/>
 					<View style={[StyleSheet.absoluteFillObject, { width: `${dislikeWidth + likeWidth}%` }, { backgroundColor: '#aabd8c', borderRadius: 8 }]}/>
 				</View>
-				<TouchableOpacity onPress={handleLike} style={{ left: -10}} >{postBlock.userHasLiked ? <Icon name={postBlock.result} size={24} /> : <Icon name={postBlock.result} size={24} color={"#381d2a"} />}</TouchableOpacity>
+				<TouchableOpacity onPress={handleLike} style={{ left: -10}} >{postBlock.userHasLiked ? <Icon name={postBlock.result} size={24} /> : <Icon name={postBlock.result} size={24} color="#381d2a" />}</TouchableOpacity>
 			</View>
 		</View>
 	);
