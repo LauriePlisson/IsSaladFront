@@ -8,6 +8,7 @@ import {
   Modal,
   Image,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 
 import Icon from "../components/icons";
@@ -18,7 +19,12 @@ import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 
 import * as ImagePicker from "expo-image-picker";
-import { CameraIcon, ChevronRight, Images, SwitchCameraIcon } from "lucide-react-native";
+import {
+  CameraIcon,
+  ChevronRight,
+  Images,
+  SwitchCameraIcon,
+} from "lucide-react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
@@ -36,6 +42,8 @@ export default function CameraScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
+  const [isUploading, setIsUploading] = useState(false); // 👈
+
   useEffect(() => {
     (async () => {
       const result = await Camera.requestCameraPermissionsAsync();
@@ -52,6 +60,7 @@ export default function CameraScreen({ navigation }) {
   };
 
   const takePicture = async () => {
+    if (isUploading) return;
     const photo: any = await cameraRef.current?.takePictureAsync({
       quality: 0.3,
     });
@@ -62,6 +71,7 @@ export default function CameraScreen({ navigation }) {
     setModalVisible(true);
   };
   const openGallery = async () => {
+    if (isUploading) return;
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
@@ -77,6 +87,8 @@ export default function CameraScreen({ navigation }) {
   };
 
   const uploadPhoto = async () => {
+    if (!previewImage || isUploading) return;
+    setIsUploading(true);
     const formData = new FormData();
     formData.append("photoUrl", {
       uri: previewImage,
@@ -101,6 +113,7 @@ export default function CameraScreen({ navigation }) {
         setPhotoUrl(data.post.photoUrl);
         setResult(data.post.result);
         setModalVisible(false);
+        setIsUploading(false);
         navigation.navigate("Result" as any, {
           photoUrl: data.post.photoUrl,
           result: data.post.result,
@@ -121,6 +134,7 @@ export default function CameraScreen({ navigation }) {
           <TouchableOpacity
             style={styles.headerButton}
             onPress={() => navigation.navigate("TabNavigator")}
+            disabled={isUploading}
           >
             <Icon name="x" size={25} color="#381d2a" />
           </TouchableOpacity>
@@ -140,20 +154,28 @@ export default function CameraScreen({ navigation }) {
           navigationBarTranslucent={true} //Android only
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
+          onRequestClose={() => {
+            if (isUploading) return; // 👈 empêche la fermeture pendant l'upload
+            setModalVisible(false);
+          }}
         >
           <View style={styles.modalContainer}>
             <View style={styles.headerModal}>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Icon name="x" size={25} color="#f39b6d" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  uploadPhoto();
-                }}
-              >
-                <ChevronRight size={25} color="#f39b6d" />
-              </TouchableOpacity>
+              {!isUploading ? (
+                <>
+                  <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <Icon name="x" size={25} color="#f39b6d" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={uploadPhoto}>
+                    <ChevronRight size={25} color="#f39b6d" />
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <View style={styles.loadingWrap}>
+                  <ActivityIndicator size="small" />
+                  <Text style={styles.loadingText}>Analyse en cours…</Text>
+                </View>
+              )}
             </View>
             <View style={styles.modalContent}>
               {previewImage && (
@@ -197,7 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#aabd8c",
     justifyContent: "space-around",
     alignItems: "center",
-    height: '10%',
+    height: "10%",
     flexDirection: "row",
   },
   text: {
@@ -217,7 +239,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#aabd8c",
     justifyContent: "space-around",
     alignItems: "center",
-    height: '11%',
+    height: "11%",
     borderRadius: 8,
     flexDirection: "row",
   },
@@ -242,9 +264,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "70%",
     marginBottom: 20,
+    alignItems: "center", // 👈
+  },
+  loadingWrap: {
+    // 👈
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  loadingText: {
+    // 👈
+    color: "#f39b6d",
+    fontWeight: "600",
   },
   modalContent: {
-    width: '80%',
+    width: "80%",
     aspectRatio: 1,
     backgroundColor: "#f39b6d",
     borderRadius: 8,
