@@ -17,7 +17,7 @@ import MiniPost from "../components/miniPost";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
 import Icon from "../components/icons";
-import { Sandwich, Sprout } from "lucide-react-native";
+import { Frown, Sandwich, SendHorizonal, Sprout } from "lucide-react-native";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export type PostState = {
@@ -267,8 +267,8 @@ export default function ProfileScreen({ navigation }) {
             <Text
               style={[
                 styles.username,
-                userInfos.team?.name
-                  ? styles[userInfos.team.name]
+                userInfos.team
+                  ? styles[userInfos.team]
                   : { color: "#381d2a" },
               ]}
             >
@@ -279,7 +279,7 @@ export default function ProfileScreen({ navigation }) {
               <TouchableOpacity onPress={() => setEdit(!edit)}>
                 <Text style={styles.editButton}>edit description</Text>
               </TouchableOpacity>
-            )} */}
+            )}
             {edit && (
               <>
                 <TextInput
@@ -307,10 +307,10 @@ export default function ProfileScreen({ navigation }) {
             )}
           </View>
           <View style={styles.userTeam}>
-            {userInfos.team?.name ? (
-              <Icon name={userInfos.team.name} size={40} />
+            {userInfos.team ? (
+              <Icon name={userInfos.team} size={40} />
             ) : (
-              <Sprout size={40} />
+              <Frown size={40} />
             )}
           </View>
           {/* <View style={styles.userNumber}>
@@ -432,7 +432,8 @@ export default function ProfileScreen({ navigation }) {
                       onPress={sendComment}
                       style={styles.sendBtn}
                     >
-                      <Text style={{ color: "#fff" }}>Envoyer</Text>
+                      {/* <Text style={{ color: "#fff" }}>Envoyer</Text> */}
+                      <SendHorizonal color='#fff' size={20} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -471,14 +472,15 @@ const styles = StyleSheet.create({
   },
   username: {
     fontFamily: "Josefin Sans",
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: 900,
-    color: "#381d2a",
+    top: -10,
   },
   description: {
     fontFamily: "Josefin Sans",
     fontSize: 16,
     color: "#381d2a9d",
+    top: -5,
   },
   editButton: {
     fontFamily: "Josefin Sans",
