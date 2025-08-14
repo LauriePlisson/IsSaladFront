@@ -14,27 +14,31 @@ import {
 import React from "react";
 
 interface IconProps {
-	name: string | undefined;
-	color?: string;
-	size?: number;
+  name: string | undefined;
+  color?: string;
+  size?: number;
 }
 
 export default function Icon({ name, color, size = 24 }: IconProps) {
-	const icons: Record<string, React.ComponentType<{ color?: string; size?: number }>> = {
-		'salad': Salad,
-		'soup': Soup,
-		'sandwich': Sandwich,
-		'raviolis': Croissant,
-		'frown': Frown,
-		undefined: Frown, // Default icon if name is undefined
-		'notebook-text': NotebookText,
-		'house': House,
-		'user-plus': UserPlus,
-		'user': User,
-		'x': X,
-		'back': ChevronLeft,
-	};
-	let colorIcon: string = color || '#381d2a'; // Default color if not provided
+  const icons: Record<
+    string,
+    React.ComponentType<{ color?: string; size?: number }>
+  > = {
+    salad: Salad,
+    soup: Soup,
+    sandwich: Sandwich,
+    raviolis: Croissant,
+    frown: Frown,
+    undefined: Frown, // Default icon if name is undefined
+    "notebook-text": NotebookText,
+    house: House,
+    "user-plus": UserPlus,
+    user: User,
+    x: X,
+    back: ChevronLeft,
+    other: Frown,
+  };
+  let colorIcon: string = color || "#381d2a"; // Default color if not provided
   const LucideIcon = icons[name];
   if (!color) {
     if (name === "salad") {

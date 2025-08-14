@@ -67,7 +67,7 @@ export default function UserScreen(props) {
           setPosts(data.postsList);
           setDescription(data.description);
           setAvatar(data.avatar);
-          setTeam(data.team.name);
+          setTeam(data.team);
         });
     }, [])
   );

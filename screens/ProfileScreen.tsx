@@ -72,8 +72,9 @@ export default function ProfileScreen({ navigation }) {
         .then((data) => {
           setPosts(data.postsList);
           setUserInfos(data);
+          // setDescription(data.description);
         });
-    }, [delet, user.username])
+    }, [delet, user.username, edit])
   );
 
   const handleX = (url: string) => {
@@ -222,7 +223,7 @@ export default function ProfileScreen({ navigation }) {
     if (description === "") {
       newDescription = "@" + user.username;
     }
-    console.log(newDescription);
+    // console.log(newDescription);
 
     const changeDescription: changeDescr = {
       username: user.username,
