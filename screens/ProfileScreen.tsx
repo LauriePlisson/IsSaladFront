@@ -405,7 +405,7 @@ export default function ProfileScreen({ navigation }) {
                       const author = comment.ownerComment || {};
                       const username = author.username || "Utilisateur";
                       const avatar = author.avatar || "https://via.placeholder.com/44";
-                      const team = author.team;
+                      const team = author.team || 'no team';
                       const isLast = index === comments.length - 1;
 
                       return (

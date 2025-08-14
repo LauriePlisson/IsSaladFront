@@ -25,6 +25,7 @@ export default function Icon({ name, color, size = 24 }: IconProps) {
 		'soup': Soup,
 		'sandwich': Sandwich,
 		'raviolis': Croissant,
+    'no food': Frown,
 		'frown': Frown,
 		undefined: Frown, // Default icon if name is undefined
 		'notebook-text': NotebookText,
