@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
   },
   modalSheet: {
     height: "80%",
-    backgroundColor: "rgba(253, 249, 242, 1)",
+    backgroundColor: "rgba(243, 241, 238, 1)",
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     padding: 10,
