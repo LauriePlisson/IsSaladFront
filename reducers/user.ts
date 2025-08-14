@@ -34,7 +34,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    addUser: (state: UserState, action: PayloadAction<UserState["value"]>) => {
+    addUser: (state, action: PayloadAction<UserState["value"]>) => {
       state.value = action.payload;
     },
     editUsername: (state, action: PayloadAction<string>) => {
@@ -62,7 +62,6 @@ export const userSlice = createSlice({
           (e) => e.username === action.payload.username
         )
       ) {
-        console.log("coucou");
         state.value.friendList.push(action.payload);
       } else {
         state.value.friendList = state.value.friendList.filter(

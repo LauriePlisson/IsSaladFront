@@ -6,20 +6,26 @@ import {
   TextInput,
   ScrollView,
   SafeAreaView,
+  Keyboard,
 } from "react-native";
 import SearchContainer from "../components/searchContainer";
 import UserBlock from "../components/userBlock";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addFriendtoFriendList } from "../reducers/user";
+import { newSearch } from "../reducers/search";
 
-export default function SearchScreen() {
+export default function SearchScreen(props) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
   const [searchUsername, setSearchUsername] = useState<string>("");
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [viewAll, setViewAll] = useState<boolean>(true);
   const [viewFriend, setViewFriend] = useState<boolean>(false);
+  const [errorSearch, setErrorSearch] = useState<boolean>(false);
+  const [lengthError, setLengthError] = useState<boolean>(false);
+  // const [changeColor, setChangeColor] = useState<boolean>(false);
 
   const user = useSelector((state: any) => state.user.value);
   const dispatch = useDispatch();
@@ -27,19 +33,23 @@ export default function SearchScreen() {
   // console.log("my friends:", myfriends);
   let isFriend = false;
 
-  useEffect(() => {
-    fetch(`${lienExpo}users/`)
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log("Fetched users:", data);
-        setAllUsers(data.users);
-      });
-    // setMyFriends(user.friendList);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetch(`${lienExpo}users/`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log("Fetched users:", data);
+          setAllUsers(data.users);
+        });
+      // setMyFriends(user.friendList);
+    }, [])
+  );
 
+  // console.log(allUsers);
   const handleSearch = () => {
     if (searchUsername.length < 3) {
-      console.log("Search term must be at least 3 characters long");
+      setLengthError(true);
+      // console.log("Search term must be at least 3 characters long");
       return;
     }
 
@@ -51,15 +61,19 @@ export default function SearchScreen() {
 
           // console.log("Search results:", data);
         } else {
+          setErrorSearch(true);
           // console.log("No users found");
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching search results:", error);
       });
   };
+  // console.log(errorSearch);
+  const handlePressProfil = (name: string) => {
+    // console.log(name);
+    dispatch(newSearch(name));
+    props.change();
+  };
 
-  const handleAdd = (frienddata: string) => {
+  const handleAdd = (frienddata) => {
     // console.log("Adding user:", frienddata);
 
     fetch(`${lienExpo}users/addFriend`, {
@@ -91,16 +105,23 @@ export default function SearchScreen() {
     // Logic to add a user to the friend list
   };
   const displayAllUsers = allUsers?.map((alluser, i) => {
-    return (
-      <UserBlock
-        key={i}
-        children={alluser}
-        onPress={() => {
-          handleAdd(alluser);
-        }}
-        isFriend={user.friendList.some((e) => e.username === alluser.username)}
-      />
-    );
+    if (alluser.username !== user.username) {
+      return (
+        <UserBlock
+          key={i}
+          children={alluser}
+          onPress={() => {
+            handleAdd(alluser);
+          }}
+          redirect={() => {
+            handlePressProfil(alluser.username);
+          }}
+          isFriend={user.friendList.some(
+            (e) => e.username === alluser.username
+          )}
+        />
+      );
+    }
   });
 
   const displayMyFriends = user.friendList?.map((friend, i) => {
@@ -110,6 +131,9 @@ export default function SearchScreen() {
         children={friend}
         onPress={() => {
           handleAdd(friend);
+        }}
+        redirect={() => {
+          handlePressProfil(friend.username);
         }}
         isFriend={true}
       />
@@ -124,6 +148,9 @@ export default function SearchScreen() {
         onPress={() => {
           handleAdd(result);
         }}
+        redirect={() => {
+          handlePressProfil(result.username);
+        }}
         isFriend={user.friendList.some((e) => e.username === result.username)}
       />
     );
@@ -131,21 +158,41 @@ export default function SearchScreen() {
   const handlePressOngletAll = () => {
     setViewAll(true);
     setViewFriend(false);
+    setErrorSearch(false);
+    setLengthError(false);
+    setSearchResults([]);
+    setSearchUsername("");
   };
 
   const handlePressOngletFriend = () => {
     setViewFriend(true), setViewAll(false);
+    setErrorSearch(false);
+    setLengthError(false);
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <>
       <SearchContainer
         children={"search..."}
-        onChangeText={(value) => setSearchUsername(value)}
+        onChangeText={(value) => {
+          setSearchUsername(value),
+            setErrorSearch(false),
+            setLengthError(false);
+        }}
         value={searchUsername}
         onPress={() => {
           handleSearch();
         }}
       />
+      {lengthError && (
+        <Text style={{ marginBottom: 5, color: "#ac6139ff" }}>
+          username search must be at least 3 letters
+        </Text>
+      )}
+      {errorSearch && (
+        <Text style={{ marginBottom: 5, color: "#ac6139ff" }}>
+          no user found
+        </Text>
+      )}
       <View style={styles.onglets}>
         <TouchableOpacity
           style={styles.onglet}
@@ -168,28 +215,35 @@ export default function SearchScreen() {
         }}
         style={styles.usersDisplay}
       >
-        {viewAll && !viewFriend && (
+        {viewAll && !viewFriend && searchResults.length === 0 && (
           <>
             <Text>All users:</Text>
             {displayAllUsers}
           </>
         )}
-        {searchResults.length > 0 && <>{displaySearchResults}</>}
-        {!viewAll && viewFriend && (
+        {searchResults.length > 0 && (
+          <>
+            <Text>Search Result:</Text>
+            {displaySearchResults}
+          </>
+        )}
+        {!viewAll && viewFriend && searchResults.length === 0 && (
           <>
             <Text>Your friends:</Text>
             {displayMyFriends}
           </>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
   },
   username: {
     fontSize: 20,
@@ -219,7 +273,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#aabd8c",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 20,
+    borderRadius: 8,
   },
   textonglet: {
     color: "#381D2A",

@@ -7,15 +7,25 @@ import {
   TouchableOpacity,
   Modal,
   Image,
+  SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
+
+import Icon from "../components/icons";
 
 import { CameraView, Camera, CameraType } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 
 import * as ImagePicker from "expo-image-picker";
+import {
+  CameraIcon,
+  ChevronRight,
+  Images,
+  SwitchCameraIcon,
+} from "lucide-react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
@@ -31,6 +41,8 @@ export default function CameraScreen({ navigation }) {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  const [isUploading, setIsUploading] = useState(false); // 👈
 
   useEffect(() => {
     (async () => {
@@ -48,6 +60,7 @@ export default function CameraScreen({ navigation }) {
   };
 
   const takePicture = async () => {
+    if (isUploading) return;
     const photo: any = await cameraRef.current?.takePictureAsync({
       quality: 0.3,
     });
@@ -58,6 +71,7 @@ export default function CameraScreen({ navigation }) {
     setModalVisible(true);
   };
   const openGallery = async () => {
+    if (isUploading) return;
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
@@ -73,6 +87,8 @@ export default function CameraScreen({ navigation }) {
   };
 
   const uploadPhoto = async () => {
+    if (!previewImage || isUploading) return;
+    setIsUploading(true);
     const formData = new FormData();
     formData.append("photoUrl", {
       uri: previewImage,
@@ -87,6 +103,7 @@ export default function CameraScreen({ navigation }) {
         method: "POST",
         body: formData,
         headers: {
+          Accept: "multipart/form-data",
           "Content-Type": "multipart/form-data",
         },
       });
@@ -97,6 +114,7 @@ export default function CameraScreen({ navigation }) {
         setPhotoUrl(data.post.photoUrl);
         setResult(data.post.result);
         setModalVisible(false);
+        setIsUploading(false);
         navigation.navigate("Result" as any, {
           photoUrl: data.post.photoUrl,
           result: data.post.result,
@@ -111,72 +129,85 @@ export default function CameraScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("TabNavigator")}
-        >
-          <FontAwesome name="times" size={25} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.text}>Nouvelle Publication</Text>
-        <TouchableOpacity style={styles.headerButton}>
-          <FontAwesome name="arrow-right" size={25} color="black" />
-        </TouchableOpacity>
-      </View>
-      <CameraView
-        style={styles.camera}
-        facing={facing}
-        ref={(ref: any) => (cameraRef.current = ref)}
-      />
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.headerModal}>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <FontAwesome name="times" size={25} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                uploadPhoto();
-              }}
-            >
-              <FontAwesome name="arrow-right" size={25} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.modalContent}>
-            {previewImage && (
-              <Image
-                source={{ uri: previewImage }}
-                style={styles.previewImage}
-                resizeMode="cover"
-              />
-            )}
-          </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={() => navigation.navigate("TabNavigator")}
+            disabled={isUploading}
+          >
+            <Icon name="x" size={25} color="#381d2a" />
+          </TouchableOpacity>
+          <Text style={styles.text}>Nouvelle Publication</Text>
+          <TouchableOpacity style={styles.headerButton}>
+            <ChevronRight size={25} color="#381d2a" />
+          </TouchableOpacity>
         </View>
-      </Modal>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton} onPress={openGallery}>
-          <FontAwesome name="image" size={40} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.footerBUttonCamera}
-          onPress={takePicture}
+        <CameraView
+          style={styles.camera}
+          facing={facing}
+          ref={(ref: any) => (cameraRef.current = ref)}
+        />
+        <Modal
+          animationType="slide"
+          statusBarTranslucent={true} //Android only
+          navigationBarTranslucent={true} //Android only
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            if (isUploading) return; // 👈 empêche la fermeture pendant l'upload
+            setModalVisible(false);
+          }}
         >
-          <FontAwesome name="camera-retro" size={40} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.footerButton}
-          onPress={toggleCameraFacing}
-        >
-          <FontAwesome name="rotate-right" size={40} color="black" />
-        </TouchableOpacity>
-      </View>
-    </View>
+          <View style={styles.modalContainer}>
+            <View style={styles.headerModal}>
+              {!isUploading ? (
+                <>
+                  <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <Icon name="x" size={25} color="#f39b6d" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={uploadPhoto}>
+                    <ChevronRight size={25} color="#f39b6d" />
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <View style={styles.loadingWrap}>
+                  <ActivityIndicator size="small" />
+                  <Text style={styles.loadingText}>Analyse en cours…</Text>
+                </View>
+              )}
+            </View>
+            <View style={styles.modalContent}>
+              {previewImage && (
+                <Image
+                  source={{ uri: previewImage }}
+                  style={styles.previewImage}
+                  resizeMode="cover"
+                />
+              )}
+            </View>
+          </View>
+        </Modal>
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.footerButton} onPress={openGallery}>
+            <Images size={40} color="#381d2a" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.footerBUttonCamera}
+            onPress={takePicture}
+          >
+            <CameraIcon size={40} color="#381d2a" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.footerButton}
+            onPress={toggleCameraFacing}
+          >
+            <SwitchCameraIcon size={40} color="#381d2a" />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -186,40 +217,42 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   header: {
-    backgroundColor: "#eee5b3",
+    backgroundColor: "#aabd8c",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: 30,
+    height: "10%",
     flexDirection: "row",
   },
   text: {
-    fontSize: 15,
-    borderWidth: 1,
+    fontSize: 18,
+    fontFamily: "Josefin Sans",
+    color: "#381d2a",
+    fontWeight: "bold",
+    top: 15,
   },
   headerButton: {
-    padding: 7,
-    borderRadius: 50,
-    backgroundColor: "#eee5b3",
-    borderWidth: 3,
+    top: 15,
   },
   camera: {
     flex: 1,
   },
   footer: {
-    backgroundColor: "#eee5b3",
+    backgroundColor: "#aabd8c",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: 20,
+    height: "11%",
+    borderRadius: 8,
     flexDirection: "row",
   },
   footerButton: {
-    padding: 7,
+    paddingVertical: 20,
+    bottom: 15,
   },
   footerBUttonCamera: {
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: "#c24c11ff",
-    borderWidth: 3,
+    padding: 10,
+    bottom: 15,
+    borderRadius: 8,
+    backgroundColor: "#f39b6d",
   },
   modalContainer: {
     flex: 1,
@@ -232,12 +265,24 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "70%",
     marginBottom: 20,
+    alignItems: "center", // 👈
+  },
+  loadingWrap: {
+    // 👈
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  loadingText: {
+    // 👈
+    color: "#f39b6d",
+    fontWeight: "600",
   },
   modalContent: {
-    width: 300,
-    height: 300,
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    width: "80%",
+    aspectRatio: 1,
+    backgroundColor: "#f39b6d",
+    borderRadius: 8,
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -245,6 +290,6 @@ const styles = StyleSheet.create({
   previewImage: {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
+    borderRadius: 8,
   },
 });

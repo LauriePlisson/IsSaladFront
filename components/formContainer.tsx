@@ -1,8 +1,12 @@
 import React from "react";
-import { StyleProp, TextInput, View, ViewStyle } from "react-native";
+import {
+  KeyboardTypeOptions,
+  StyleProp,
+  TextInput,
+  View,
+  ViewStyle,
+} from "react-native";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import InputElem from "./InputElem";
 
 // Type declaration for the props of the FormContainer component
 interface FormContainerProps {
@@ -14,6 +18,7 @@ interface FormContainerProps {
   secureTextEntry?: boolean;
   style?: StyleProp<ViewStyle>;
   value?: React.ReactNode;
+  keyboardType?: KeyboardTypeOptions;
 }
 // FormContainer component
 export default function FormContainer({
@@ -24,6 +29,7 @@ export default function FormContainer({
   text,
   style,
   value,
+  keyboardType,
 }: FormContainerProps) {
   return (
     <View style={[styles[hover ? "hover" : "formContainer"], style]}>
@@ -35,6 +41,7 @@ export default function FormContainer({
         placeholderTextColor="#381d2a5a"
         secureTextEntry={secureTextEntry}
         value={value as string}
+        keyboardType={keyboardType}
       />
     </View>
   );
@@ -46,18 +53,18 @@ const styles = StyleSheet.create({
     padding: 12,
     width: "80%",
     height: 56,
-    backgroundColor: "#E9E3B4",
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
     justifyContent: "center",
     alignItems: "flex-start",
-    marginVertical: 20,
+    marginVertical: 15,
   },
   containerName: {
     fontFamily: "Josefin Sans",
     fontSize: 16,
-    color: "#381D2A",
+    color: "#ac6139ff",
     marginRight: 10,
     top: -7,
-    backgroundColor: "#ffffff78",
+    //backgroundColor: "#ffffff78",
     borderRadius: 6,
   },
   input: {

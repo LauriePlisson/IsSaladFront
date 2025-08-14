@@ -8,10 +8,12 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import FormContainer from "../components/formContainer";
 import ButtonLog from "../components/logButton";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../reducers/user";
 
@@ -21,21 +23,27 @@ export default function SignInScreen({ navigation }) {
   const [error, setError] = useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
-  // console.log("Lien Expo:", lienExpo);
+  const lienExpo: string = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
+
   // const user = useSelector((state: any) => state.user.value);
-  // console.log("Current user state:", user);
+
+  type logInState = {
+    username: string;
+    password: string;
+  };
 
   const onPressSignIn = () => {
+    const userlogin: logInState = {
+      username: username,
+      password: password,
+    };
+
     fetch(`${lienExpo}users/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
+      body: JSON.stringify(userlogin),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -47,7 +55,7 @@ export default function SignInScreen({ navigation }) {
               friendList: data.friendsList,
               avatar: data.avatar,
               description: data.description,
-              team: data.team,
+              team: data.team.name,
             })
           );
 
@@ -66,6 +74,20 @@ export default function SignInScreen({ navigation }) {
         style={styles.signInContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
+        <Image
+          source={{
+            uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091143/ChatGPT_Image_13_aou%CC%82t_2025_15_18_25_nxdfto.png",
+          }}
+          style={{
+            width: 150,
+            aspectRatio: 1,
+            borderRadius: 5,
+            // borderColor: "#ac6139ff",
+            // borderWidth: 1,
+            marginBottom: 20,
+          }}
+        />
+        <Text style={styles.appName}>IsSalad?</Text>
         <FormContainer
           text="Username"
           placeholder="Username"
@@ -93,15 +115,15 @@ export default function SignInScreen({ navigation }) {
             onPressSignIn();
           }}
         />
-        {/* <ButtonLog children='Admin' onPress={() => {
-          setUsername('Test'), setPassword('Test1234'), onPressSignIn();
-        }} /> */}
       </KeyboardAvoidingView>
 
       <ButtonLog
         children="Sign Up"
         onPress={() => {
-          setError(false), navigation.navigate("SignUp");
+          setError(false);
+          setUsername("");
+          setPassword("");
+          navigation.navigate("SignUp");
         }}
       />
     </SafeAreaView>
@@ -112,9 +134,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "#f1d5a9ff",
   },
   signInContainer: {
+    marginTop: 50,
     alignItems: "center",
     justifyContent: "center",
     borderBottomWidth: 2,
@@ -132,5 +156,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#f39b6d",
+  },
+  appName: {
+    color: "#ac6139ff",
+    fontWeight: "400",
+    fontSize: 35,
+    marginBottom: 20,
+    letterSpacing: 2,
   },
 });

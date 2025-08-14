@@ -1,23 +1,22 @@
 import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Icon from "./icons";
+import { Check } from "lucide-react-native";
 
 // Type declaration for the props of the CheckButton component
 interface CheckButtonProps {
-  children: React.ReactNode;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }
 
 export default function CheckButton({
-  children,
   onPress,
   style,
 }: CheckButtonProps) {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-      <FontAwesome name="check" size={20} color={"#f39b6d"} />
+      <Check size={20} color={"#f39b6d"} />
     </TouchableOpacity>
   );
 }

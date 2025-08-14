@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import Icon from './icons';
+import { ChevronLeft } from 'lucide-react-native';
 // Type declaration for the props of the headerLeftBtn component
 interface HeaderLeftBtnProps {
 	onPress?: () => void;
@@ -12,7 +12,7 @@ interface HeaderLeftBtnProps {
 export default function headerLeftBtn({ onPress, style }: HeaderLeftBtnProps) {
 	return(
 		<TouchableOpacity onPress={onPress} style={[styles.container, style]}>
-			<FontAwesome name="arrow-left" size={24} color="#381D2A" />
+			<ChevronLeft size={24} color="#381D2A" />
 		</TouchableOpacity>
 	)
 }
