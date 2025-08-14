@@ -135,6 +135,7 @@ export default function SettingsScreen({ navigation }) {
 
   const logout = () => {
     dispatch(logOutUser());
+    setModalVisible(!modalVisible);
     navigation.navigate("SignIn");
   };
 
@@ -162,9 +163,11 @@ export default function SettingsScreen({ navigation }) {
             if (dataSuppr.result === true) {
               dispatch(logOutUser());
               navigation.navigate("SignIn");
+              setModalVisible(!modalVisible);
               setErrorDelete(false);
             } else {
               setErrorDelete(true);
+              setModalVisible(!modalVisible);
             }
           });
       });
