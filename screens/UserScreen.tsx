@@ -67,7 +67,7 @@ export default function UserScreen(props) {
           setPosts(data.postsList);
           setDescription(data.description);
           setAvatar(data.avatar);
-          setTeam(data.team);
+          setTeam(data.team.name);
         });
     }, [])
   );
@@ -218,11 +218,7 @@ export default function UserScreen(props) {
               <Text style={styles.description}>{description}</Text>
             </View>
             <View style={styles.userTeam}>
-              {userInfos.team?.name ? (
-                <Icon name={userInfos.team.name} size={40} />
-              ) : (
-                <Sprout size={40} />
-              )}
+              {team ? <Icon name={team} size={40} /> : <Sprout size={40} />}
             </View>
             {/* <View style={styles.userNumber}>
             <View style={styles.stats}>
@@ -407,7 +403,7 @@ const styles = StyleSheet.create({
     width: 60,
     aspectRatio: 1,
     borderRadius: 100,
-    backgroundColor: "#1f6225ff",
+    // backgroundColor: "#1f6225ff",
   },
   stats: {
     alignItems: "center",
