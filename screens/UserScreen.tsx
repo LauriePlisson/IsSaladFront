@@ -273,7 +273,8 @@ export default function UserScreen(props) {
                           avatar:
                             selectedPost.ownerPost?.avatar || avatar || "",
                           team: {
-                            name: selectedPost.ownerPost?.team?.name || "no team",
+                            name:
+                              selectedPost.ownerPost?.team?.name || "no team",
                           },
                         },
                         description: selectedPost.description || "",
@@ -405,7 +406,7 @@ const styles = StyleSheet.create({
   },
   buttonBack: {
     left: 150,
-    top: -48,
+    // top: -48,
     height: 40,
     width: 70,
     justifyContent: "center",
