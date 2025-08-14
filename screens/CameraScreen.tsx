@@ -103,6 +103,7 @@ export default function CameraScreen({ navigation }) {
         method: "POST",
         body: formData,
         headers: {
+          Accept: "multipart/form-data",
           "Content-Type": "multipart/form-data",
         },
       });
