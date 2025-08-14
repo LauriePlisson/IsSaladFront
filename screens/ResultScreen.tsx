@@ -134,7 +134,7 @@ export default function ResultScreen({ route, navigation }) {
                 color={team.color}
               />
             ) : (
-              <Frown size={50} color="#381d2a" />
+              <Icon name={undefined} size={50} />
             )}
             <Text style={styles.result}>
               Is...
@@ -142,10 +142,10 @@ export default function ResultScreen({ route, navigation }) {
                 style={{
                   fontWeight: 900,
                   fontFamily: "Josefin Sans",
-                  color: team.color || "#381d2a",
+                  color: team.color || "red",
                 }}
               >
-                {team.name?.toUpperCase() || "other"}
+                {team.name?.toUpperCase() || "ERROR"}
               </Text>
             </Text>
             {team ? (
@@ -155,7 +155,7 @@ export default function ResultScreen({ route, navigation }) {
                 color={team.color}
               />
             ) : (
-              <Frown size={50} color="#381d2a" />
+              <Icon name={undefined} size={50} />
             )}
           </View>
           <Image source={{ uri: photoUrl }} style={styles.image} />

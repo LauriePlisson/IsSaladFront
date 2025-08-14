@@ -144,7 +144,7 @@ export default function Post({
               <Icon name={postBlock.result} size={24} />
             )
           ) : (
-            <Icon name={postBlock.result} size={24} color={"#381d2a"} />
+            <Icon name={postBlock.result} size={24} color="#381d2a" />
           )}
         </TouchableOpacity>
       </View>
