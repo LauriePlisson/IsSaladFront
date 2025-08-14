@@ -280,11 +280,11 @@ export default function ProfileScreen({ navigation }) {
                 <Text style={styles.editButton}>edit description</Text>
               </TouchableOpacity>
             )}
-            {!edit && (
+            {/* {!edit && (
               <TouchableOpacity onPress={() => setEdit(!edit)}>
                 <Text style={styles.editButton}>edit description</Text>
               </TouchableOpacity>
-            )}
+            )} */}
             {edit && (
               <>
                 <TextInput
