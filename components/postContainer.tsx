@@ -8,6 +8,7 @@ import {
   MessageSquare,
   Utensils,
   UtensilsCrossed,
+  Smile,
 } from "lucide-react-native";
 
 // Type declaration for the props of the Post component
@@ -134,9 +135,9 @@ export default function Post({
           />
         </View>
         <TouchableOpacity onPress={handleLike} style={{ left: -10 }}>
-          {postBlock.userHasLiked ? (
-            <Icon name={postBlock.result} size={24} />
-          ) : (
+          {postBlock.userHasLiked ?
+            ( postBlock.result === "no food" ? ( <Smile size={24} color="#381d2a" /> ) : 
+            <Icon name={postBlock.result} size={24} />) : (
             <Icon name={postBlock.result} size={24} color={"#381d2a"} />
           )}
         </TouchableOpacity>

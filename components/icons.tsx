@@ -10,6 +10,7 @@ import {
   User,
   X,
   Croissant,
+  CircleAlert,
 } from "lucide-react-native";
 import React from "react";
 
@@ -47,6 +48,10 @@ export default function Icon({ name, color, size = 24 }: IconProps) {
       colorIcon = "#F2C94C"; // Change color for soup icon
     } else if (name === "sandwich") {
       colorIcon = "#F39B6D"; // Change color for sandwich icon
+    } else if (name === "croissant") {
+      colorIcon = "#8a4d2dff"; // Change color for croissant icon
+    } else if (name === undefined) {
+      colorIcon = "#ff0f0fff"; // Change color for circle-alert icon
     }
   }
   // F2C94C
