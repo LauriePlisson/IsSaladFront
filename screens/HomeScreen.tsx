@@ -15,9 +15,7 @@ import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
-//import Icon from "../components/icons";
-// import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { Meh } from "lucide-react-native";
+import { Meh, Minus, SendHorizonal } from "lucide-react-native";
 
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function HomeScreen() {
@@ -27,7 +25,7 @@ export default function HomeScreen() {
   const [commentsVisible, setCommentsVisible] = useState(false);
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
   const [commentText, setCommentText] = useState("");
-  const [userInfos, setUserInfos] = useState<any>({});
+  // const [userInfos, setUserInfos] = useState<any>({});
 
   const fetchPosts = async () => {
     try {
@@ -94,7 +92,6 @@ export default function HomeScreen() {
 
   // ouvrir la modal commentaires
   const openComments = (post: any) => {
-    console.log("Post sélectionné :", post.ownerComment);
     setSelectedPost(post);
     setCommentsVisible(true);
   };
@@ -165,13 +162,21 @@ export default function HomeScreen() {
             onPress={() => setCommentsVisible(false)}
           />
           <View style={styles.modalSheet}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.closeBtn}
               onPress={() => setCommentsVisible(false)}
             >
-              <Meh size={25} color="#000000ff" />
+              <Minus size={40} color="#381d2a" />
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Commentaires</Text>
+            <Text style={styles.modalTitle}>Commentaires</Text> */}
+            <View style={styles.modalHeader}>
+              <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                Commentaires
+              </Text>
+              <TouchableOpacity onPress={() => setCommentsVisible(false)}>
+                <Text style={{ fontSize: 16 }}>Fermer</Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.commentList}>
               <FlatList
                 data={selectedPost?.comments ?? []}
@@ -201,9 +206,7 @@ export default function HomeScreen() {
                 style={styles.input}
               />
               <TouchableOpacity style={styles.sendBtn} onPress={sendComment}>
-                <Text style={{ color: "#fff", fontWeight: "600" }}>
-                  Envoyer
-                </Text>
+                <SendHorizonal size={21} color="#fff" />
               </TouchableOpacity>
             </View>
           </View>
@@ -234,7 +237,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+    paddingHorizontal: 20,
+    paddingBottom: 10,
+  },
   modalTitle: {
     fontFamily: "Josefin Sans",
     fontSize: 24,
@@ -252,6 +262,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     marginHorizontal: 10,
+    left: 10,
     marginBottom: 30,
     width: "90%",
   },
@@ -268,10 +279,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#d67b1aff",
     paddingHorizontal: 12,
     paddingVertical: 10,
-
     borderRadius: 8,
   },
-  closeBtn: { alignSelf: "center", marginTop: 16 },
+  closeBtn: { alignSelf: "stretch" },
   backdrop: {
     flex: 1,
     justifyContent: "flex-end",
@@ -284,7 +294,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
     overflow: "hidden",
     backgroundColor: "rgba(243, 241, 238, 1)",
   },

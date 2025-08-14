@@ -12,35 +12,36 @@ import {
 
 // Type declaration for the props of the Post component
 interface PostProps {
-  postBlock: {
-    ownerPost: {
-      _id: string;
-      username: string;
-      avatar?: string;
-    };
-    description: string;
-    date: string;
-    photoUrl?: string;
-    comments?:
-      | {
-          _id: string;
-          username: string;
-          avatar: string;
-          content: string;
-          team?: string;
-          date: string;
-        }[]
-      | undefined;
-    likeCount?: number;
-    dislikeCount?: number;
-    userHasLiked?: boolean;
-    userHasDisliked?: boolean;
-    result?: string;
-  };
-  handleLike: () => void;
-  handleDislike: () => void;
-  onPress: () => void;
-  style?: StyleProp<ViewStyle>;
+	postBlock: {
+		ownerPost: {
+			_id: string;
+			username: string;
+			avatar?: string;
+			team?: {
+				name: string;
+			};
+		};
+		description: string;
+		date: string;
+		photoUrl?: string;
+		comments?: {
+			_id: string;
+			username: string;
+			avatar: string;
+			content: string;
+			team?: string;
+			date: string;
+		}[] | undefined;
+		likeCount?: number;
+		dislikeCount?: number;
+		userHasLiked?: boolean;
+		userHasDisliked?: boolean;
+		result?: string;
+	};
+	handleLike: () => void;
+	handleDislike: () => void;
+	onPress: () => void;
+	style?: StyleProp<ViewStyle>;
 }
 
 // Post component
