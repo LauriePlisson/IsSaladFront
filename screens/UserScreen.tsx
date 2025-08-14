@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "../components/icons";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
+import { Sandwich, Sprout } from "lucide-react-native";
 
 export type PostState = {
   _id: string;
@@ -66,7 +67,7 @@ export default function UserScreen(props) {
           setPosts(data.postsList);
           setDescription(data.description);
           setAvatar(data.avatar);
-          setTeam(data.team);
+          setTeam(data.team.name);
         });
     }, [])
   );
@@ -217,12 +218,7 @@ export default function UserScreen(props) {
               <Text style={styles.description}>{description}</Text>
             </View>
             <View style={styles.userTeam}>
-              {team && (
-                <Image
-                  source={{ uri: team }}
-                  style={{ width: 60, aspectRatio: 1, borderRadius: 100 }}
-                />
-              )}
+              {team ? <Icon name={team} size={40} /> : <Sprout size={40} />}
             </View>
             {/* <View style={styles.userNumber}>
             <View style={styles.stats}>
@@ -279,9 +275,9 @@ export default function UserScreen(props) {
                         ownerPost: {
                           _id: selectedPost.ownerPost?._id || "",
                           username:
-                            selectedPost.ownerPost?.username || user.username,
+                            selectedPost.ownerPost?.username || userName,
                           avatar:
-                            selectedPost.ownerPost?.avatar || user.avatar || "",
+                            selectedPost.ownerPost?.avatar || avatar || "",
                         },
                         description: selectedPost.description || "",
                         date: selectedPost.date,
@@ -407,7 +403,7 @@ const styles = StyleSheet.create({
     width: 60,
     aspectRatio: 1,
     borderRadius: 100,
-    backgroundColor: "#1f6225ff",
+    // backgroundColor: "#1f6225ff",
   },
   stats: {
     alignItems: "center",

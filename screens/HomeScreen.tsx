@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+// import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Meh } from "lucide-react-native";
 
 // const BACKEND_ADDRESS = "http://192.168.100.158:3000";
@@ -286,6 +286,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(243, 241, 238, 1)",
   },
 });
