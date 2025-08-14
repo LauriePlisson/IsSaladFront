@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Keyboard,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
@@ -24,7 +25,6 @@ interface teamType {
   description?: string;
 }
 
-// const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function ResultScreen({ route, navigation }) {
   const photoUrl = route.params.photoUrl;
@@ -34,6 +34,22 @@ export default function ResultScreen({ route, navigation }) {
   const [description, setDescription] = useState<string>("");
   const [team, setTeam] = useState<teamType>({});
   const [open, setOpen] = useState<boolean>(false);
+  //@ts-ignore
+  const ref = useRef<ScrollView | null>(null);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener(
+      "keyboardDidShow",
+      scrollToBottom
+    );
+    return () => {
+      showSubscription.remove();
+    };
+  }, []);
+
+  const scrollToBottom = () => {
+    ref.current.scrollToEnd({ animated: true });
+  };
 
   const UpdateDescription = async () => {
     if (!description.trim()) {
@@ -111,7 +127,10 @@ export default function ResultScreen({ route, navigation }) {
   );
 
   return (
-    <>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <View style={styles.header}>
         <TouchableOpacity style={styles.headerButton} onPress={deletePost}>
           <Icon name="x" size={25} color="#381d2a" />
@@ -121,96 +140,92 @@ export default function ResultScreen({ route, navigation }) {
           <ChevronRight size={25} color="#381d2a" />
         </TouchableOpacity>
       </View>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <ScrollView
+        ref={(scroll: any) => (ref.current = scroll)}
+        contentContainerStyle={styles.scroll}
       >
-        <ScrollView contentContainerStyle={styles.scroll}>
-          <View style={styles.resultContainer}>
-            {team ? (
-              <Icon
-                name={team.name?.toLowerCase()}
-                size={50}
-                color={team.color}
-              />
-            ) : (
-              <Icon name={undefined} size={50} />
-            )}
-            <Text style={styles.result}>
-              Is...
-              <Text
-                style={{
-                  fontWeight: 900,
-                  fontFamily: "Josefin Sans",
-                  color: team.color || "red",
-                }}
-              >
-                {team.name?.toUpperCase() || "ERROR"}
-              </Text>
-            </Text>
-            {team ? (
-              <Icon
-                name={team.icon?.toLowerCase()}
-                size={50}
-                color={team.color}
-              />
-            ) : (
-              <Icon name={undefined} size={50} />
-            )}
-          </View>
-          <Image source={{ uri: photoUrl }} style={styles.image} />
-          {open && (
-            <Text style={styles.textDesc}>
-              {team ? team.description : "Pas de description disponible. :("}
-            </Text>
-          )}
-          {open ? (
-            <TouchableOpacity
-              onPress={() => {
-                setOpen(false);
-              }}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>close</Text>
-            </TouchableOpacity>
+        <View style={styles.resultContainer}>
+          {team ? (
+            <Icon
+              name={team.name?.toLowerCase()}
+              size={50}
+              color={team.color}
+            />
           ) : (
-            <TouchableOpacity
-              onPress={() => {
-                setOpen(true);
+            <Icon name={undefined} size={50} />
+          )}
+          <Text style={styles.result}>
+            Is...
+            <Text
+              style={{
+                fontWeight: 900,
+                margin: 0,
+                fontFamily: "Josefin Sans",
+                color: team.color || "red",
               }}
-              style={styles.button}
             >
-              <Text style={styles.buttonText}>{result} ?</Text>
+              {team.name?.toUpperCase() || "ERROR"}
+            </Text>
+          </Text>
+          {team ? (
+            <Icon
+              name={team.icon?.toLowerCase()}
+              size={50}
+              color={team.color}
+            />
+          ) : (
+            <Icon name={undefined} size={50} />
+          )}
+        </View>
+        <Image source={{ uri: photoUrl }} style={styles.image} />
+        {open && (
+          <Text style={styles.textDesc}>
+            {team ? team.description : "Pas de description disponible. :("}
+          </Text>
+        )}
+        {open ? (
+          <TouchableOpacity
+            onPress={() => {
+              setOpen(false);
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>close</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setOpen(true);
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>{result} ?</Text>
+          </TouchableOpacity>
+        )}
+        {!open && (
+          <>
+            <TextInput
+              placeholder="Ajouter une description..."
+              value={description}
+              onChangeText={setDescription}
+              style={styles.input}
+              multiline
+            />
+
+            <TouchableOpacity onPress={UpdateDescription} style={styles.button}>
+              <Text style={styles.buttonText}>Valider</Text>
             </TouchableOpacity>
-          )}
-
-          {!open && (
-            <>
-              <TextInput
-                placeholder="Ajouter une description..."
-                value={description}
-                onChangeText={setDescription}
-                style={styles.input}
-                multiline
-              />
-
-              <TouchableOpacity
-                onPress={UpdateDescription}
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>Valider</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </>
+          </>
+        )}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
+
     // backgroundColor: "#fff",
   },
   header: {
@@ -223,7 +238,6 @@ const styles = StyleSheet.create({
   },
   headerButton: {
     paddingTop: 10,
-    top: 10,
   },
   text: {
     fontSize: 18,
@@ -231,7 +245,6 @@ const styles = StyleSheet.create({
     fontFamily: "Josefin Sans",
     color: "#381d2a",
     fontWeight: "bold",
-    top: 10,
   },
   textDesc: {
     fontSize: 16,
@@ -250,7 +263,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     aspectRatio: 1,
-    marginVertical: 20,
+    // marginVertical: 20,
     borderRadius: 8,
   },
   result: {
@@ -258,7 +271,6 @@ const styles = StyleSheet.create({
     fontFamily: "Josefin Sans",
     color: "#381d2a",
     fontWeight: "bold",
-    marginTop: 10,
     textAlign: "center",
   },
   input: {
@@ -292,7 +304,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   scroll: {
-    flexGrow: 1,
+    // flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,

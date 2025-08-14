@@ -8,6 +8,10 @@ import {
   SafeAreaView,
   ScrollView,
   Modal,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Platform,
+  Keyboard,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -334,7 +338,10 @@ export default function ProfileScreen({ navigation }) {
         animationType="slide"
         onRequestClose={closePostModal}
       >
-        <View style={styles.modalBackdrop}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalBackdrop}
+        >
           <View style={styles.modalSheet}>
             {/* Header du modal */}
             <View style={styles.modalHeader}>
@@ -388,8 +395,8 @@ export default function ProfileScreen({ navigation }) {
                   <Text style={styles.commentsTitle}>
                     Commentaires ({selectedPost.comments?.length || 0})
                   </Text>
-
                   {/* Liste scrollable */}
+
                   <ScrollView
                     style={styles.commentsScroll}
                     contentContainerStyle={{ paddingBottom: 12 }}
@@ -414,7 +421,6 @@ export default function ProfileScreen({ navigation }) {
                     })}
                   </ScrollView>
 
-                  {/* Input + Envoyer */}
                   <View style={styles.addRow}>
                     <TextInput
                       placeholder="Écrire un commentaire…"
@@ -434,7 +440,7 @@ export default function ProfileScreen({ navigation }) {
               )}
             </ScrollView>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );
@@ -523,9 +529,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   commentsScroll: {
-    maxHeight: 220, // NOTE: hauteur scrollable (ajuste)
+    maxHeight: 220,
+    flexGrow: 1, // NOTE: hauteur scrollable (ajuste)
   },
   addRow: {
+    flexGrow: 1,
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
@@ -559,5 +567,9 @@ const styles = StyleSheet.create({
   },
   ravioli: {
     color: "#8a4d2dff",
+  },
+  backdrop: {
+    flexGrow: 1,
+    justifyContent: "flex-end",
   },
 });

@@ -8,6 +8,8 @@ import {
   SafeAreaView,
   ScrollView,
   Modal,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -245,7 +247,10 @@ export default function UserScreen(props) {
           animationType="slide"
           onRequestClose={closePostModal}
         >
-          <View style={styles.modalBackdrop}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.modalBackdrop}
+          >
             <View style={styles.modalSheet}>
               {/* Header du modal */}
               <View style={styles.modalHeader}>
@@ -346,7 +351,7 @@ export default function UserScreen(props) {
                 )}
               </ScrollView>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </Modal>
       </SafeAreaView>
     </>

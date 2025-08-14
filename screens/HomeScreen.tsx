@@ -9,6 +9,10 @@ import {
   Modal,
   FlatList,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSelector } from "react-redux";
@@ -16,6 +20,7 @@ import { UserState } from "../reducers/user";
 import Post from "../components/postContainer";
 import Comment from "../components/comment";
 import { Meh, Minus, SendHorizonal } from "lucide-react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function HomeScreen() {
@@ -128,7 +133,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.inner}>
       <Text style={styles.title}>Fil d'actualité</Text>
       <View style={styles.postsContainer}>
         {posts.map((post, index) => {
@@ -156,7 +161,10 @@ export default function HomeScreen() {
         transparent
         presentationStyle="overFullScreen"
       >
-        <View style={styles.backdrop}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.backdrop}
+        >
           <TouchableOpacity
             style={styles.backdropTouch}
             activeOpacity={1}
@@ -199,6 +207,10 @@ export default function HomeScreen() {
                 contentContainerStyle={{ alignItems: "center" }}
               />
             </View>
+            {/* <KeyboardAvoidingView
+              // behavior={Platform.OS === "ios" ? "padding" : "height"}
+              // style={{ flexGrow: 1 }}
+              > */}
             <View style={styles.commentInputRow}>
               <TextInput
                 value={commentText}
@@ -210,8 +222,9 @@ export default function HomeScreen() {
                 <SendHorizonal size={21} color="#fff" />
               </TouchableOpacity>
             </View>
+            {/* </KeyboardAvoidingView> */}
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </ScrollView>
   );
@@ -221,6 +234,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "rgba(248, 235, 213, 0.87)",
+  },
+  inner: {
+    flex: 1,
+    padding: 24,
   },
   postsContainer: {
     flex: 1,
