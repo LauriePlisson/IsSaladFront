@@ -279,7 +279,7 @@ export default function ProfileScreen({ navigation }) {
               <TouchableOpacity onPress={() => setEdit(!edit)}>
                 <Text style={styles.editButton}>edit description</Text>
               </TouchableOpacity>
-            )}
+            )} */}
             {edit && (
               <>
                 <TextInput
@@ -448,6 +448,7 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
     alignItems: "center",
     justifyContent: "flex-start",
   },
@@ -505,7 +506,7 @@ const styles = StyleSheet.create({
   },
   modalSheet: {
     height: "80%",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(243, 241, 238, 1)",
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     padding: 10,

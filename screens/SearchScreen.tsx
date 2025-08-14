@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import SearchContainer from "../components/searchContainer";
 import UserBlock from "../components/userBlock";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addFriendtoFriendList } from "../reducers/user";
 import { newSearch } from "../reducers/search";
@@ -32,16 +33,19 @@ export default function SearchScreen(props) {
   // console.log("my friends:", myfriends);
   let isFriend = false;
 
-  useEffect(() => {
-    fetch(`${lienExpo}users/`)
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log("Fetched users:", data);
-        setAllUsers(data.users);
-      });
-    // setMyFriends(user.friendList);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetch(`${lienExpo}users/`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log("Fetched users:", data);
+          setAllUsers(data.users);
+        });
+      // setMyFriends(user.friendList);
+    }, [])
+  );
 
+  // console.log(allUsers);
   const handleSearch = () => {
     if (searchUsername.length < 3) {
       setLengthError(true);
@@ -239,6 +243,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
   },
   username: {
     fontSize: 20,
@@ -268,7 +273,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#aabd8c",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 20,
+    borderRadius: 8,
   },
   textonglet: {
     color: "#381D2A",

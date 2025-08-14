@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
 import FormContainer from "../components/formContainer";
 import ButtonLog from "../components/logButton";
@@ -67,6 +68,21 @@ export default function SignUpScreen({ navigation }) {
         style={styles.SignUpContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
+        <Image
+          source={{
+            uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091143/ChatGPT_Image_13_aou%CC%82t_2025_15_18_25_nxdfto.png",
+          }}
+          style={{
+            width: 150,
+            aspectRatio: 1,
+            borderRadius: 50,
+            // borderColor: "#ac6139ff",
+            // borderWidth: 1,
+            marginBottom: 20,
+          }}
+        />
+        <Text style={styles.appName}>IsSalad?</Text>
+
         <FormContainer
           text="Email"
           placeholder="Email"
@@ -119,6 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#f1d5a9ff",
   },
   errorText: {
     color: "#f39b6d",
@@ -141,5 +158,12 @@ const styles = StyleSheet.create({
   },
   info: {
     color: "#381d2a5a",
+  },
+  appName: {
+    color: "#ac6139ff",
+    fontWeight: "400",
+    fontSize: 35,
+    marginBottom: 20,
+    letterSpacing: 2,
   },
 });

@@ -333,7 +333,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginTop: 30,
+    paddingTop: 30,
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
   },
   infoContainer: {
     alignItems: "center",

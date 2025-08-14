@@ -49,7 +49,7 @@ export default function Comment({
           <Icon name={ownerComment.team.name} size={24} />
         ) : (
           <Icon name="frown" size={24} color="#381d2a" />
-        )}
+        )} */}
       </View>
       <Text style={styles.comment}>{text}</Text>
     </View>

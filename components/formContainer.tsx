@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     padding: 12,
     width: "80%",
     height: 56,
-    backgroundColor: "#E9E3B4",
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
     justifyContent: "center",
     alignItems: "flex-start",
     marginVertical: 15,
@@ -61,10 +61,10 @@ const styles = StyleSheet.create({
   containerName: {
     fontFamily: "Josefin Sans",
     fontSize: 16,
-    color: "#381D2A",
+    color: "#ac6139ff",
     marginRight: 10,
     top: -7,
-    backgroundColor: "#ffffff78",
+    //backgroundColor: "#ffffff78",
     borderRadius: 6,
   },
   input: {

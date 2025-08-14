@@ -19,6 +19,7 @@ export default function OptionSearchScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
     alignItems: "center",
     justifyContent: "center",
   },

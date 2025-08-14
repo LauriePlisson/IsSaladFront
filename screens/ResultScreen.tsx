@@ -55,7 +55,6 @@ export default function ResultScreen({ route, navigation }) {
       const data = await response.json();
 
       if (data.result) {
-        alert("Description ajoutée avec succès !");
         navigation.navigate("TabNavigator");
       } else {
         alert("Erreur : " + data.error);
@@ -97,14 +96,14 @@ export default function ResultScreen({ route, navigation }) {
   useFocusEffect(
     useCallback(() => {
       fetch(`${lienExpo}teams/${result}`)
-        .then(res => res.json())
-        .then(team => {
+        .then((res) => res.json())
+        .then((team) => {
           if (team.result) {
             setTeam({
               name: team.name,
               icon: team.icon,
               color: team.color,
-              description: team.description
+              description: team.description,
             });
           }
         });
@@ -132,11 +131,19 @@ export default function ResultScreen({ route, navigation }) {
               name={team.name?.toLowerCase() || "frown"}
               size={50}
               color={team.color || "#381d2a"}
-              />
-            <Text style={styles.result}>Is... 
-            <Text style={{fontWeight: 900,fontFamily: "Josefin Sans", color: team.color || "#381d2a"}}>
-              {team.name?.toUpperCase() || "Pas une salade/Sandwich/Soupe"}
-            </Text></Text>
+            />
+            <Text style={styles.result}>
+              Is...
+              <Text
+                style={{
+                  fontWeight: 900,
+                  fontFamily: "Josefin Sans",
+                  color: team.color || "#381d2a",
+                }}
+              >
+                {team.name?.toUpperCase() || "No Food"}
+              </Text>
+            </Text>
             <Icon
               name={team.icon?.toLowerCase() || "frown"}
               size={50}
@@ -144,30 +151,49 @@ export default function ResultScreen({ route, navigation }) {
             />
           </View>
           <Image source={{ uri: photoUrl }} style={styles.image} />
-          {open && 
+          {open && (
             <Text style={styles.textDesc}>
-            {team.description || "Pas de description disponible. :("}
+              {team.description || "Pas de description disponible. :("}
             </Text>
-          }
-          {open ? <TouchableOpacity onPress={() => {setOpen(false)}} style={styles.button}>
-            <Text style={styles.buttonText}>close</Text>
-          </TouchableOpacity> : <TouchableOpacity onPress={() => {setOpen(true)}} style={styles.button}>
-            <Text style={styles.buttonText}>{result} ?</Text>
-          </TouchableOpacity>}
+          )}
+          {open ? (
+            <TouchableOpacity
+              onPress={() => {
+                setOpen(false);
+              }}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>close</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setOpen(true);
+              }}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>{result} ?</Text>
+            </TouchableOpacity>
+          )}
 
-          {!open && <>
-          <TextInput
-            placeholder="Ajouter une description..."
-            value={description}
-            onChangeText={setDescription}
-            style={styles.input}
-            multiline
-          />
+          {!open && (
+            <>
+              <TextInput
+                placeholder="Ajouter une description..."
+                value={description}
+                onChangeText={setDescription}
+                style={styles.input}
+                multiline
+              />
 
-          <TouchableOpacity onPress={UpdateDescription} style={styles.button}>
-            <Text style={styles.buttonText}>Valider</Text>
-          </TouchableOpacity>
-          </>}
+              <TouchableOpacity
+                onPress={UpdateDescription}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>Valider</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </>
@@ -183,7 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#AABD8C",
     justifyContent: "space-around",
     alignItems: "center",
-    height: '10%',
+    height: "10%",
     flexDirection: "row",
     width: "100%",
   },
