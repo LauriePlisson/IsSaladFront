@@ -138,11 +138,7 @@ export default function Post({
         </View>
         <TouchableOpacity onPress={handleLike} style={{ left: -10 }}>
           {postBlock.userHasLiked ? (
-            postBlock.result === "other" ? (
-              <Smile size={24} color="#381d2a" />
-            ) : (
               <Icon name={postBlock.result} size={24} />
-            )
           ) : (
             <Icon name={postBlock.result} size={24} color="#381d2a" />
           )}

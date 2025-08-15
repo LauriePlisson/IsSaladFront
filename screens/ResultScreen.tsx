@@ -117,7 +117,7 @@ export default function ResultScreen({ route, navigation }) {
           if (team.result) {
             setTeam({
               name: team.name,
-              icon: team.icon,
+              icon: team.name,
               color: team.color,
               description: team.description,
             });
