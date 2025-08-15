@@ -62,7 +62,7 @@ export default function CameraScreen({ navigation }) {
   const takePicture = async () => {
     if (isUploading) return;
     const photo: any = await cameraRef.current?.takePictureAsync({
-      quality: 0.3,
+      quality: 0.4,
     });
 
     if (!photo) return;
@@ -76,7 +76,7 @@ export default function CameraScreen({ navigation }) {
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.4,
     });
 
     if (!result.canceled) {
