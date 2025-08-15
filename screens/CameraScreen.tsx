@@ -76,7 +76,7 @@ export default function CameraScreen({ navigation }) {
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.4,
+      quality: 0.3,
     });
 
     if (!result.canceled) {
