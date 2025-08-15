@@ -32,7 +32,6 @@ export default function DocScreen({}) {
             source={{
               uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091143/ChatGPT_Image_13_aou%CC%82t_2025_15_18_25_nxdfto.png",
             }}
-            // style={[styles.child, { aspectRatio: 1 }]}
             style={styles.image}
           />
           <Text style={styles.text}>
@@ -54,7 +53,6 @@ export default function DocScreen({}) {
             source={{
               uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091050/ChatGPT_Image_13_aou%CC%82t_2025_15_03_04_quzmal.png",
             }}
-            // style={[styles.child, { aspectRatio: 1 }]}
             style={styles.image}
           />
           <Text style={styles.text}>
@@ -75,7 +73,6 @@ export default function DocScreen({}) {
             source={{
               uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091050/ChatGPT_Image_13_aou%CC%82t_2025_15_11_25_mvkmhf.png",
             }}
-            // style={[styles.child, { aspectRatio: 1 }]}
             style={styles.image}
           />
           <Text style={styles.text}>
@@ -97,7 +94,6 @@ export default function DocScreen({}) {
             source={{
               uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091050/ChatGPT_Image_13_aou%CC%82t_2025_15_08_15_owsfll.png",
             }}
-            // style={[styles.child, { aspectRatio: 1 }]}
             style={styles.image}
           />
           <Text style={styles.text}>
@@ -112,6 +108,74 @@ export default function DocScreen({}) {
             {"\n"}
             <Text style={{ fontWeight: "600" }}>Règle pratique</Text>: S'il y a
             un contenant comestible autour du contenu, c'est un sandwich.
+          </Text>
+        </View>
+        <View style={styles.child}>
+          <Image
+            source={{
+              uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755091049/ChatGPT_Image_13_aou%CC%82t_2025_14_49_51_usr5rp.png",
+            }}
+            style={styles.image}
+          />
+          <Text style={styles.text}>
+            <Text style={styles.title}>Ravioli 🧍</Text> {"\n"} {"\n"}
+            <Text style={{ fontWeight: "600" }}>Définition </Text>: Contenu
+            (complexe) entièrement enfermé dans un contenant comestible (ou ici
+            : biologique): Un être humain.{"\n"}
+            {"\n"}
+            <Text style={{ fontWeight: "600" }}>Exemples</Text>: Toi, moi, les
+            passants, tout ce qui a une enveloppe corporelle et une pensée
+            vaguement organisée à l’intérieur.
+            {"\n"}
+            {"\n"}
+            <Text style={{ fontWeight: "600" }}>Règle pratique</Text>: S’il a
+            une peau, une personnalité, et qu’il peut s’inscrire sur les réseaux
+            sociaux, c'est un ravioli.
+          </Text>
+        </View>
+        <View style={styles.child}>
+          <Image
+            source={{
+              uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755244254/ChatGPT_Image_15_aou%CC%82t_2025_09_46_19_qqu5gq.png",
+            }}
+            style={styles.image}
+          />
+          <Text style={styles.text}>
+            <Text style={styles.title}>Ravioli-Salade 📸</Text> {"\n"} {"\n"}
+            <Text style={{ fontWeight: "600" }}>Définition </Text>: Plusieurs
+            raviolis visibles côte à côte, chacun ayant son propre contenu, non
+            fusionnés mais rassemblés dans un cadre.{"\n"} {"\n"}
+            <Text style={{ fontWeight: "600" }}>Exemples</Text>: Une collection
+            d’humains, photo de classe, selfie de groupe, tableau Zoom avec 12
+            visages, foule en festival.
+            {"\n"}
+            {"\n"}
+            <Text style={{ fontWeight: "600" }}>Règle pratique</Text>: S’il y a
+            plusieurs humains visibles et distincts, sans sauce qui les unit,
+            c'est une ravioli-salade.
+          </Text>
+        </View>
+        <View style={styles.child}>
+          <Image
+            source={{
+              uri: "https://res.cloudinary.com/dtaynthro/image/upload/v1755244254/ChatGPT_Image_15_aou%CC%82t_2025_09_46_29_jvhhs4.png",
+            }}
+            style={styles.image}
+          />
+          <Text style={[styles.text, { lineHeight: 20 }]}>
+            <Text style={styles.title}>Other ❓</Text> {"\n"} {"\n"}
+            <Text style={{ fontWeight: "600" }}>Définition </Text>: Objet ou
+            entité qui échappe à toute tentative raisonnable de classification
+            culinaire ou existentielle. Ce que l’algorithme regarde... puis
+            décide de ne pas commenter.{"\n"} {"\n"}
+            <Text style={{ fontWeight: "600" }}>Exemples</Text>: Un caillou, une
+            idée floue de ce que tu voulais prendre en photo, une ombre très
+            convaincante...
+            {"\n"}
+            {"\n"}
+            <Text style={{ fontWeight: "600" }}>Règle pratique</Text>: Si ça ne
+            se mange pas, ne pense pas, n’est pas structuré... alors ce n’est
+            pas notre problème
           </Text>
         </View>
       </SwiperFlatList>
