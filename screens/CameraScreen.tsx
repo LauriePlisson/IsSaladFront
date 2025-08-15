@@ -27,7 +27,6 @@ import {
 } from "lucide-react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-// const BACKEND_ADDRESS = "http://192.168.100.158:3000";
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
 export default function CameraScreen({ navigation }) {
   const cameraRef = useRef<CameraView | null>(null);
@@ -62,7 +61,7 @@ export default function CameraScreen({ navigation }) {
   const takePicture = async () => {
     if (isUploading) return;
     const photo: any = await cameraRef.current?.takePictureAsync({
-      quality: 0.4,
+      quality: 0.3,
     });
 
     if (!photo) return;
@@ -76,7 +75,7 @@ export default function CameraScreen({ navigation }) {
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.4,
+      quality: 0.3,
     });
 
     if (!result.canceled) {

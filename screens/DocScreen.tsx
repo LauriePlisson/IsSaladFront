@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Pressable,
   Image,
+  ScrollView,
 } from "react-native";
 
 import { SwiperFlatList } from "react-native-swiper-flatlist";

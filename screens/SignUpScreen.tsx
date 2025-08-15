@@ -114,7 +114,7 @@ export default function SignUpScreen({ navigation }) {
           {error ? "Invalid username or mail or password" : ""}
         </Text>
         <ButtonLog
-          children="Singn Up"
+          children="Sign Up"
           onPress={() => {
             handleSignUp();
           }}

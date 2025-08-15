@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
   inner: {
     flex: 1,
     padding: 24,
+    backgroundColor: "rgba(248, 235, 213, 0.87)",
   },
   postsContainer: {
     flex: 1,
