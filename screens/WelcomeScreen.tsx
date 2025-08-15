@@ -66,11 +66,19 @@ export default function WelcomeScreen({ navigation }) {
         // style={[styles.child, { aspectRatio: 1 }]}
         style={styles.image}
       />
-      <Text style={styles.text}>
-        <Text style={styles.title}>Bienvenue dans IsSalad? !</Text> {"\n"}
-        {"\n"}Parce que tout est soit une soupe, soit une salade, soit un
-        sandwich… même si vous refusez d’y croire.
+      {/* <Text style={styles.text}> */}
+      <Text style={[styles.title]}>
+        Bienvenue dans <Text style={{ fontWeight: "600" }}> IsSalad? !</Text>
       </Text>
+      <Text style={styles.text}>
+        {"\n"}
+        {"\n"}Parce que tout est soit une{" "}
+        <Text style={{ fontWeight: "600" }}>soupe</Text>, soit une{" "}
+        <Text style={{ fontWeight: "600" }}>salade</Text>, soit un
+        <Text style={{ fontWeight: "600" }}> sandwich</Text>… même si vous
+        refusez d’y croire!
+      </Text>
+      {/* </Text> */}
       {loadingOver && (
         <TouchableOpacity
           style={styles.welcome}
@@ -91,35 +99,30 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f1d5a9ff",
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
-    paddingTop: 100,
   },
   image: {
     height: 200,
     aspectRatio: 1,
-    marginBottom: 15,
+    marginTop: 50,
     borderRadius: 50,
   },
   title: {
     textAlign: "center",
     fontWeight: 300,
     color: "#ac6139ff",
-    // textDecorationLine: "underline",
-    // textDecorationColor: "#f39b6d",
     fontSize: 35,
     letterSpacing: 1,
-    marginBottom: 15,
+    marginTop: 30,
+    // marginBottom: 5,
   },
   text: {
-    fontSize: 18,
+    fontSize: 20,
     textAlign: "justify",
     color: " #381D2A",
-    // borderTopWidth: 2,
-    height: 300,
-    // borderColor: "#f39b6d",
-    paddingTop: 25,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
+    marginBottom: 50,
   },
   welcome: {
     backgroundColor: "#aabd8c",
@@ -128,7 +131,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-    bottom: 50,
   },
   textWelcome: {
     color: "#381D2A",
