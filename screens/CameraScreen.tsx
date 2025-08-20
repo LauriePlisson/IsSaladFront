@@ -28,6 +28,7 @@ import {
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
+// Camera screen component that handles photo capture, gallery selection, and AI-powered food analysis
 export default function CameraScreen({ navigation }) {
   const cameraRef = useRef<CameraView | null>(null);
 
@@ -54,10 +55,12 @@ export default function CameraScreen({ navigation }) {
     return <View />;
   }
 
+  // Toggles between front and back camera
   const toggleCameraFacing = () => {
     setFacing((current: CameraType) => (current === "back" ? "front" : "back"));
   };
 
+  // Captures a photo using the camera
   const takePicture = async () => {
     if (isUploading) return;
     const photo: any = await cameraRef.current?.takePictureAsync({
@@ -69,6 +72,7 @@ export default function CameraScreen({ navigation }) {
     setPreviewImage(photo.uri);
     setModalVisible(true);
   };
+  // Opens the device's photo gallery for image selection
   const openGallery = async () => {
     if (isUploading) return;
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -85,6 +89,7 @@ export default function CameraScreen({ navigation }) {
     }
   };
 
+  // Uploads photo to backend for AI analysis and creates a new post
   const uploadPhoto = async () => {
     if (!previewImage || isUploading) return;
     setIsUploading(true);

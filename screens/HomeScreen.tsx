@@ -23,6 +23,7 @@ import { Meh, Minus, SendHorizonal } from "lucide-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
+// Home screen component that displays the main feed with posts and comment functionality
 export default function HomeScreen() {
   const user = useSelector((state: { user: UserState }) => state.user.value);
   const [posts, setPosts] = useState([]);
@@ -32,6 +33,7 @@ export default function HomeScreen() {
   const [commentText, setCommentText] = useState("");
   // const [userInfos, setUserInfos] = useState<any>({});
 
+  // Fetches posts from the backend API and updates the state
   const fetchPosts = async () => {
     try {
       const response = await fetch(`${lienExpo}posts/getPosts`, {
@@ -58,6 +60,7 @@ export default function HomeScreen() {
     }, [])
   );
 
+  // Handles liking a post by sending a like request to the backend
   const handleLike = async (post) => {
     try {
       const response = await fetch(`${lienExpo}posts/likePost`, {
@@ -77,6 +80,7 @@ export default function HomeScreen() {
     }
   };
 
+  // Handles disliking a post by sending a dislike request to the backend
   const handleDislike = async (post) => {
     try {
       const response = await fetch(`${lienExpo}posts/dislikePost`, {
@@ -96,13 +100,13 @@ export default function HomeScreen() {
     }
   };
 
-  // ouvrir la modal commentaires
+  // Opens the comments modal for a specific post
   const openComments = (post: any) => {
     setSelectedPost(post);
     setCommentsVisible(true);
   };
 
-  // envoyer un commentaire
+  // Sends a comment to the backend and updates the post locally
   const sendComment = async () => {
     if (!commentText.trim() || !selectedPost?._id) return;
 

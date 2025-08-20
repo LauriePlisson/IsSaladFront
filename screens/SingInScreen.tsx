@@ -17,6 +17,7 @@ import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../reducers/user";
 
+// Sign in screen component that handles user authentication
 export default function SignInScreen({ navigation }) {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -32,6 +33,7 @@ export default function SignInScreen({ navigation }) {
     password: string;
   };
 
+  // Handles user sign-in by sending credentials to backend and managing authentication state
   const onPressSignIn = () => {
     const userlogin: logInState = {
       username: username,

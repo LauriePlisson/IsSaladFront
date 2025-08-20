@@ -26,6 +26,7 @@ interface MiniPostProps {
   style?: StyleProp<ViewStyle>;
 }
 
+// Mini post component that displays a small preview of a post with delete functionality
 export default function MiniPost({
   postBlock,
   style,

@@ -44,6 +44,7 @@ const icons: Record<
     back: ChevronLeft,
 };
 
+// Reusable icon component that renders Lucide icons with custom colors and sizes
 export default function Icon({ name, color, size = 24 }: IconProps) {
   let colorIcon: string = color || "#381d2a"; // Default color if not provided
   const LucideIcon = icons[name];

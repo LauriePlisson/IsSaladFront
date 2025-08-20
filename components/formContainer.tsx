@@ -20,7 +20,7 @@ interface FormContainerProps {
   value?: React.ReactNode;
   keyboardType?: KeyboardTypeOptions;
 }
-// FormContainer component
+// Form container component that wraps text inputs with consistent styling and labels
 export default function FormContainer({
   secureTextEntry,
   onChangeText,

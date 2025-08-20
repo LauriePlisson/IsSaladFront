@@ -47,6 +47,7 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
+// Component that renders the main tab navigation with custom styling and icons
 const TabNavigator = ({ navigation }) => {
   return (
     <Tab.Navigator
@@ -184,6 +185,7 @@ const TabNavigator = ({ navigation }) => {
   );
 };
 
+// Main app component that sets up Redux store, navigation, and screen stack
 export default function App({ navigation }) {
   return (
     <Provider store={store}>

@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { UserState } from "../reducers/user";
 import { addUser } from "../reducers/user";
 
+// Welcome screen component that checks user authentication and displays app introduction
 export default function WelcomeScreen({ navigation }) {
   const lienExpo = process.env.EXPO_PUBLIC_ADDRESS_EXPO;
   const [loadingOver, setLoadingOver] = useState<boolean>(false);

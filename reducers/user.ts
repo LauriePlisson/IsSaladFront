@@ -34,18 +34,23 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    // Action to set the complete user state with authentication data
     addUser: (state, action: PayloadAction<UserState["value"]>) => {
       state.value = action.payload;
     },
+    // Action to update the user's username
     editUsername: (state, action: PayloadAction<string>) => {
       state.value.username = action.payload;
     },
+    // Action to update the user's avatar URL
     editAvatar: (state, action: PayloadAction<string>) => {
       state.value.avatar = action.payload;
     },
+    // Action to update the user's description/bio
     editDescription: (state, action: PayloadAction<string>) => {
       state.value.description = action.payload;
     },
+    // Action to clear user data on logout
     logOutUser: (state) => {
       state.value = {
         username: "",
@@ -56,6 +61,7 @@ export const userSlice = createSlice({
         team: "",
       };
     },
+    // Action to add or remove a friend from the user's friend list
     addFriendtoFriendList: (state, action: PayloadAction<FriendListState>) => {
       if (
         !state.value.friendList.some(

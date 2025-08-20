@@ -10,6 +10,7 @@ interface CheckButtonProps {
   style?: StyleProp<ViewStyle>;
 }
 
+// Reusable check button component with custom styling and onPress handler
 export default function CheckButton({
   onPress,
   style,

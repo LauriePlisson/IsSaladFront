@@ -11,6 +11,7 @@ interface InputProps {
   value?: string;
 }
 
+// Reusable text input component with custom styling and placeholder text
 export default function InputElem({ children, onChangeText, style, secureTextEntry = false }: InputProps) {
 	return (
 		<TextInput

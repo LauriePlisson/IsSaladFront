@@ -10,6 +10,7 @@ interface PhotoButtonProps {
 	style?: StyleProp<ViewStyle>;
 }
 
+// Photo button component that provides camera access functionality
 export default function PhotoButton({ onPress, style }: PhotoButtonProps) {
 	return (
 		<TouchableOpacity style={[styles.button, style]} onPress={onPress}>

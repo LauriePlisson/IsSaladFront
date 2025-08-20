@@ -10,6 +10,7 @@ interface LogButtonProps {
   style?: StyleProp<ViewStyle>;
 }
 
+// Reusable login button component with customizable color themes and text
 export default function ButtonLog({
   children,
   onPress,

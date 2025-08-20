@@ -12,7 +12,7 @@ interface ChangeAvatarProps {
 	style?: StyleProp<ViewStyle>;
 }
 
-// ChangeAvatar component
+// Avatar component that displays user image with optional edit functionality
 export default function ChangeAvatar({ name, onPress, style, photoPath }: ChangeAvatarProps) {
 	return (
 			<TouchableOpacity style={[styles.button, styles[name === 'modify' ? 'modify' : 'display'], style]} onPress={onPress}>

@@ -18,7 +18,7 @@ interface CommentProps {
   position?: string;
   style?: StyleProp<ViewStyle>;
 }
-// Comment component
+// Comment component that displays user comments with avatar, username, and timestamp
 export default function Comment({
   ownerComment,
   text,

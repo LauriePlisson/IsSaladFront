@@ -16,6 +16,7 @@ export const searchSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
+    // Action to update the search query with a username
     newSearch: (state, action: PayloadAction<string>) => {
       state.value.username = action.payload;
     },

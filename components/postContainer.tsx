@@ -47,7 +47,7 @@ interface PostProps {
   style?: StyleProp<ViewStyle>;
 }
 
-// Post component
+// Post component that displays a social media post with user info, image, description and voting
 export default function Post({
   postBlock,
   style,
@@ -58,9 +58,11 @@ export default function Post({
   const time: any = moment(postBlock.date);
   const formattedDate: string = moment(time).fromNow();
   let total: number = postBlock.likeCount + postBlock.dislikeCount;
+// Calculates the percentage of likes out of total votes
   const likePercentage = (total: number) => {
     return Math.round((postBlock.likeCount / total) * 100);
   };
+  // Calculates the percentage of dislikes out of total votes
   const dislikePercentage = (total: number) => {
     return Math.round((postBlock.dislikeCount / total) * 100);
   };
