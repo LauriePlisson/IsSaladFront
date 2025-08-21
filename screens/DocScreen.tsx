@@ -167,7 +167,7 @@ export default function DocScreen({}) {
               justifyContent: "center",
               alignItems: "center",
               marginBottom: 15,
-              marginTop: -30,
+              marginTop: -70,
             }}
           >
             <Image
@@ -186,9 +186,8 @@ export default function DocScreen({}) {
               un élément comestible (pain, pâte, feuille, etc.).{"\n"}
             </Text>
             <Text style={styles.text}>
-              <Text style={{ fontWeight: "600" }}>Exemples</Text>: Plat dont les
-              ingrédients sont enfermés, totalement ou partiellement, dans un
-              élément comestible (pain, pâte, feuille, etc.).{"\n"}
+              <Text style={{ fontWeight: "600" }}>Exemples</Text>: Sandwich
+              classique, burger, taco, burrito, sushi.{"\n"}
             </Text>
             <Text style={styles.text}>
               <Text style={{ fontWeight: "600" }}>Règle pratique</Text>: S'il y
