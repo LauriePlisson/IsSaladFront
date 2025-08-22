@@ -61,7 +61,7 @@ export default function SignInScreen({ navigation }) {
             })
           );
 
-          navigation.navigate("TabNavigator", "Home");
+          navigation.navigate("TabNavigator", { screen: "Home" });
           setUsername("");
           setPassword("");
         } else {

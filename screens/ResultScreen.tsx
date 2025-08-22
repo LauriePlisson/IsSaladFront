@@ -71,7 +71,7 @@ export default function ResultScreen({ route, navigation }) {
       const data = await response.json();
 
       if (data.result) {
-        navigation.navigate("TabNavigator");
+        navigation.navigate("TabNavigator", { screen: "Home" });
       } else {
         alert("Erreur : " + data.error);
       }
@@ -136,9 +136,9 @@ export default function ResultScreen({ route, navigation }) {
           <Icon name="x" size={25} color="#381d2a" />
         </TouchableOpacity>
         <Text style={styles.text}>Nouvelle Publication</Text>
-        <TouchableOpacity style={styles.headerButton}>
+        {/* <TouchableOpacity style={styles.headerButton}>
           <ChevronRight size={25} color="#381d2a" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <ScrollView
         ref={(scroll: any) => (ref.current = scroll)}
@@ -229,12 +229,14 @@ const styles = StyleSheet.create({
     // backgroundColor: "#fff",
   },
   header: {
-    backgroundColor: "#AABD8C",
-    justifyContent: "space-around",
-    alignItems: "center",
+    backgroundColor: "#aabd8c",
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
     height: "10%",
     flexDirection: "row",
-    width: "100%",
+    paddingLeft: 15,
+    paddingBottom: 10,
+    gap: 70,
   },
   headerButton: {
     paddingTop: 10,

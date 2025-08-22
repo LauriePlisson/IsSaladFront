@@ -144,9 +144,9 @@ export default function CameraScreen({ navigation }) {
             <Icon name="x" size={25} color="#381d2a" />
           </TouchableOpacity>
           <Text style={styles.text}>Nouvelle Publication</Text>
-          <TouchableOpacity style={styles.headerButton}>
+          {/* <TouchableOpacity style={styles.headerButton}>
             <ChevronRight size={25} color="#381d2a" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <CameraView
           style={styles.camera}
@@ -222,10 +222,12 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#aabd8c",
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
     alignItems: "center",
     height: "10%",
     flexDirection: "row",
+    paddingLeft: 15,
+    gap: 85,
   },
   text: {
     fontSize: 18,
