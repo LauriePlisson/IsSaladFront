@@ -27,7 +27,6 @@ import SettingsScreen from "./screens/SettingsScreen";
 import tabBar from "./components/tabBar";
 import headerLeftBtn from "./components/headerLeftBtn";
 import PhotoButton from "./components/photoBtn";
-import TestScreen from "./screens/TestScreen";
 import UserScreen from "./screens/UserScreen";
 import { ScreenStackHeaderLeftView } from "react-native-screens";
 import { Camera, Settings } from "lucide-react-native";
@@ -91,9 +90,6 @@ const TabNavigator = ({ navigation }) => {
             case "Profile":
               iconName = "user";
               break;
-            case "Test":
-              iconName = "meh";
-              break;
             case "TabCamera":
               return null; // Camera button will be handled separately
           }
@@ -117,18 +113,6 @@ const TabNavigator = ({ navigation }) => {
         headerTitle: "IsSalad?",
       })}
     >
-      {/* <Tab.Screen
-        name="Test"
-        component={TestScreen}
-        options={{ 
-          // headerShown: false, tabBarButton: () => null, // Hide this tab in the tab bar
-          headerRight: () => {
-            return (
-              <FontAwesome name="cog" size={24} color="#381D2A" onPress={() => navigation.navigate('Settings')} />
-            );
-          }
-        }}
-      /> */}
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
         name="Search"
